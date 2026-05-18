@@ -161,6 +161,20 @@ app.put('/api/categorias/:id', (req, res) => {
   res.json(data.categorias[idx]);
 });
 
+app.post('/api/categorias/reordenar', (req, res) => {
+  const { ordemIds } = req.body;
+  if (!Array.isArray(ordemIds)) return res.status(400).json({ erro: 'ordemIds obrigatório' });
+  const data = readCategorias();
+  const mapa = new Map(data.categorias.map((c) => [c.id, c]));
+  data.categorias = ordemIds.map((id, i) => {
+    const c = mapa.get(id);
+    if (c) c.ordem = i;
+    return c;
+  }).filter(Boolean);
+  writeCategorias(data);
+  res.json({ ok: true });
+});
+
 app.delete('/api/categorias/:id', (req, res) => {
   const produtos = readData().produtos;
   const emUso = produtos.filter((p) => p.categoriaId === req.params.id);
