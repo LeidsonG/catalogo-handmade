@@ -1,0 +1,281 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  font-family: 'Georgia', 'Times New Roman', serif;
+  color: #2a1a10;
+  background: #faf6f1;
+  -webkit-print-color-adjust: exact;
+  print-color-adjust: exact;
+}
+
+:root {
+  --cor-fundo: #faf6f1;
+  --cor-papel: #ffffff;
+  --cor-texto: #2a1a10;
+  --cor-acento: #6b4226;
+  --cor-suave: #8a6e57;
+  --cor-linha: #d8c9b8;
+}
+
+.pagina {
+  width: 210mm;
+  height: 297mm;
+  padding: 18mm 16mm;
+  page-break-after: always;
+  background: var(--cor-fundo);
+  position: relative;
+  overflow: hidden;
+}
+
+.pagina:last-child {
+  page-break-after: auto;
+}
+
+/* ---------- Página de introdução ---------- */
+.pagina-intro {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 30mm 25mm;
+}
+
+.intro-marca {
+  font-size: 52pt;
+  letter-spacing: 4px;
+  font-weight: normal;
+  margin: 0 0 6mm;
+  color: var(--cor-acento);
+}
+
+.intro-subtitulo {
+  font-size: 14pt;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--cor-suave);
+  margin-bottom: 18mm;
+}
+
+.intro-divisor {
+  width: 60mm;
+  height: 1px;
+  background: var(--cor-linha);
+  margin: 0 auto 14mm;
+}
+
+.intro-texto {
+  font-size: 12pt;
+  line-height: 1.8;
+  max-width: 130mm;
+  color: var(--cor-texto);
+  font-style: italic;
+}
+
+.intro-rodape {
+  position: absolute;
+  bottom: 18mm;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 9pt;
+  letter-spacing: 2px;
+  color: var(--cor-suave);
+}
+
+.intro-rodape .contato {
+  margin-top: 4mm;
+}
+
+/* ---------- Layout 1 produto por página ---------- */
+.pagina-layout-1 {
+  display: flex;
+  flex-direction: column;
+}
+
+.pagina-layout-1 .produto-foto-wrap {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 10mm;
+  min-height: 0;
+}
+
+.pagina-layout-1 .produto-foto {
+  max-width: 100%;
+  max-height: 180mm;
+  object-fit: contain;
+}
+
+.pagina-layout-1 .produto-foto-placeholder {
+  width: 100%;
+  height: 180mm;
+  background: var(--cor-papel);
+  border: 1px dashed var(--cor-linha);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-suave);
+  font-style: italic;
+}
+
+.pagina-layout-1 .produto-info {
+  border-top: 1px solid var(--cor-linha);
+  padding-top: 6mm;
+}
+
+.pagina-layout-1 .produto-codigo {
+  font-size: 9pt;
+  letter-spacing: 3px;
+  color: var(--cor-suave);
+  text-transform: uppercase;
+  margin-bottom: 2mm;
+}
+
+.pagina-layout-1 .produto-nome {
+  font-size: 22pt;
+  color: var(--cor-acento);
+  margin-bottom: 3mm;
+}
+
+.pagina-layout-1 .produto-descricao {
+  font-size: 11pt;
+  line-height: 1.6;
+  color: var(--cor-texto);
+  margin-bottom: 6mm;
+  font-style: italic;
+}
+
+.pagina-layout-1 .produto-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.pagina-layout-1 .produto-preco {
+  font-size: 20pt;
+  color: var(--cor-acento);
+  font-weight: bold;
+}
+
+/* ---------- Layout 2 produtos por página ---------- */
+.pagina-layout-2 {
+  display: flex;
+  flex-direction: column;
+  gap: 8mm;
+}
+
+.pagina-layout-2 .produto-bloco {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10mm;
+  align-items: center;
+  padding: 6mm 4mm;
+  border-bottom: 1px solid var(--cor-linha);
+  min-height: 0;
+}
+
+.pagina-layout-2 .produto-bloco:last-child {
+  border-bottom: none;
+}
+
+.pagina-layout-2 .produto-bloco.vazio {
+  border: none;
+}
+
+.pagina-layout-2 .produto-foto-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.pagina-layout-2 .produto-foto {
+  max-width: 100%;
+  max-height: 110mm;
+  object-fit: contain;
+}
+
+.pagina-layout-2 .produto-foto-placeholder {
+  width: 100%;
+  height: 100mm;
+  background: var(--cor-papel);
+  border: 1px dashed var(--cor-linha);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--cor-suave);
+  font-style: italic;
+}
+
+.pagina-layout-2 .produto-codigo {
+  font-size: 8pt;
+  letter-spacing: 3px;
+  color: var(--cor-suave);
+  text-transform: uppercase;
+  margin-bottom: 2mm;
+}
+
+.pagina-layout-2 .produto-nome {
+  font-size: 17pt;
+  color: var(--cor-acento);
+  margin-bottom: 3mm;
+}
+
+.pagina-layout-2 .produto-descricao {
+  font-size: 10pt;
+  line-height: 1.55;
+  color: var(--cor-texto);
+  margin-bottom: 5mm;
+  font-style: italic;
+}
+
+.pagina-layout-2 .produto-rodape {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 4mm;
+  border-top: 1px solid var(--cor-linha);
+}
+
+.pagina-layout-2 .produto-preco {
+  font-size: 16pt;
+  color: var(--cor-acento);
+  font-weight: bold;
+}
+
+/* ---------- Cor (amostra) ---------- */
+.produto-cor {
+  display: flex;
+  align-items: center;
+  gap: 3mm;
+}
+
+.produto-cor-amostra {
+  display: inline-block;
+  width: 9mm;
+  height: 9mm;
+  border-radius: 50%;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  background-size: cover;
+  background-position: center;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+}
+
+.produto-cor-nome {
+  font-size: 10pt;
+  letter-spacing: 1px;
+  color: var(--cor-suave);
+  text-transform: uppercase;
+}
