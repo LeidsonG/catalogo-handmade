@@ -2,13 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="utf-8">
-  <title>Tati Cintos — Admin do Catálogo</title>
+  <title>Handmade — Sistema de Catálogo</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="admin.css">
 </head>
 <body>
   <header class="topo">
-    <h1>Tati Cintos <span class="topo-sub">— Admin do catálogo</span></h1>
+    <h1>Handmade<span class="topo-sub">— Sistema de Catálogo</span></h1>
     <div class="topo-acoes">
       <button id="btn-pdf-1" class="botao botao-secundario">Gerar PDF (1 por página)</button>
       <button id="btn-pdf-2" class="botao botao-primario">Gerar PDF (2 por página)</button>
@@ -44,19 +44,17 @@
           <label>Descrição curta <textarea name="descricao" rows="2"></textarea></label>
           <label>Nome da cor <input name="nomeCor" placeholder="Marrom envelhecido"></label>
 
-          <div class="grid-2">
-            <div class="campo-arquivo">
-              <label>Foto do produto (PNG sem fundo)</label>
-              <input type="file" id="arquivo-foto" accept="image/*">
-              <div class="preview" id="preview-foto"></div>
-              <input type="hidden" name="foto">
-            </div>
-            <div class="campo-arquivo">
-              <label>Recorte da textura do couro</label>
-              <input type="file" id="arquivo-cor" accept="image/*">
-              <div class="preview preview-cor" id="preview-cor"></div>
-              <input type="hidden" name="corTextura">
-            </div>
+          <div class="campo-arquivo">
+            <label>Foto do produto (PNG sem fundo)</label>
+            <input type="file" id="arquivo-foto" accept="image/*">
+            <div class="preview" id="preview-foto"></div>
+            <input type="hidden" name="foto">
+          </div>
+          <div class="campo-arquivo">
+            <label>Recorte da textura do couro</label>
+            <input type="file" id="arquivo-cor" accept="image/*">
+            <div class="preview preview-cor" id="preview-cor"></div>
+            <input type="hidden" name="corTextura">
           </div>
 
           <div class="acoes-form">
