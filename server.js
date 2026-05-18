@@ -158,12 +158,15 @@ app.post('/api/gerar-pdf', async (req, res) => {
 app.use('/output', express.static(OUTPUT_DIR));
 
 function encontrarLogo() {
-  const exts = ['svg', 'png', 'jpg', 'jpeg', 'webp'];
-  for (const ext of exts) {
-    const caminho = path.join(ROOT, 'assets', `logo.${ext}`);
-    if (fs.existsSync(caminho)) return `/assets/logo.${ext}`;
-  }
-  return '';
+  const pasta = path.join(ROOT, 'assets');
+  if (!fs.existsSync(pasta)) return '';
+  const exts = new Set(['.svg', '.png', '.jpg', '.jpeg', '.webp']);
+  const arquivos = fs.readdirSync(pasta)
+    .filter((f) => exts.has(path.extname(f).toLowerCase()));
+  if (!arquivos.length) return '';
+  // Prioriza arquivos chamados "logo.*", senão usa o primeiro arquivo de imagem encontrado.
+  const preferido = arquivos.find((f) => /^logo\./i.test(f)) || arquivos[0];
+  return `/assets/${preferido}`;
 }
 
 function construirHtml({ produtos, intro, layout }) {
