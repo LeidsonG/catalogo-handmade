@@ -29,9 +29,15 @@ const storage = multer.diskStorage({
     const kind = req.params.tipo === 'cor' ? 'cores' : 'produtos';
     cb(null, path.join(UPLOADS, kind));
   },
-  filename: (_req, file, cb) => {
-    const id = crypto.randomBytes(6).toString('hex');
-    cb(null, `${id}${path.extname(file.originalname).toLowerCase()}`);
+  filename: (req, file, cb) => {
+    const codigo = sanitizarCodigo(req.query.codigo);
+    const ext = path.extname(file.originalname).toLowerCase();
+    if (!codigo) {
+      // Fallback: hash aleatório se não veio código (não deveria acontecer pelo admin)
+      return cb(null, `${crypto.randomBytes(6).toString('hex')}${ext}`);
+    }
+    const sufixo = req.params.tipo === 'cor' ? '-cor' : '';
+    cb(null, `${codigo}${sufixo}${ext}`);
   },
 });
 const upload = multer({ storage, limits: { fileSize: 15 * 1024 * 1024 } });
@@ -56,6 +62,19 @@ function writeCategorias(data) {
   fs.writeFileSync(CATEGORIAS_FILE, JSON.stringify(data, null, 2));
 }
 
+function gerarProximoId(itens, prefixo, tamanho) {
+  const padrao = new RegExp(`^${prefixo}(\\d+)$`);
+  const max = itens.reduce((acc, item) => {
+    const m = String(item.id || '').match(padrao);
+    return m ? Math.max(acc, Number(m[1])) : acc;
+  }, 0);
+  return `${prefixo}${String(max + 1).padStart(tamanho, '0')}`;
+}
+
+function sanitizarCodigo(codigo) {
+  return String(codigo || '').replace(/[^a-zA-Z0-9_-]/g, '_');
+}
+
 app.get('/', (_req, res) => res.redirect('/admin'));
 
 app.get('/api/produtos', (_req, res) => {
@@ -70,7 +89,7 @@ app.post('/api/produtos', (req, res) => {
     return res.status(400).json({ erro: 'categoria obrigatória e deve existir' });
   }
   const novo = {
-    id: crypto.randomBytes(6).toString('hex'),
+    id: gerarProximoId(data.produtos, 'p', 5),
     codigo: req.body.codigo || '',
     nome: req.body.nome || '',
     descricao: req.body.descricao || '',
@@ -137,7 +156,7 @@ app.post('/api/categorias', (req, res) => {
     return res.status(400).json({ erro: 'já existe uma categoria com esse nome' });
   }
   const nova = {
-    id: crypto.randomBytes(6).toString('hex'),
+    id: gerarProximoId(data.categorias, 'c', 3),
     nome,
     ordem: data.categorias.length,
   };

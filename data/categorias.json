@@ -1,3 +1,9 @@
 {
-  "categorias": []
+  "categorias": [
+    {
+      "id": "c001",
+      "nome": "Cintos infantis masculino",
+      "ordem": 0
+    }
+  ]
 }

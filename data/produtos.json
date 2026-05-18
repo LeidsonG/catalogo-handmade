@@ -1,3 +1,37 @@
 {
-  "produtos": []
+  "produtos": [
+    {
+      "id": "p00001",
+      "codigo": "CM-001",
+      "nome": "Cinto exemplo",
+      "descricao": "Exemplo curto.",
+      "preco": 119.9,
+      "nomeCor": "Marrom",
+      "foto": "/uploads/produtos/CM-001.png",
+      "corTextura": "/uploads/cores/CM-001-cor.png",
+      "ordem": 0
+    },
+    {
+      "id": "p00002",
+      "codigo": "CM-002",
+      "nome": "Cinto exemplo 2",
+      "descricao": "Descrição curta...",
+      "preco": 249.9,
+      "nomeCor": "Vermelho",
+      "foto": "/uploads/produtos/CM-002.png",
+      "corTextura": "/uploads/cores/CM-002-cor.png",
+      "ordem": 1
+    },
+    {
+      "id": "p00003",
+      "codigo": "CF-100",
+      "nome": "Cinto exemplo 3",
+      "descricao": "Descrição de exemplo",
+      "preco": 190.9,
+      "nomeCor": "Rosa",
+      "foto": "/uploads/produtos/CF-100.png",
+      "corTextura": "/uploads/cores/CF-100-cor.png",
+      "ordem": 2
+    }
+  ]
 }
