@@ -65,8 +65,9 @@ function renderCategorias() {
     <li class="categoria-item" draggable="true" data-id="${c.id}">
       <span class="categoria-drag" title="Arraste para reordenar">⋮⋮</span>
       <span class="categoria-nome">${esc(c.nome)}</span>
+      ${c.prefixoCodigo ? `<span class="categoria-prefixo" title="Prefixo do código">${esc(c.prefixoCodigo)}</span>` : ''}
       <span class="categoria-acoes">
-        <button class="botao botao-fantasma botao-mini" data-editar-cat="${c.id}">Renomear</button>
+        <button class="botao botao-fantasma botao-mini" data-editar-cat="${c.id}">Editar</button>
         <button class="botao botao-perigo botao-mini" data-excluir-cat="${c.id}">Excluir</button>
       </span>
     </li>
@@ -156,6 +157,7 @@ function popularSelectsCategoria() {
 formCategoria.addEventListener('submit', async (e) => {
   e.preventDefault();
   const nome = formCategoria.elements.nome.value.trim();
+  const prefixoCodigo = formCategoria.elements.prefixoCodigo.value.trim();
   if (!nome) return;
   const id = formCategoria.elements.id.value;
   const url = id ? `/api/categorias/${id}` : '/api/categorias';
@@ -163,10 +165,10 @@ formCategoria.addEventListener('submit', async (e) => {
   const resposta = await fetch(url, {
     method: metodo,
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ nome }),
+    body: JSON.stringify({ nome, prefixoCodigo }),
   });
   if (resposta.ok) {
-    mostrarToast(id ? 'Categoria renomeada' : 'Categoria adicionada', 'sucesso');
+    mostrarToast(id ? 'Categoria atualizada' : 'Categoria adicionada', 'sucesso');
     limparFormCategoria();
     carregar();
   } else {
@@ -189,6 +191,7 @@ function editarCategoria(id) {
   if (!c) return;
   formCategoria.elements.id.value = c.id;
   formCategoria.elements.nome.value = c.nome;
+  formCategoria.elements.prefixoCodigo.value = c.prefixoCodigo || '';
   btnSalvarCategoria.textContent = 'Salvar';
   btnCancelarCategoria.classList.remove('escondido');
   formCategoria.elements.nome.focus();
@@ -414,6 +417,22 @@ formProduto.addEventListener('submit', async (e) => {
     mostrarToast(erro || 'Erro ao salvar produto', 'erro');
   }
 });
+
+selectCategoriaProduto.addEventListener('change', sugerirCodigo);
+
+async function sugerirCodigo() {
+  // Só sugere ao criar produto novo, e só se o campo de código estiver vazio.
+  if (formProduto.elements.id.value) return;
+  if (formProduto.elements.codigo.value.trim()) return;
+  const categoriaId = selectCategoriaProduto.value;
+  if (!categoriaId) return;
+  try {
+    const resp = await fetch(`/api/categorias/${categoriaId}/proximo-codigo`);
+    if (!resp.ok) return;
+    const { codigo } = await resp.json();
+    if (codigo) formProduto.elements.codigo.value = codigo;
+  } catch {}
+}
 
 btnLimpar.addEventListener('click', limparForm);
 

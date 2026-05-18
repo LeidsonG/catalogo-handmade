@@ -22,17 +22,6 @@
   <main class="layout">
     <aside class="painel">
       <section class="bloco">
-        <h2>Categorias</h2>
-        <form id="form-categoria" class="form form-inline">
-          <input type="hidden" name="id">
-          <input name="nome" placeholder="Ex: Cintos infantis masculino" required>
-          <button type="submit" class="botao botao-primario" id="btn-salvar-categoria">Adicionar</button>
-          <button type="button" class="botao botao-fantasma escondido" id="btn-cancelar-categoria">Cancelar</button>
-        </form>
-        <ul id="lista-categorias" class="lista-categorias"></ul>
-      </section>
-
-      <section class="bloco">
         <h2 id="titulo-form">Novo produto</h2>
         <form id="form-produto" class="form">
           <input type="hidden" name="id">
@@ -65,6 +54,26 @@
             <button type="submit" class="botao botao-primario" id="btn-salvar">Adicionar produto</button>
           </div>
         </form>
+      </section>
+
+      <section class="bloco">
+        <h2>Categorias</h2>
+        <form id="form-categoria" class="form">
+          <input type="hidden" name="id">
+          <div class="grid-cat">
+            <label>Nome
+              <input name="nome" placeholder="Ex: Cintos infantis masculino" required>
+            </label>
+            <label class="campo-prefixo">Prefixo do código
+              <input name="prefixoCodigo" placeholder="CM-" maxlength="10">
+            </label>
+          </div>
+          <div class="acoes-form">
+            <button type="button" class="botao botao-fantasma escondido" id="btn-cancelar-categoria">Cancelar</button>
+            <button type="submit" class="botao botao-primario" id="btn-salvar-categoria">Adicionar</button>
+          </div>
+        </form>
+        <ul id="lista-categorias" class="lista-categorias"></ul>
       </section>
 
       <section class="bloco">
