@@ -9,7 +9,8 @@
       "nomeCor": "Marrom",
       "foto": "/uploads/produtos/CM-001.png",
       "corTextura": "/uploads/cores/CM-001-cor.png",
-      "ordem": 0
+      "ordem": 0,
+      "categoriaId": "c001"
     },
     {
       "id": "p00002",
@@ -20,7 +21,8 @@
       "nomeCor": "Vermelho",
       "foto": "/uploads/produtos/CM-002.png",
       "corTextura": "/uploads/cores/CM-002-cor.png",
-      "ordem": 1
+      "ordem": 1,
+      "categoriaId": "c001"
     },
     {
       "id": "p00003",
@@ -31,7 +33,8 @@
       "nomeCor": "Rosa",
       "foto": "/uploads/produtos/CF-100.png",
       "corTextura": "/uploads/cores/CF-100-cor.png",
-      "ordem": 2
+      "ordem": 2,
+      "categoriaId": "c001"
     }
   ]
 }
