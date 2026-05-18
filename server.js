@@ -8,6 +8,7 @@ const puppeteer = require('puppeteer');
 const ROOT = __dirname;
 const DATA_FILE = path.join(ROOT, 'data', 'produtos.json');
 const INTRO_FILE = path.join(ROOT, 'data', 'intro.json');
+const CATEGORIAS_FILE = path.join(ROOT, 'data', 'categorias.json');
 const UPLOADS = path.join(ROOT, 'uploads');
 const OUTPUT_DIR = path.join(ROOT, 'output');
 const PORTA = Number(process.env.PORT) || 3000;
@@ -47,6 +48,13 @@ function readIntro() {
 function writeIntro(intro) {
   fs.writeFileSync(INTRO_FILE, JSON.stringify(intro, null, 2));
 }
+function readCategorias() {
+  if (!fs.existsSync(CATEGORIAS_FILE)) return { categorias: [] };
+  return JSON.parse(fs.readFileSync(CATEGORIAS_FILE, 'utf8'));
+}
+function writeCategorias(data) {
+  fs.writeFileSync(CATEGORIAS_FILE, JSON.stringify(data, null, 2));
+}
 
 app.get('/', (_req, res) => res.redirect('/admin'));
 
@@ -56,6 +64,11 @@ app.get('/api/produtos', (_req, res) => {
 
 app.post('/api/produtos', (req, res) => {
   const data = readData();
+  const cats = readCategorias().categorias;
+  const categoriaId = req.body.categoriaId || '';
+  if (!categoriaId || !cats.find((c) => c.id === categoriaId)) {
+    return res.status(400).json({ erro: 'categoria obrigatória e deve existir' });
+  }
   const novo = {
     id: crypto.randomBytes(6).toString('hex'),
     codigo: req.body.codigo || '',
@@ -65,6 +78,7 @@ app.post('/api/produtos', (req, res) => {
     nomeCor: req.body.nomeCor || '',
     foto: req.body.foto || '',
     corTextura: req.body.corTextura || '',
+    categoriaId,
     ordem: data.produtos.length,
   };
   data.produtos.push(novo);
@@ -76,6 +90,12 @@ app.put('/api/produtos/:id', (req, res) => {
   const data = readData();
   const idx = data.produtos.findIndex((p) => p.id === req.params.id);
   if (idx === -1) return res.status(404).json({ erro: 'não encontrado' });
+  if (req.body.categoriaId !== undefined) {
+    const cats = readCategorias().categorias;
+    if (!req.body.categoriaId || !cats.find((c) => c.id === req.body.categoriaId)) {
+      return res.status(400).json({ erro: 'categoria obrigatória e deve existir' });
+    }
+  }
   data.produtos[idx] = { ...data.produtos[idx], ...req.body, id: req.params.id };
   data.produtos[idx].preco = Number(data.produtos[idx].preco) || 0;
   writeData(data);
@@ -103,6 +123,58 @@ app.post('/api/produtos/reordenar', (req, res) => {
   res.json({ ok: true });
 });
 
+app.get('/api/categorias', (_req, res) => {
+  const lista = readCategorias().categorias;
+  lista.sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+  res.json(lista);
+});
+
+app.post('/api/categorias', (req, res) => {
+  const nome = String(req.body.nome || '').trim();
+  if (!nome) return res.status(400).json({ erro: 'nome obrigatório' });
+  const data = readCategorias();
+  if (data.categorias.find((c) => c.nome.toLowerCase() === nome.toLowerCase())) {
+    return res.status(400).json({ erro: 'já existe uma categoria com esse nome' });
+  }
+  const nova = {
+    id: crypto.randomBytes(6).toString('hex'),
+    nome,
+    ordem: data.categorias.length,
+  };
+  data.categorias.push(nova);
+  writeCategorias(data);
+  res.json(nova);
+});
+
+app.put('/api/categorias/:id', (req, res) => {
+  const data = readCategorias();
+  const idx = data.categorias.findIndex((c) => c.id === req.params.id);
+  if (idx === -1) return res.status(404).json({ erro: 'não encontrado' });
+  const nome = String(req.body.nome || '').trim();
+  if (!nome) return res.status(400).json({ erro: 'nome obrigatório' });
+  const conflito = data.categorias.find(
+    (c) => c.id !== req.params.id && c.nome.toLowerCase() === nome.toLowerCase(),
+  );
+  if (conflito) return res.status(400).json({ erro: 'já existe uma categoria com esse nome' });
+  data.categorias[idx].nome = nome;
+  writeCategorias(data);
+  res.json(data.categorias[idx]);
+});
+
+app.delete('/api/categorias/:id', (req, res) => {
+  const produtos = readData().produtos;
+  const emUso = produtos.filter((p) => p.categoriaId === req.params.id);
+  if (emUso.length > 0) {
+    return res.status(400).json({
+      erro: `categoria em uso por ${emUso.length} produto(s) — remova ou troque a categoria deles antes`,
+    });
+  }
+  const data = readCategorias();
+  data.categorias = data.categorias.filter((c) => c.id !== req.params.id);
+  writeCategorias(data);
+  res.json({ ok: true });
+});
+
 app.post('/api/upload/:tipo', upload.single('arquivo'), (req, res) => {
   if (!req.file) return res.status(400).json({ erro: 'arquivo obrigatório' });
   const kind = req.params.tipo === 'cor' ? 'cores' : 'produtos';
@@ -120,10 +192,17 @@ app.put('/api/intro', (req, res) => {
 app.get('/render/:layout', (req, res) => {
   const layout = req.params.layout;
   if (!['1', '2'].includes(layout)) return res.status(400).send('layout inválido');
+  const categoriaId = String(req.query.categoria || '');
+  if (!categoriaId) return res.status(400).send('parâmetro categoria obrigatório');
+  const cats = readCategorias().categorias;
+  const categoria = cats.find((c) => c.id === categoriaId);
+  if (!categoria) return res.status(404).send('categoria não encontrada');
+  const produtos = readData().produtos.filter((p) => p.categoriaId === categoriaId);
   const html = construirHtml({
-    produtos: readData().produtos,
+    produtos,
     intro: readIntro(),
     layout,
+    categoria,
   });
   res.set('Content-Type', 'text/html; charset=utf-8').send(html);
 });
@@ -131,17 +210,25 @@ app.get('/render/:layout', (req, res) => {
 app.post('/api/gerar-pdf', async (req, res) => {
   const layout = String(req.body.layout || '2');
   if (!['1', '2'].includes(layout)) return res.status(400).json({ erro: 'layout inválido' });
+  const categoriaId = String(req.body.categoriaId || '');
+  if (!categoriaId) return res.status(400).json({ erro: 'categoriaId obrigatório' });
+  const categoria = readCategorias().categorias.find((c) => c.id === categoriaId);
+  if (!categoria) return res.status(404).json({ erro: 'categoria não encontrada' });
 
   const browser = await puppeteer.launch({ headless: 'new' });
   try {
     const page = await browser.newPage();
     // Carregamos via rota HTTP (em vez de setContent) para que caminhos absolutos
     // como /uploads/... e /assets/... resolvam para o próprio servidor.
-    await page.goto(`http://localhost:${PORTA}/render/${layout}`, {
-      waitUntil: 'networkidle0',
-    });
+    await page.goto(
+      `http://localhost:${PORTA}/render/${layout}?categoria=${encodeURIComponent(categoriaId)}`,
+      { waitUntil: 'networkidle0' },
+    );
     const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
-    const nome = `catalogo-layout${layout}-${stamp}.pdf`;
+    const slug = categoria.nome.toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const nome = `catalogo-${slug}-layout${layout}-${stamp}.pdf`;
     const caminho = path.join(OUTPUT_DIR, nome);
     await page.pdf({
       path: caminho,
@@ -169,7 +256,7 @@ function encontrarLogo() {
   return `/assets/${preferido}`;
 }
 
-function construirHtml({ produtos, intro, layout }) {
+function construirHtml({ produtos, intro, layout, categoria }) {
   const css = fs.readFileSync(path.join(ROOT, 'templates', 'pdf.css'), 'utf8');
   const templateIntro = fs.readFileSync(path.join(ROOT, 'templates', 'intro.html'), 'utf8');
   const templateProduto = fs.readFileSync(
@@ -197,6 +284,7 @@ function construirHtml({ produtos, intro, layout }) {
     ano: intro.ano,
     instagram: intro.contato?.instagram || '',
     whatsapp: intro.contato?.whatsapp || '',
+    categoria: categoria?.nome || '',
   });
 
   const ordenados = [...produtos].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));

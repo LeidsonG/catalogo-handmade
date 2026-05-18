@@ -86,7 +86,20 @@ html, body {
   letter-spacing: 6px;
   text-transform: uppercase;
   color: var(--cor-suave);
-  margin-bottom: 18mm;
+  margin-bottom: 8mm;
+}
+
+.intro-categoria {
+  font-size: 18pt;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  color: var(--cor-acento);
+  margin-bottom: 14mm;
+  font-weight: 600;
+}
+
+.intro-categoria:empty {
+  display: none;
 }
 
 .intro-divisor {
