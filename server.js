@@ -75,6 +75,14 @@ function sanitizarCodigo(codigo) {
   return String(codigo || '').replace(/[^a-zA-Z0-9_-]/g, '_');
 }
 
+function normalizarPrefixo(p) {
+  if (!p) return '';
+  // mantém só letras e números, descarta espaços/traços/etc., padroniza maiúsculas
+  const limpo = String(p).replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  if (!limpo) return '';
+  return `${limpo}-`;
+}
+
 app.get('/', (_req, res) => res.redirect('/admin'));
 
 app.get('/api/produtos', (_req, res) => {
@@ -158,7 +166,7 @@ app.post('/api/categorias', (req, res) => {
   const nova = {
     id: gerarProximoId(data.categorias, 'c', 3),
     nome,
-    prefixoCodigo: String(req.body.prefixoCodigo || '').trim(),
+    prefixoCodigo: normalizarPrefixo(req.body.prefixoCodigo),
     ordem: data.categorias.length,
   };
   data.categorias.push(nova);
@@ -178,7 +186,7 @@ app.put('/api/categorias/:id', (req, res) => {
   if (conflito) return res.status(400).json({ erro: 'já existe uma categoria com esse nome' });
   data.categorias[idx].nome = nome;
   if (req.body.prefixoCodigo !== undefined) {
-    data.categorias[idx].prefixoCodigo = String(req.body.prefixoCodigo || '').trim();
+    data.categorias[idx].prefixoCodigo = normalizarPrefixo(req.body.prefixoCodigo);
   }
   writeCategorias(data);
   res.json(data.categorias[idx]);
