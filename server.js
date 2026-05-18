@@ -185,31 +185,35 @@ function construirHtml({ produtos, intro, layout }) {
     ? `<img class="logo-canto" src="${escapar(logo)}" alt="">`
     : '';
 
-  const introRender = aplicar(templateIntro, {
+  // Substituir {{logo}} ANTES de aplicar() — caso contrário, aplicar() trata
+  // {{logo}} como variável ausente e remove o placeholder.
+  const templateIntroComLogo = templateIntro.replace('{{logo}}', logoIntroHtml);
+  const templateProdutoComLogo = templateProduto.replace(/\{\{logo\}\}/g, logoCantoHtml);
+
+  const introRender = aplicar(templateIntroComLogo, {
     marca: intro.marca,
     subtitulo: intro.subtitulo,
     texto: intro.texto,
     ano: intro.ano,
     instagram: intro.contato?.instagram || '',
     whatsapp: intro.contato?.whatsapp || '',
-  }).replace('{{logo}}', logoIntroHtml);
+  });
 
   const ordenados = [...produtos].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
 
   let paginas = '';
   if (layout === '1') {
     for (const p of ordenados) {
-      paginas += renderProduto(templateProduto, p).replace('{{logo}}', logoCantoHtml);
+      paginas += renderProduto(templateProdutoComLogo, p);
     }
   } else {
     for (let i = 0; i < ordenados.length; i += 2) {
       const par = ordenados.slice(i, i + 2);
       const bloco1 = renderBloco(par[0]);
       const bloco2 = par[1] ? renderBloco(par[1]) : '<div class="produto-bloco vazio"></div>';
-      paginas += templateProduto
+      paginas += templateProdutoComLogo
         .replace('{{bloco1}}', bloco1)
-        .replace('{{bloco2}}', bloco2)
-        .replace('{{logo}}', logoCantoHtml);
+        .replace('{{bloco2}}', bloco2);
     }
   }
 

@@ -43,23 +43,24 @@ html, body {
 /* ---------- Logo ---------- */
 .intro-logo {
   display: block;
-  max-width: 70mm;
-  max-height: 70mm;
+  max-width: 110mm;
+  max-height: 90mm;
   width: auto;
   height: auto;
-  margin: 0 auto 12mm;
+  margin: 0 auto 16mm;
   object-fit: contain;
 }
 
 .logo-canto {
   position: absolute;
-  bottom: 10mm;
-  right: 12mm;
+  top: 8mm;
+  right: 10mm;
   width: 18mm;
   height: auto;
   max-height: 18mm;
   opacity: 0.85;
   object-fit: contain;
+  z-index: 2;
 }
 
 /* ---------- Página de introdução ---------- */
