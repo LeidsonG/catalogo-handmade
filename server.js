@@ -10,6 +10,7 @@ const DATA_FILE = path.join(ROOT, 'data', 'produtos.json');
 const INTRO_FILE = path.join(ROOT, 'data', 'intro.json');
 const UPLOADS = path.join(ROOT, 'uploads');
 const OUTPUT_DIR = path.join(ROOT, 'output');
+const PORTA = Number(process.env.PORT) || 3000;
 
 for (const dir of [path.join(UPLOADS, 'produtos'), path.join(UPLOADS, 'cores'), OUTPUT_DIR]) {
   fs.mkdirSync(dir, { recursive: true });
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/admin', express.static(path.join(ROOT, 'admin')));
 app.use('/uploads', express.static(UPLOADS));
 app.use('/templates', express.static(path.join(ROOT, 'templates')));
+app.use('/assets', express.static(path.join(ROOT, 'assets')));
 
 const storage = multer.diskStorage({
   destination: (req, _file, cb) => {
@@ -130,16 +132,14 @@ app.post('/api/gerar-pdf', async (req, res) => {
   const layout = String(req.body.layout || '2');
   if (!['1', '2'].includes(layout)) return res.status(400).json({ erro: 'layout inválido' });
 
-  const html = construirHtml({
-    produtos: readData().produtos,
-    intro: readIntro(),
-    layout,
-  });
-
   const browser = await puppeteer.launch({ headless: 'new' });
   try {
     const page = await browser.newPage();
-    await page.setContent(html, { waitUntil: 'networkidle0' });
+    // Carregamos via rota HTTP (em vez de setContent) para que caminhos absolutos
+    // como /uploads/... e /assets/... resolvam para o próprio servidor.
+    await page.goto(`http://localhost:${PORTA}/render/${layout}`, {
+      waitUntil: 'networkidle0',
+    });
     const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
     const nome = `catalogo-layout${layout}-${stamp}.pdf`;
     const caminho = path.join(OUTPUT_DIR, nome);
@@ -266,7 +266,6 @@ function formatarPreco(v) {
   });
 }
 
-const PORTA = Number(process.env.PORT) || 3000;
 app.listen(PORTA, () => {
   console.log(`Servidor: http://localhost:${PORTA}/admin`);
 });
