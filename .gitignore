@@ -1,6 +1,7 @@
 node_modules/
 output/*.pdf
 fotos-originais/
+data/*.backup-*
 .DS_Store
 *.log
 .venv/
