@@ -10,10 +10,7 @@
   <header class="topo">
     <h1>Handmade<span class="topo-sub">— Sistema de Catálogo</span></h1>
     <div class="topo-acoes">
-      <label class="topo-select">
-        Categoria
-        <select id="seletor-categoria-pdf"></select>
-      </label>
+      <select id="seletor-categoria-pdf" class="topo-select" title="Categoria do PDF"></select>
       <button id="btn-pdf-1" class="botao botao-secundario">Gerar PDF (1 por página)</button>
       <button id="btn-pdf-2" class="botao botao-primario">Gerar PDF (2 por página)</button>
     </div>
@@ -65,7 +62,10 @@
               <input name="nome" placeholder="Ex: Cintos infantis masculino" required>
             </label>
             <label class="campo-prefixo">Prefixo do código
-              <input name="prefixoCodigo" placeholder="CM-" maxlength="10">
+              <span class="prefixo-wrap">
+                <input name="prefixoCodigo" placeholder="CM" maxlength="6" pattern="[A-Za-z0-9]*" autocomplete="off">
+                <span class="prefixo-sufixo">-</span>
+              </span>
             </label>
           </div>
           <div class="acoes-form">
@@ -95,7 +95,12 @@
     <section class="lista-painel">
       <div class="lista-cabecalho">
         <h2>Produtos cadastrados</h2>
-        <div class="contador" id="contador">0 produtos</div>
+        <div class="lista-cabecalho-acoes">
+          <select id="filtro-categoria-lista" class="filtro-lista" title="Filtrar por categoria">
+            <option value="">Todas as categorias</option>
+          </select>
+          <div class="contador" id="contador">0 produtos</div>
+        </div>
       </div>
       <div id="grupos" class="grupos"></div>
     </section>

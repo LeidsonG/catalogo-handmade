@@ -6,8 +6,11 @@ const formCategoria = $('#form-categoria');
 const listaCategorias = $('#lista-categorias');
 const selectCategoriaProduto = $('#select-categoria-produto');
 const seletorCategoriaPdf = $('#seletor-categoria-pdf');
+const filtroCategoriaLista = $('#filtro-categoria-lista');
 const grupos = $('#grupos');
 const contador = $('#contador');
+
+let filtroCategoria = '';
 const tituloForm = $('#titulo-form');
 const btnSalvar = $('#btn-salvar');
 const btnLimpar = $('#btn-limpar');
@@ -152,12 +155,31 @@ function popularSelectsCategoria() {
   if (categorias.find((c) => c.id === valorPdfAtual && (contagem.get(c.id) || 0) > 0)) {
     seletorCategoriaPdf.value = valorPdfAtual;
   }
+
+  // Filtro da lista de produtos: "Todas" + cada categoria com contador
+  const opcoesFiltro = categorias.map((c) => {
+    const n = contagem.get(c.id) || 0;
+    return `<option value="${c.id}">${esc(c.nome)} (${n})</option>`;
+  }).join('');
+  filtroCategoriaLista.innerHTML = `<option value="">Todas as categorias</option>${opcoesFiltro}`;
+  if (filtroCategoria && categorias.find((c) => c.id === filtroCategoria)) {
+    filtroCategoriaLista.value = filtroCategoria;
+  } else {
+    filtroCategoria = '';
+    filtroCategoriaLista.value = '';
+  }
 }
+
+filtroCategoriaLista.addEventListener('change', () => {
+  filtroCategoria = filtroCategoriaLista.value;
+  renderProdutos();
+});
 
 formCategoria.addEventListener('submit', async (e) => {
   e.preventDefault();
   const nome = formCategoria.elements.nome.value.trim();
-  const prefixoCodigo = formCategoria.elements.prefixoCodigo.value.trim();
+  // Input só aceita letras/números; backend adiciona "-" automaticamente.
+  const prefixoCodigo = formCategoria.elements.prefixoCodigo.value.trim().replace(/[^A-Za-z0-9]/g, '');
   if (!nome) return;
   const id = formCategoria.elements.id.value;
   const url = id ? `/api/categorias/${id}` : '/api/categorias';
@@ -179,6 +201,12 @@ formCategoria.addEventListener('submit', async (e) => {
 
 btnCancelarCategoria.addEventListener('click', limparFormCategoria);
 
+// Bloqueia caracteres inválidos no input de prefixo em tempo real
+formCategoria.elements.prefixoCodigo.addEventListener('input', (e) => {
+  const limpo = e.target.value.replace(/[^A-Za-z0-9]/g, '').toUpperCase();
+  if (limpo !== e.target.value) e.target.value = limpo;
+});
+
 function limparFormCategoria() {
   formCategoria.reset();
   formCategoria.elements.id.value = '';
@@ -191,7 +219,8 @@ function editarCategoria(id) {
   if (!c) return;
   formCategoria.elements.id.value = c.id;
   formCategoria.elements.nome.value = c.nome;
-  formCategoria.elements.prefixoCodigo.value = c.prefixoCodigo || '';
+  // Remove o "-" final do prefixo salvo para mostrar só o que o usuário digitou
+  formCategoria.elements.prefixoCodigo.value = (c.prefixoCodigo || '').replace(/-+$/, '');
   btnSalvarCategoria.textContent = 'Salvar';
   btnCancelarCategoria.classList.remove('escondido');
   formCategoria.elements.nome.focus();
@@ -226,8 +255,13 @@ function renderProdutos() {
     else semCategoria.push(p);
   }
 
+  const categoriasFiltradas = filtroCategoria
+    ? categorias.filter((c) => c.id === filtroCategoria)
+    : categorias;
+  const mostrarSemCategoria = !filtroCategoria && semCategoria.length;
+
   let html = '';
-  for (const cat of categorias) {
+  for (const cat of categoriasFiltradas) {
     const itens = porCategoria.get(cat.id) || [];
     html += `
       <section class="grupo">
@@ -241,7 +275,7 @@ function renderProdutos() {
       </section>
     `;
   }
-  if (semCategoria.length) {
+  if (mostrarSemCategoria) {
     html += `
       <section class="grupo grupo-orfao">
         <h3 class="grupo-titulo">
@@ -252,6 +286,9 @@ function renderProdutos() {
         <ul class="lista">${semCategoria.map(itemHtml).join('')}</ul>
       </section>
     `;
+  }
+  if (!html) {
+    html = '<div class="vazio">Nenhum produto nessa categoria.</div>';
   }
   grupos.innerHTML = html;
   grupos.querySelectorAll('[data-editar]').forEach((el) => {
