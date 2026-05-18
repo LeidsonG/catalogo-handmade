@@ -3,7 +3,8 @@
     {
       "id": "c001",
       "nome": "Cintos infantis masculino",
-      "ordem": 0
+      "ordem": 0,
+      "prefixoCodigo": "CM-"
     }
   ]
 }

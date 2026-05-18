@@ -158,6 +158,7 @@ app.post('/api/categorias', (req, res) => {
   const nova = {
     id: gerarProximoId(data.categorias, 'c', 3),
     nome,
+    prefixoCodigo: String(req.body.prefixoCodigo || '').trim(),
     ordem: data.categorias.length,
   };
   data.categorias.push(nova);
@@ -176,9 +177,38 @@ app.put('/api/categorias/:id', (req, res) => {
   );
   if (conflito) return res.status(400).json({ erro: 'já existe uma categoria com esse nome' });
   data.categorias[idx].nome = nome;
+  if (req.body.prefixoCodigo !== undefined) {
+    data.categorias[idx].prefixoCodigo = String(req.body.prefixoCodigo || '').trim();
+  }
   writeCategorias(data);
   res.json(data.categorias[idx]);
 });
+
+app.get('/api/categorias/:id/proximo-codigo', (req, res) => {
+  const categoria = readCategorias().categorias.find((c) => c.id === req.params.id);
+  if (!categoria) return res.status(404).json({ erro: 'categoria não encontrada' });
+  const prefixo = categoria.prefixoCodigo || '';
+  if (!prefixo) return res.json({ codigo: '', motivo: 'categoria sem prefixo definido' });
+  const produtos = readData().produtos;
+  const codigo = proximoCodigoCategoria(produtos, categoria.id, prefixo);
+  res.json({ codigo });
+});
+
+function proximoCodigoCategoria(produtos, categoriaId, prefixo) {
+  const numeros = [];
+  let tamanhoMin = 3;
+  for (const p of produtos) {
+    if (p.categoriaId !== categoriaId) continue;
+    if (!p.codigo || !p.codigo.startsWith(prefixo)) continue;
+    const parte = p.codigo.slice(prefixo.length);
+    if (/^\d+$/.test(parte)) {
+      numeros.push(Number(parte));
+      tamanhoMin = Math.max(tamanhoMin, parte.length);
+    }
+  }
+  const proximo = (numeros.length ? Math.max(...numeros) : 0) + 1;
+  return `${prefixo}${String(proximo).padStart(tamanhoMin, '0')}`;
+}
 
 app.post('/api/categorias/reordenar', (req, res) => {
   const { ordemIds } = req.body;
