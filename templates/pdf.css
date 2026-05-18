@@ -215,16 +215,17 @@ html, body {
 .pagina-layout-2 {
   display: flex;
   flex-direction: column;
-  gap: 8mm;
+  gap: 6mm;
+  padding: 10mm 8mm;
 }
 
 .pagina-layout-2 .produto-bloco {
   flex: 1;
   display: grid;
-  grid-template-columns: 1.6fr 1fr;
-  gap: 8mm;
+  grid-template-columns: 1.8fr 1fr;
+  gap: 6mm;
   align-items: center;
-  padding: 4mm 2mm;
+  padding: 2mm 0;
   border-bottom: 1px solid var(--cor-linha);
   min-height: 0;
 }
@@ -246,7 +247,7 @@ html, body {
 
 .pagina-layout-2 .produto-foto {
   max-width: 100%;
-  max-height: 150mm;
+  max-height: 165mm;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -254,7 +255,7 @@ html, body {
 
 .pagina-layout-2 .produto-foto-placeholder {
   width: 100%;
-  height: 150mm;
+  height: 165mm;
   background: var(--cor-papel);
   border: 1px dashed var(--cor-linha);
   display: flex;
