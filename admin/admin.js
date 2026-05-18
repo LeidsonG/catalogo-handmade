@@ -319,21 +319,37 @@ formIntro.addEventListener('submit', async (e) => {
 
 /* ---------- Upload ---------- */
 
-async function uploadArquivo(file, tipo) {
+async function uploadArquivo(file, tipo, codigo) {
   const fd = new FormData();
   fd.append('arquivo', file);
-  const resposta = await fetch(`/api/upload/${tipo}`, { method: 'POST', body: fd });
+  const qs = codigo ? `?codigo=${encodeURIComponent(codigo)}` : '';
+  const resposta = await fetch(`/api/upload/${tipo}${qs}`, { method: 'POST', body: fd });
   if (!resposta.ok) throw new Error('Falha no upload');
   return resposta.json();
+}
+
+function codigoPreenchidoOuAvisa() {
+  const codigo = formProduto.elements.codigo.value.trim();
+  if (!codigo) {
+    mostrarToast('Preencha o código do produto antes do upload', 'erro');
+    formProduto.elements.codigo.focus();
+    return null;
+  }
+  return codigo;
 }
 
 arquivoFoto.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+  const codigo = codigoPreenchidoOuAvisa();
+  if (!codigo) {
+    arquivoFoto.value = '';
+    return;
+  }
   try {
-    const { caminho } = await uploadArquivo(file, 'foto');
+    const { caminho } = await uploadArquivo(file, 'foto', codigo);
     formProduto.elements.foto.value = caminho;
-    previewFoto.innerHTML = `<img src="${caminho}">`;
+    previewFoto.innerHTML = `<img src="${caminho}?t=${Date.now()}">`;
   } catch (err) {
     mostrarToast('Erro no upload da foto', 'erro');
   }
@@ -342,11 +358,16 @@ arquivoFoto.addEventListener('change', async (e) => {
 arquivoCor.addEventListener('change', async (e) => {
   const file = e.target.files[0];
   if (!file) return;
+  const codigo = codigoPreenchidoOuAvisa();
+  if (!codigo) {
+    arquivoCor.value = '';
+    return;
+  }
   try {
-    const { caminho } = await uploadArquivo(file, 'cor');
+    const { caminho } = await uploadArquivo(file, 'cor', codigo);
     formProduto.elements.corTextura.value = caminho;
     previewCor.className = 'preview preview-cor com-textura';
-    previewCor.style.backgroundImage = `url('${caminho}')`;
+    previewCor.style.backgroundImage = `url('${caminho}?t=${Date.now()}')`;
     previewCor.innerHTML = '';
   } catch (err) {
     mostrarToast('Erro no upload da cor', 'erro');
