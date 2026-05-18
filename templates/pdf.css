@@ -130,19 +130,21 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10mm;
+  margin-bottom: 6mm;
   min-height: 0;
 }
 
 .pagina-layout-1 .produto-foto {
   max-width: 100%;
-  max-height: 180mm;
+  max-height: 215mm;
+  width: 100%;
+  height: 215mm;
   object-fit: contain;
 }
 
 .pagina-layout-1 .produto-foto-placeholder {
   width: 100%;
-  height: 180mm;
+  height: 215mm;
   background: var(--cor-papel);
   border: 1px dashed var(--cor-linha);
   display: flex;
@@ -226,13 +228,15 @@ html, body {
 
 .pagina-layout-2 .produto-foto {
   max-width: 100%;
-  max-height: 110mm;
+  max-height: 130mm;
+  width: 100%;
+  height: 130mm;
   object-fit: contain;
 }
 
 .pagina-layout-2 .produto-foto-placeholder {
   width: 100%;
-  height: 100mm;
+  height: 130mm;
   background: var(--cor-papel);
   border: 1px dashed var(--cor-linha);
   display: flex;
@@ -282,23 +286,31 @@ html, body {
 .produto-cor {
   display: flex;
   align-items: center;
-  gap: 3mm;
+  gap: 2mm;
 }
 
 .produto-cor-amostra {
   display: inline-block;
-  width: 9mm;
-  height: 9mm;
+  width: 5mm;
+  height: 5mm;
   border-radius: 50%;
   border: 1px solid rgba(0, 0, 0, 0.15);
   background-size: cover;
   background-position: center;
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
 }
 
 .produto-cor-nome {
-  font-size: 10pt;
+  font-size: 8pt;
   letter-spacing: 1px;
   color: var(--cor-suave);
   text-transform: uppercase;
+}
+
+/* ---------- Preço ---------- */
+.produto-preco {
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 600;
+  letter-spacing: 0.3px;
 }
