@@ -154,8 +154,13 @@ html, body {
 
 .grid-cat {
   display: grid;
-  grid-template-columns: 1fr 110px;
+  grid-template-columns: 1fr 130px;
   gap: 10px;
+  align-items: end;
+}
+
+.grid-cat > label {
+  white-space: nowrap;
 }
 
 .prefixo-wrap {
