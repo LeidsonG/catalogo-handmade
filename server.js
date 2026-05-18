@@ -157,6 +157,15 @@ app.post('/api/gerar-pdf', async (req, res) => {
 
 app.use('/output', express.static(OUTPUT_DIR));
 
+function encontrarLogo() {
+  const exts = ['svg', 'png', 'jpg', 'jpeg', 'webp'];
+  for (const ext of exts) {
+    const caminho = path.join(ROOT, 'assets', `logo.${ext}`);
+    if (fs.existsSync(caminho)) return `/assets/logo.${ext}`;
+  }
+  return '';
+}
+
 function construirHtml({ produtos, intro, layout }) {
   const css = fs.readFileSync(path.join(ROOT, 'templates', 'pdf.css'), 'utf8');
   const templateIntro = fs.readFileSync(path.join(ROOT, 'templates', 'intro.html'), 'utf8');
@@ -165,6 +174,14 @@ function construirHtml({ produtos, intro, layout }) {
     'utf8',
   );
 
+  const logo = encontrarLogo();
+  const logoIntroHtml = logo
+    ? `<img class="intro-logo" src="${escapar(logo)}" alt="">`
+    : '';
+  const logoCantoHtml = logo
+    ? `<img class="logo-canto" src="${escapar(logo)}" alt="">`
+    : '';
+
   const introRender = aplicar(templateIntro, {
     marca: intro.marca,
     subtitulo: intro.subtitulo,
@@ -172,14 +189,14 @@ function construirHtml({ produtos, intro, layout }) {
     ano: intro.ano,
     instagram: intro.contato?.instagram || '',
     whatsapp: intro.contato?.whatsapp || '',
-  });
+  }).replace('{{logo}}', logoIntroHtml);
 
   const ordenados = [...produtos].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
 
   let paginas = '';
   if (layout === '1') {
     for (const p of ordenados) {
-      paginas += renderProduto(templateProduto, p);
+      paginas += renderProduto(templateProduto, p).replace('{{logo}}', logoCantoHtml);
     }
   } else {
     for (let i = 0; i < ordenados.length; i += 2) {
@@ -188,7 +205,8 @@ function construirHtml({ produtos, intro, layout }) {
       const bloco2 = par[1] ? renderBloco(par[1]) : '<div class="produto-bloco vazio"></div>';
       paginas += templateProduto
         .replace('{{bloco1}}', bloco1)
-        .replace('{{bloco2}}', bloco2);
+        .replace('{{bloco2}}', bloco2)
+        .replace('{{logo}}', logoCantoHtml);
     }
   }
 

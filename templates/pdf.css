@@ -11,18 +11,18 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: 'Georgia', 'Times New Roman', serif;
-  color: #2a1a10;
-  background: #faf6f1;
+  color: var(--cor-texto);
+  background: var(--cor-fundo);
   -webkit-print-color-adjust: exact;
   print-color-adjust: exact;
 }
 
 :root {
-  --cor-fundo: #faf6f1;
-  --cor-papel: #ffffff;
-  --cor-texto: #2a1a10;
-  --cor-acento: #6b4226;
-  --cor-suave: #8a6e57;
+  --cor-fundo: #ffffff;
+  --cor-papel: #f7f3ee;
+  --cor-texto: #1a1a1a;
+  --cor-acento: #1a1a1a;
+  --cor-suave: #7a6a5a;
   --cor-linha: #d8c9b8;
 }
 
@@ -38,6 +38,28 @@ html, body {
 
 .pagina:last-child {
   page-break-after: auto;
+}
+
+/* ---------- Logo ---------- */
+.intro-logo {
+  display: block;
+  max-width: 70mm;
+  max-height: 70mm;
+  width: auto;
+  height: auto;
+  margin: 0 auto 12mm;
+  object-fit: contain;
+}
+
+.logo-canto {
+  position: absolute;
+  bottom: 10mm;
+  right: 12mm;
+  width: 18mm;
+  height: auto;
+  max-height: 18mm;
+  opacity: 0.85;
+  object-fit: contain;
 }
 
 /* ---------- Página de introdução ---------- */
