@@ -176,21 +176,47 @@ html, body {
 .categoria-item {
   display: flex;
   align-items: center;
-  justify-content: space-between;
   gap: 8px;
   padding: 6px 10px;
   background: var(--cor-fundo);
   border-radius: var(--raio);
   border: 1px solid transparent;
+  cursor: default;
+  transition: border-color 0.15s, background 0.15s, transform 0.05s;
 }
 
 .categoria-item:hover {
   border-color: var(--cor-linha);
 }
 
+.categoria-item.arrastando {
+  opacity: 0.4;
+}
+
+.categoria-item.alvo-drop {
+  border-color: var(--cor-acento);
+  background: #fff;
+  transform: translateY(-1px);
+}
+
+.categoria-drag {
+  cursor: grab;
+  color: var(--cor-suave);
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: -2px;
+  user-select: none;
+  padding: 0 2px;
+}
+
+.categoria-drag:active {
+  cursor: grabbing;
+}
+
 .categoria-nome {
   font-size: 13px;
   color: var(--cor-texto);
+  flex: 1;
 }
 
 .categoria-acoes {

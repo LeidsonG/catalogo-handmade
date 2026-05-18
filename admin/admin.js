@@ -62,7 +62,8 @@ function renderCategorias() {
     return;
   }
   listaCategorias.innerHTML = categorias.map((c) => `
-    <li class="categoria-item" data-id="${c.id}">
+    <li class="categoria-item" draggable="true" data-id="${c.id}">
+      <span class="categoria-drag" title="Arraste para reordenar">⋮⋮</span>
       <span class="categoria-nome">${esc(c.nome)}</span>
       <span class="categoria-acoes">
         <button class="botao botao-fantasma botao-mini" data-editar-cat="${c.id}">Renomear</button>
@@ -76,22 +77,78 @@ function renderCategorias() {
   listaCategorias.querySelectorAll('[data-excluir-cat]').forEach((el) => {
     el.addEventListener('click', () => excluirCategoria(el.dataset.excluirCat));
   });
+  ativarDragCategorias();
+}
+
+let dragCatId = null;
+
+function ativarDragCategorias() {
+  listaCategorias.querySelectorAll('.categoria-item').forEach((el) => {
+    el.addEventListener('dragstart', (e) => {
+      dragCatId = el.dataset.id;
+      el.classList.add('arrastando');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', el.dataset.id);
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('arrastando');
+      listaCategorias.querySelectorAll('.alvo-drop').forEach((x) => x.classList.remove('alvo-drop'));
+      dragCatId = null;
+    });
+    el.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!dragCatId || el.dataset.id === dragCatId) return;
+      listaCategorias.querySelectorAll('.alvo-drop').forEach((x) => x.classList.remove('alvo-drop'));
+      el.classList.add('alvo-drop');
+    });
+    el.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      const origemId = dragCatId;
+      const destinoId = el.dataset.id;
+      if (!origemId || origemId === destinoId) return;
+      const idsAtuais = Array.from(listaCategorias.querySelectorAll('.categoria-item')).map((x) => x.dataset.id);
+      const novaOrdem = idsAtuais.filter((id) => id !== origemId);
+      const idxDestino = novaOrdem.indexOf(destinoId);
+      novaOrdem.splice(idxDestino, 0, origemId);
+      await reordenarCategorias(novaOrdem);
+    });
+  });
+}
+
+async function reordenarCategorias(ordemIds) {
+  const resposta = await fetch('/api/categorias/reordenar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ordemIds }),
+  });
+  if (resposta.ok) carregar();
+  else mostrarToast('Erro ao reordenar', 'erro');
 }
 
 function popularSelectsCategoria() {
-  const opcoes = categorias.length
-    ? categorias.map((c) => `<option value="${c.id}">${esc(c.nome)}</option>`).join('')
-    : '';
+  const opcoesProduto = categorias
+    .map((c) => `<option value="${c.id}">${esc(c.nome)}</option>`)
+    .join('');
 
   selectCategoriaProduto.innerHTML = categorias.length
-    ? `<option value="">— selecione —</option>${opcoes}`
+    ? `<option value="">— selecione —</option>${opcoesProduto}`
     : '<option value="">— crie uma categoria antes —</option>';
+
+  const contagem = new Map();
+  for (const p of produtos) {
+    contagem.set(p.categoriaId, (contagem.get(p.categoriaId) || 0) + 1);
+  }
+  const opcoesPdf = categorias.map((c) => {
+    const n = contagem.get(c.id) || 0;
+    const sufixo = n === 0 ? ' (vazia)' : ` (${n})`;
+    return `<option value="${c.id}"${n === 0 ? ' disabled' : ''}>${esc(c.nome)}${sufixo}</option>`;
+  }).join('');
 
   const valorPdfAtual = seletorCategoriaPdf.value;
   seletorCategoriaPdf.innerHTML = categorias.length
-    ? opcoes
+    ? opcoesPdf
     : '<option value="">(sem categorias)</option>';
-  if (categorias.find((c) => c.id === valorPdfAtual)) {
+  if (categorias.find((c) => c.id === valorPdfAtual && (contagem.get(c.id) || 0) > 0)) {
     seletorCategoriaPdf.value = valorPdfAtual;
   }
 }
