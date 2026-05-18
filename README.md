@@ -1,102 +1,158 @@
-# Tati Cintos — Sistema de Catálogo
+# Catálogo Handmade
 
-Sistema local para gerar catálogos PDF de cintos de couro artesanais.
-Edita preços e produtos numa interface web, gera o PDF em segundos.
+Sistema local em Node.js + Puppeteer para gerar catálogos PDF de cintos de couro
+artesanais (marca **Handmade — Tati**). Admin web para cadastrar produtos por
+categoria, fazer upload de fotos e regerar o PDF em segundos sempre que algum
+preço mudar.
 
-## O que tem dentro
+> Pensado para quem precisa atualizar preços com frequência sem ter que reabrir
+> InDesign/Illustrator e re-exportar 40 páginas manualmente.
 
-- **`server.js`** — Servidor Express com API REST (produtos, intro, upload, gerar PDF).
-- **`admin/`** — Interface web local para CRUD de produtos.
-- **`templates/`** — HTML + CSS dos PDFs (intro, 1/página, 2/página).
-- **`data/produtos.json`** — Banco de dados simples (texto). Não edite à mão se possível.
-- **`scripts/remove-bg.py`** — Remove fundo de várias fotos em lote.
-- **`uploads/`** — Fotos dos produtos e recortes de cor (criadas pelo admin).
-- **`output/`** — PDFs gerados.
+## Funcionalidades
+
+- **Admin web local** com CRUD de produtos e categorias
+- **Categorias com prefixo de código** — ao escolher a categoria, o próximo
+  código é sugerido automaticamente (`CM-001`, `CM-002`, `CM-003`...)
+- **Drag-and-drop** para reordenar categorias
+- **Filtro por categoria** na lista de produtos
+- **Upload de fotos** (PNG sem fundo) e recorte de cor (textura real do couro)
+- **Dois layouts de PDF**: 1 produto por página (luxuoso) ou 2 produtos por
+  página (equilibrado)
+- **PDF filtrado por categoria** — gera só os produtos da categoria escolhida
+- **Logo da marca** na página de introdução (grande) e no canto de cada página
+  (pequeno)
+- **Script Python** para remover fundo das fotos em lote (`rembg`)
+- **IDs sequenciais e legíveis** (`p00001`, `c001`) — arquivos de imagem
+  nomeados pelo código do produto (`CM-001.png`)
 
 ## Pré-requisitos
 
-- Node.js 18+ (você tem v19)
-- Python 3.10+ (você tem 3.12), apenas para remover fundo das fotos
+- **Node.js 18+** (recomendado 19+)
+- **Python 3.10+** (opcional — só para remover fundo das fotos em lote)
 
-## Primeiro uso
+## Instalação
 
 ```bash
-# 1. Instalar dependências do servidor (já feito na 1ª execução)
+git clone https://github.com/LeidsonG/catalogo-handmade.git
+cd catalogo-handmade
 npm install
+```
 
-# 2. (Opcional) Instalar rembg para remover fundo das fotos
+Opcional, para o script de remoção de fundo:
+
+```bash
 pip install -r scripts/requirements.txt
+```
 
-# 3. Subir o servidor
+## Como usar
+
+```bash
 npm start
 ```
 
 Abra http://localhost:3000/admin no navegador.
 
-## Fluxo de trabalho
+### Fluxo de trabalho
 
-### a) Preparar as fotos (uma vez)
+1. **Logo da marca** — coloque `logo.svg` (ou `.png`) na pasta [assets/](assets/).
+   Veja [assets/README.md](assets/README.md).
+2. **Preparar fotos** (opcional, em lote) — jogue as fotos originais com
+   fundo em [fotos-originais/](fotos-originais/) e rode:
+   ```bash
+   python scripts/remove-bg.py
+   ```
+   Isso gera os PNGs sem fundo em `uploads/produtos/sem-fundo/`.
+3. **Criar categorias** — no admin, defina cada categoria (ex: "Cintos
+   infantis masculino") e o **prefixo** (ex: `CM`).
+4. **Cadastrar produtos** — para cada cinto, escolha a categoria (o código
+   é preenchido automático: `CM-001`, `CM-002`...), preencha nome, preço,
+   descrição e cor, faça upload da foto e do recorte de cor.
+5. **Editar a introdução** — bloco de Introdução no admin (marca, subtítulo,
+   texto, ano, Instagram, WhatsApp).
+6. **Gerar PDF** — no topo do admin, escolha a categoria e clique em
+   "Gerar PDF (1 por página)" ou "Gerar PDF (2 por página)". O PDF abre
+   numa aba nova e fica salvo em [output/](output/) com o nome
+   `catalogo-<categoria>-layout<N>-<timestamp>.pdf`.
 
-1. Jogue as fotos originais dos cintos em [fotos-originais/](fotos-originais/).
-2. Rode `python scripts/remove-bg.py` — gera PNGs sem fundo em
-   [uploads/produtos/sem-fundo/](uploads/produtos/sem-fundo/).
-3. (Para o círculo de cor) Recorte um pedaço pequeno da textura do couro
-   de cada cinto (pode ser no Paint ou qualquer editor) e salve numa pasta.
-
-### b) Cadastrar produtos
-
-1. No admin, preencha a **Introdução** uma vez.
-2. Para cada cinto, preencha o formulário e faça upload:
-   - Foto do produto (a PNG sem fundo)
-   - Recorte da textura do couro (vira o círculo de cor no catálogo)
-3. Clique em **Adicionar produto**.
-
-### c) Gerar PDF
-
-- **Gerar PDF (1 por página)** — layout luxuoso, ~45 páginas para 40 cintos.
-- **Gerar PDF (2 por página)** — layout equilibrado, ~22 páginas.
-
-O PDF abre numa nova aba e fica salvo em [output/](output/).
-Pode gerar quantas vezes quiser — cada arquivo tem timestamp no nome.
-
-### d) Atualizar preços
+### Atualizar preços
 
 Abra o admin, clique **Editar** no produto, mude o preço, salve, regere o PDF.
+São 5 segundos por mudança em vez de reabrir todo o documento de design.
 
-## Identidade visual (para você customizar depois)
+## Personalização visual
 
-Cores e fontes do PDF estão em [templates/pdf.css](templates/pdf.css), nas variáveis
-no topo do arquivo:
+Todo o visual do PDF está em [templates/pdf.css](templates/pdf.css). Os blocos
+estão marcados com comentários para você achar rápido. Os mais úteis:
 
 ```css
 :root {
-  --cor-fundo: #faf6f1;       /* fundo das páginas */
-  --cor-acento: #6b4226;      /* marrom principal (títulos, preços) */
-  --cor-suave: #8a6e57;       /* secundário (códigos, legendas) */
+  --cor-fundo: #ffffff;       /* fundo das páginas */
+  --cor-acento: #1a1a1a;      /* cor principal */
+  --cor-suave: #7a6a5a;       /* cor secundária */
   --cor-linha: #d8c9b8;       /* divisórias */
 }
 ```
 
-Para usar a fonte/logo da marca, é só substituir essas variáveis e o conteúdo da
-página de introdução em [templates/intro.html](templates/intro.html).
+| O que mudar | Onde mexer |
+|---|---|
+| Margem das páginas | `.pagina-layout-1 { padding: ... }` ou `.pagina-layout-2 { padding: ... }` |
+| Tamanho da foto (layout 1) | `.pagina-layout-1 .produto-foto { max-height: ... }` |
+| Tamanho da foto (layout 2) | `.pagina-layout-2 .produto-foto { max-height: ... }` |
+| Proporção foto/info (layout 2) | `.pagina-layout-2 .produto-bloco { grid-template-columns: ... }` |
+| Tamanho do círculo de cor | `.produto-cor-amostra { width: ...; height: ... }` |
+| Logo de canto | `.logo-canto { width: ...; top: ...; right: ... }` |
+
+> Mudou só o CSS? **Não precisa reiniciar o servidor** — clique "Gerar PDF"
+> de novo. Mudou `server.js`? Precisa reiniciar.
 
 ## Estrutura de pastas
 
 ```
-handmade-cintos/
-├── server.js                  Servidor + API
+catalogo-handmade/
+├── server.js                  Servidor Express + API + geração de PDF
 ├── package.json
 ├── admin/                     Interface web (index.html, admin.js, admin.css)
-├── templates/                 HTML/CSS do PDF
+├── templates/                 HTML/CSS do PDF (pdf.css, intro/layout-1/layout-2.html)
 ├── data/
 │   ├── produtos.json          Banco de produtos
-│   └── intro.json             Dados da página de introdução
+│   ├── categorias.json        Banco de categorias
+│   └── intro.json             Texto da página de introdução
+├── assets/
+│   └── logo.svg               Logo da marca (você adiciona)
 ├── uploads/
 │   ├── produtos/              Fotos dos cintos (PNG sem fundo)
 │   └── cores/                 Recortes de textura para o círculo de cor
 ├── scripts/
-│   ├── remove-bg.py           Remoção de fundo em lote
+│   ├── remove-bg.py           Remoção de fundo em lote (rembg)
+│   ├── migrar-ids.js          Migração one-shot de IDs/arquivos
 │   └── requirements.txt
 ├── fotos-originais/           Fotos com fundo (entrada do remove-bg.py)
 └── output/                    PDFs gerados
 ```
+
+## API REST
+
+O admin web é apenas um cliente da API HTTP. Você pode integrar outra ferramenta
+(planilha, importador) chamando essas rotas:
+
+| Método | Rota | Descrição |
+|---|---|---|
+| GET    | `/api/produtos`                          | Lista todos os produtos |
+| POST   | `/api/produtos`                          | Cria produto (exige `categoriaId`) |
+| PUT    | `/api/produtos/:id`                      | Edita produto |
+| DELETE | `/api/produtos/:id`                      | Remove produto |
+| POST   | `/api/produtos/reordenar`                | Reordena (recebe `ordemIds: [...]`) |
+| GET    | `/api/categorias`                        | Lista categorias |
+| POST   | `/api/categorias`                        | Cria categoria |
+| PUT    | `/api/categorias/:id`                    | Edita categoria |
+| DELETE | `/api/categorias/:id`                    | Remove (bloqueia se houver produtos) |
+| POST   | `/api/categorias/reordenar`              | Reordena categorias |
+| GET    | `/api/categorias/:id/proximo-codigo`     | Próximo código sugerido para a categoria |
+| POST   | `/api/upload/:tipo`                      | Upload de foto (`?codigo=XXX`) — tipo `foto` ou `cor` |
+| GET    | `/api/intro` / PUT                        | Texto da página de introdução |
+| GET    | `/render/:layout?categoria=ID`           | HTML do catálogo (1 ou 2) |
+| POST   | `/api/gerar-pdf`                         | Gera PDF (`layout`, `categoriaId`) |
+
+## Licença
+
+[MIT](LICENSE) © Leidson F. Gonçalves
