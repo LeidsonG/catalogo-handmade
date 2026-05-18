@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&display=swap');
+
 @page {
   size: A4;
   margin: 0;
@@ -126,6 +128,9 @@ html, body {
   font-size: 9pt;
   letter-spacing: 2px;
   color: var(--cor-suave);
+  font-family: 'Work Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-variant-numeric: tabular-nums lining-nums;
+  font-weight: 500;
 }
 
 .intro-rodape .contato {
@@ -322,8 +327,8 @@ html, body {
 
 /* ---------- Preço ---------- */
 .produto-preco {
-  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Work Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-variant-numeric: tabular-nums lining-nums;
-  font-weight: 600;
+  font-weight: 700;
   letter-spacing: 0.3px;
 }
