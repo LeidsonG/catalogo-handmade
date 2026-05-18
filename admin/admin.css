@@ -25,7 +25,7 @@ html, body {
 
 .topo {
   background: var(--cor-papel);
-  padding: 14px 28px;
+  padding: 12px 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -56,11 +56,11 @@ html, body {
 
 .layout {
   display: grid;
-  grid-template-columns: 420px 1fr;
-  gap: 24px;
-  padding: 24px;
-  max-width: 1400px;
-  margin: 0 auto;
+  grid-template-columns: 380px 1fr;
+  gap: 16px;
+  padding: 16px;
+  max-width: none;
+  margin: 0;
 }
 
 .painel {
@@ -254,7 +254,7 @@ html, body {
   margin: 0;
   padding: 0;
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 14px;
 }
 
