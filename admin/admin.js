@@ -1,13 +1,18 @@
 const $ = (sel) => document.querySelector(sel);
-const $$ = (sel) => document.querySelectorAll(sel);
 
 const formProduto = $('#form-produto');
 const formIntro = $('#form-intro');
-const lista = $('#lista');
+const formCategoria = $('#form-categoria');
+const listaCategorias = $('#lista-categorias');
+const selectCategoriaProduto = $('#select-categoria-produto');
+const seletorCategoriaPdf = $('#seletor-categoria-pdf');
+const grupos = $('#grupos');
 const contador = $('#contador');
 const tituloForm = $('#titulo-form');
 const btnSalvar = $('#btn-salvar');
 const btnLimpar = $('#btn-limpar');
+const btnSalvarCategoria = $('#btn-salvar-categoria');
+const btnCancelarCategoria = $('#btn-cancelar-categoria');
 const btnPdf1 = $('#btn-pdf-1');
 const btnPdf2 = $('#btn-pdf-2');
 const arquivoFoto = $('#arquivo-foto');
@@ -17,25 +22,182 @@ const previewCor = $('#preview-cor');
 const toast = $('#toast');
 
 let produtos = [];
+let categorias = [];
 
 async function carregar() {
-  produtos = await fetch('/api/produtos').then((r) => r.json());
-  renderLista();
-  const intro = await fetch('/api/intro').then((r) => r.json());
-  preencherIntro(intro);
+  const [pProds, pCats, pIntro] = await Promise.all([
+    fetch('/api/produtos').then((r) => r.json()),
+    fetch('/api/categorias').then((r) => r.json()),
+    fetch('/api/intro').then((r) => r.json()),
+  ]);
+  produtos = pProds;
+  categorias = pCats;
+  renderCategorias();
+  popularSelectsCategoria();
+  renderProdutos();
+  preencherIntro(pIntro);
 }
 
-function renderLista() {
-  contador.textContent = `${produtos.length} produto${produtos.length === 1 ? '' : 's'}`;
-  if (!produtos.length) {
-    lista.innerHTML = '<li class="vazio">Nenhum produto cadastrado ainda. Use o formulário ao lado para adicionar o primeiro.</li>';
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;');
+}
+
+function formatarPreco(v) {
+  return Number(v || 0).toLocaleString('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  });
+}
+
+/* ---------- Categorias ---------- */
+
+function renderCategorias() {
+  if (!categorias.length) {
+    listaCategorias.innerHTML = '<li class="vazio-cat">Nenhuma categoria. Crie uma acima para começar.</li>';
     return;
   }
-  lista.innerHTML = produtos.map(itemHtml).join('');
-  lista.querySelectorAll('[data-editar]').forEach((el) => {
+  listaCategorias.innerHTML = categorias.map((c) => `
+    <li class="categoria-item" data-id="${c.id}">
+      <span class="categoria-nome">${esc(c.nome)}</span>
+      <span class="categoria-acoes">
+        <button class="botao botao-fantasma botao-mini" data-editar-cat="${c.id}">Renomear</button>
+        <button class="botao botao-perigo botao-mini" data-excluir-cat="${c.id}">Excluir</button>
+      </span>
+    </li>
+  `).join('');
+  listaCategorias.querySelectorAll('[data-editar-cat]').forEach((el) => {
+    el.addEventListener('click', () => editarCategoria(el.dataset.editarCat));
+  });
+  listaCategorias.querySelectorAll('[data-excluir-cat]').forEach((el) => {
+    el.addEventListener('click', () => excluirCategoria(el.dataset.excluirCat));
+  });
+}
+
+function popularSelectsCategoria() {
+  const opcoes = categorias.length
+    ? categorias.map((c) => `<option value="${c.id}">${esc(c.nome)}</option>`).join('')
+    : '';
+
+  selectCategoriaProduto.innerHTML = categorias.length
+    ? `<option value="">— selecione —</option>${opcoes}`
+    : '<option value="">— crie uma categoria antes —</option>';
+
+  const valorPdfAtual = seletorCategoriaPdf.value;
+  seletorCategoriaPdf.innerHTML = categorias.length
+    ? opcoes
+    : '<option value="">(sem categorias)</option>';
+  if (categorias.find((c) => c.id === valorPdfAtual)) {
+    seletorCategoriaPdf.value = valorPdfAtual;
+  }
+}
+
+formCategoria.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const nome = formCategoria.elements.nome.value.trim();
+  if (!nome) return;
+  const id = formCategoria.elements.id.value;
+  const url = id ? `/api/categorias/${id}` : '/api/categorias';
+  const metodo = id ? 'PUT' : 'POST';
+  const resposta = await fetch(url, {
+    method: metodo,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ nome }),
+  });
+  if (resposta.ok) {
+    mostrarToast(id ? 'Categoria renomeada' : 'Categoria adicionada', 'sucesso');
+    limparFormCategoria();
+    carregar();
+  } else {
+    const { erro } = await resposta.json().catch(() => ({}));
+    mostrarToast(erro || 'Erro ao salvar categoria', 'erro');
+  }
+});
+
+btnCancelarCategoria.addEventListener('click', limparFormCategoria);
+
+function limparFormCategoria() {
+  formCategoria.reset();
+  formCategoria.elements.id.value = '';
+  btnSalvarCategoria.textContent = 'Adicionar';
+  btnCancelarCategoria.classList.add('escondido');
+}
+
+function editarCategoria(id) {
+  const c = categorias.find((x) => x.id === id);
+  if (!c) return;
+  formCategoria.elements.id.value = c.id;
+  formCategoria.elements.nome.value = c.nome;
+  btnSalvarCategoria.textContent = 'Salvar';
+  btnCancelarCategoria.classList.remove('escondido');
+  formCategoria.elements.nome.focus();
+}
+
+async function excluirCategoria(id) {
+  const c = categorias.find((x) => x.id === id);
+  if (!c) return;
+  if (!confirm(`Excluir a categoria "${c.nome}"?`)) return;
+  const resposta = await fetch(`/api/categorias/${id}`, { method: 'DELETE' });
+  if (resposta.ok) {
+    mostrarToast('Categoria excluída', 'sucesso');
+    carregar();
+  } else {
+    const { erro } = await resposta.json().catch(() => ({}));
+    mostrarToast(erro || 'Erro ao excluir', 'erro');
+  }
+}
+
+/* ---------- Produtos ---------- */
+
+function renderProdutos() {
+  contador.textContent = `${produtos.length} produto${produtos.length === 1 ? '' : 's'}`;
+  if (!produtos.length) {
+    grupos.innerHTML = '<div class="vazio">Nenhum produto cadastrado ainda.</div>';
+    return;
+  }
+  const porCategoria = new Map(categorias.map((c) => [c.id, []]));
+  const semCategoria = [];
+  for (const p of produtos) {
+    if (porCategoria.has(p.categoriaId)) porCategoria.get(p.categoriaId).push(p);
+    else semCategoria.push(p);
+  }
+
+  let html = '';
+  for (const cat of categorias) {
+    const itens = porCategoria.get(cat.id) || [];
+    html += `
+      <section class="grupo">
+        <h3 class="grupo-titulo">
+          ${esc(cat.nome)}
+          <span class="grupo-contador">${itens.length}</span>
+        </h3>
+        ${itens.length
+          ? `<ul class="lista">${itens.map(itemHtml).join('')}</ul>`
+          : '<div class="grupo-vazio">Sem produtos nesta categoria.</div>'}
+      </section>
+    `;
+  }
+  if (semCategoria.length) {
+    html += `
+      <section class="grupo grupo-orfao">
+        <h3 class="grupo-titulo">
+          Sem categoria
+          <span class="grupo-contador">${semCategoria.length}</span>
+        </h3>
+        <div class="grupo-aviso">Estes produtos foram cadastrados antes do sistema de categorias. Edite cada um para atribuir uma categoria.</div>
+        <ul class="lista">${semCategoria.map(itemHtml).join('')}</ul>
+      </section>
+    `;
+  }
+  grupos.innerHTML = html;
+  grupos.querySelectorAll('[data-editar]').forEach((el) => {
     el.addEventListener('click', () => editar(el.dataset.editar));
   });
-  lista.querySelectorAll('[data-excluir]').forEach((el) => {
+  grupos.querySelectorAll('[data-excluir]').forEach((el) => {
     el.addEventListener('click', () => excluir(el.dataset.excluir));
   });
 }
@@ -66,21 +228,7 @@ function itemHtml(p) {
   `;
 }
 
-function esc(s) {
-  if (s == null) return '';
-  return String(s)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-function formatarPreco(v) {
-  return Number(v || 0).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  });
-}
+/* ---------- Introdução ---------- */
 
 function preencherIntro(intro) {
   formIntro.elements.marca.value = intro.marca || '';
@@ -111,6 +259,8 @@ formIntro.addEventListener('submit', async (e) => {
   if (resposta.ok) mostrarToast('Introdução salva', 'sucesso');
   else mostrarToast('Erro ao salvar introdução', 'erro');
 });
+
+/* ---------- Upload ---------- */
 
 async function uploadArquivo(file, tipo) {
   const fd = new FormData();
@@ -146,9 +296,21 @@ arquivoCor.addEventListener('change', async (e) => {
   }
 });
 
+/* ---------- Produto (formulário) ---------- */
+
 formProduto.addEventListener('submit', async (e) => {
   e.preventDefault();
+  if (!categorias.length) {
+    mostrarToast('Crie uma categoria antes de cadastrar produtos', 'erro');
+    return;
+  }
+  const categoriaId = formProduto.elements.categoriaId.value;
+  if (!categoriaId) {
+    mostrarToast('Escolha uma categoria para o produto', 'erro');
+    return;
+  }
   const dados = {
+    categoriaId,
     codigo: formProduto.elements.codigo.value,
     nome: formProduto.elements.nome.value,
     descricao: formProduto.elements.descricao.value,
@@ -170,7 +332,8 @@ formProduto.addEventListener('submit', async (e) => {
     limparForm();
     carregar();
   } else {
-    mostrarToast('Erro ao salvar produto', 'erro');
+    const { erro } = await resposta.json().catch(() => ({}));
+    mostrarToast(erro || 'Erro ao salvar produto', 'erro');
   }
 });
 
@@ -193,6 +356,7 @@ function editar(id) {
   const p = produtos.find((x) => x.id === id);
   if (!p) return;
   formProduto.elements.id.value = p.id;
+  formProduto.elements.categoriaId.value = p.categoriaId || '';
   formProduto.elements.codigo.value = p.codigo;
   formProduto.elements.nome.value = p.nome;
   formProduto.elements.descricao.value = p.descricao;
@@ -226,7 +390,18 @@ async function excluir(id) {
   }
 }
 
+/* ---------- Gerar PDF ---------- */
+
 async function gerarPdf(layout) {
+  if (!categorias.length) {
+    mostrarToast('Crie ao menos uma categoria antes de gerar PDF', 'erro');
+    return;
+  }
+  const categoriaId = seletorCategoriaPdf.value;
+  if (!categoriaId) {
+    mostrarToast('Escolha uma categoria para gerar o PDF', 'erro');
+    return;
+  }
   const btn = layout === '1' ? btnPdf1 : btnPdf2;
   const textoOriginal = btn.textContent;
   btn.disabled = true;
@@ -235,14 +410,17 @@ async function gerarPdf(layout) {
     const resposta = await fetch('/api/gerar-pdf', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ layout }),
+      body: JSON.stringify({ layout, categoriaId }),
     });
-    if (!resposta.ok) throw new Error('Falha na geração');
+    if (!resposta.ok) {
+      const { erro } = await resposta.json().catch(() => ({}));
+      throw new Error(erro || 'Falha na geração');
+    }
     const { caminho, arquivo } = await resposta.json();
     mostrarToast(`PDF gerado: ${arquivo}`, 'sucesso');
     window.open(caminho, '_blank');
   } catch (err) {
-    mostrarToast('Erro ao gerar PDF', 'erro');
+    mostrarToast(err.message || 'Erro ao gerar PDF', 'erro');
   } finally {
     btn.disabled = false;
     btn.textContent = textoOriginal;
@@ -251,6 +429,8 @@ async function gerarPdf(layout) {
 
 btnPdf1.addEventListener('click', () => gerarPdf('1'));
 btnPdf2.addEventListener('click', () => gerarPdf('2'));
+
+/* ---------- Toast ---------- */
 
 let toastTimer = null;
 function mostrarToast(msg, tipo = '') {
