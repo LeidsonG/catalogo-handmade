@@ -268,7 +268,12 @@ html, body {
   gap: 6mm;
   align-items: center;
   padding: 2mm 0;
+  border-bottom: 1px solid var(--cor-linha);
   min-height: 0;
+}
+
+.pagina-layout-2 .produto-bloco:last-child {
+  border-bottom: none;
 }
 
 .pagina-layout-2 .produto-bloco.vazio {
