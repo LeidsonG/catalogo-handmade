@@ -60,7 +60,11 @@ html, body {
   --cor-texto: #1a1a1a;
   --cor-acento: #1a1a1a;
   --cor-suave: #7a6a5a;
+  --cor-suave2:#a59483;
   --cor-linha: #d8c9b8;
+
+  /*intro-scale comando a proporção de fonte da pág 1 do PDF*/
+  --intro-scale: 1.35;
 }
 
 .pagina {
@@ -80,11 +84,11 @@ html, body {
 /* ---------- Logo ---------- */
 .intro-logo {
   display: block;
-  max-width: 110mm;
-  max-height: 90mm;
+  max-width: 130mm;
+  max-height: 110mm;
   width: auto;
   height: auto;
-  margin: 0 auto 16mm;
+  margin: 0 auto 14mm;
   object-fit: contain;
 }
 
@@ -110,16 +114,8 @@ html, body {
   padding: 30mm 25mm;
 }
 
-.intro-marca {
-  font-size: 52pt;
-  letter-spacing: 4px;
-  font-weight: normal;
-  margin: 0 0 6mm;
-  color: var(--cor-acento);
-}
-
 .intro-subtitulo {
-  font-size: 16pt;
+  font-size: calc(13pt * var(--intro-scale));
   letter-spacing: 6px;
   text-transform: uppercase;
   color: var(--cor-suave);
@@ -128,11 +124,11 @@ html, body {
 
 .intro-categoria {
   font-family: 'Rye', 'Georgia', serif;
-  font-size: 32pt;
+  font-size: calc(32pt * var(--intro-scale));
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--cor-acento);
-  margin-bottom: 14mm;
+  margin-bottom: 2mm;
   font-weight: 400;
 }
 
@@ -142,17 +138,17 @@ html, body {
 
 .intro-divisor {
   width: 60mm;
-  height: 1px;
-  background: var(--cor-linha);
-  margin: 0 auto 14mm;
+  border-top: 1px solid var(--cor-suave2);
+  margin: 0 auto 5mm;
 }
 
 .intro-texto {
-  font-size: 14pt;
+  font-size: calc(13pt * var(--intro-scale));
   line-height: 1.7;
   max-width: 140mm;
   color: var(--cor-texto);
   font-style: italic;
+  margin-bottom: 15mm;
 }
 
 .intro-rodape {
@@ -161,7 +157,7 @@ html, body {
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 10pt;
+  font-size: calc(10pt * var(--intro-scale));
   letter-spacing: 2px;
   color: var(--cor-suave);
   font-family: 'Work Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -255,22 +251,29 @@ html, body {
   display: flex;
   flex-direction: column;
   gap: 6mm;
-  padding: 10mm 8mm;
+  padding: 8mm 3mm;
 }
 
 .pagina-layout-2 .produto-bloco {
   flex: 1;
   display: grid;
-  grid-template-columns: 2fr 1fr;
+  grid-template-columns: 2.6fr 1fr;
   gap: 6mm;
   align-items: center;
   padding: 2mm 0;
-  border-bottom: 1px solid var(--cor-linha);
+  position: relative;
   min-height: 0;
 }
 
-.pagina-layout-2 .produto-bloco:last-child {
-  border-bottom: none;
+/* Linha divisória de borda a borda: vaza 19mm (16mm pagina + 3mm layout-2) para cada lado */
+.pagina-layout-2 .produto-bloco:not(:last-child):not(.vazio)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -19mm;
+  right: -19mm;
+  height: 1px;
+  background-color: var(--cor-linha);
 }
 
 .pagina-layout-2 .produto-bloco.vazio {
@@ -286,7 +289,7 @@ html, body {
 
 .pagina-layout-2 .produto-foto {
   max-width: 100%;
-  max-height: 165mm;
+  max-height: 100%;
   width: 100%;
   height: 100%;
   object-fit: contain;
@@ -305,7 +308,7 @@ html, body {
 }
 
 .pagina-layout-2 .produto-codigo {
-  font-size: 9pt;
+  font-size: 14pt;
   letter-spacing: 3px;
   color: var(--cor-suave);
   text-transform: uppercase;
@@ -322,7 +325,7 @@ html, body {
 }
 
 .pagina-layout-2 .produto-descricao {
-  font-size: 12pt;
+  font-size: 13pt;
   line-height: 1.5;
   color: var(--cor-texto);
   margin-bottom: 6mm;
@@ -331,14 +334,15 @@ html, body {
 
 .pagina-layout-2 .produto-rodape {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 3mm;
   padding-top: 4mm;
   border-top: 1px solid var(--cor-linha);
 }
 
 .pagina-layout-2 .produto-preco {
-  font-size: 19pt;
+  font-size: 24pt;
   color: var(--cor-acento);
   font-weight: bold;
 }
@@ -370,8 +374,8 @@ html, body {
 
 /* ---------- Preço ---------- */
 .produto-preco {
-  font-family: 'Work Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-family: 'Rye', 'Georgia', serif;
   font-variant-numeric: tabular-nums lining-nums;
   font-weight: 700;
-  letter-spacing: 0.3px;
+  letter-spacing: -0.1px;
 }

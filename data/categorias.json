@@ -1,9 +1,15 @@
 {
   "categorias": [
     {
+      "id": "c002",
+      "nome": "Cintos Feminino",
+      "prefixoCodigo": "CF-",
+      "ordem": 0
+    },
+    {
       "id": "c001",
-      "nome": "Cintos infantis masculino",
-      "ordem": 0,
+      "nome": "Cintos Masculino",
+      "ordem": 1,
       "prefixoCodigo": "CM-"
     }
   ]

@@ -13,7 +13,6 @@
       <select id="seletor-categoria-pdf" class="topo-select" title="Categoria do PDF"></select>
       <button id="btn-pdf-1" class="botao botao-secundario">Gerar PDF (1 por página)</button>
       <button id="btn-pdf-2" class="botao botao-primario">Gerar PDF (2 por página)</button>
-      <button id="btn-trocar-senha" class="botao botao-fantasma" title="Trocar senha do admin">Trocar senha</button>
     </div>
   </header>
 
@@ -27,12 +26,12 @@
             <select name="categoriaId" id="select-categoria-produto" required></select>
           </label>
           <div class="grid-2">
-            <label>Código <input name="codigo" required placeholder="CT-001"></label>
+            <label>Código <input name="codigo" required placeholder="Ex: CM-001"></label>
             <label>Preço (R$) <input name="preco" type="number" step="0.01" required></label>
           </div>
           <label>Nome <input name="nome" required></label>
           <label>Descrição curta <textarea name="descricao" rows="2"></textarea></label>
-          <label>Nome da cor <input name="nomeCor" placeholder="Marrom envelhecido"></label>
+          <label>Nome da cor <input name="nomeCor" placeholder="Ex: Marrom envelhecido"></label>
 
           <div class="campo-arquivo">
             <label>Foto do produto (PNG sem fundo)</label>
@@ -48,7 +47,7 @@
           </div>
 
           <div class="acoes-form">
-            <button type="button" id="btn-limpar" class="botao botao-fantasma">Limpar</button>
+            <button type="button" id="btn-limpar" class="botao botao-fantasma">Limpar/Cancelar</button>
             <button type="submit" class="botao botao-primario" id="btn-salvar">Adicionar produto</button>
           </div>
         </form>
@@ -60,11 +59,11 @@
           <input type="hidden" name="id">
           <div class="grid-cat">
             <label>Nome
-              <input name="nome" placeholder="Ex: Cintos infantis masculino" required>
+              <input name="nome" placeholder="Ex: Cintos Masculino" required>
             </label>
             <label class="campo-prefixo">Prefixo
               <span class="prefixo-wrap">
-                <input name="prefixoCodigo" placeholder="CM" maxlength="6" pattern="[A-Za-z0-9]*" autocomplete="off">
+                <input name="prefixoCodigo" placeholder="Ex: CM" maxlength="6" pattern="[A-Za-z0-9]*" autocomplete="off">
                 <span class="prefixo-sufixo">-</span>
               </span>
             </label>
@@ -91,15 +90,22 @@
           <button type="submit" class="botao botao-secundario">Salvar introdução</button>
         </form>
       </section>
+
+      <section class="bloco bloco-senha">
+        <h2>Segurança</h2>
+        <button id="btn-trocar-senha" class="botao botao-fantasma botao-bloco">Trocar senha</button>
+      </section>
     </aside>
 
     <section class="lista-painel">
       <div class="lista-cabecalho">
         <h2>Produtos cadastrados</h2>
         <div class="lista-cabecalho-acoes">
+          <input type="search" id="busca-produto" class="filtro-lista filtro-busca" placeholder="Nome ou código...">
           <select id="filtro-categoria-lista" class="filtro-lista" title="Filtrar por categoria">
             <option value="">Todas as categorias</option>
           </select>
+          <button id="btn-buscar" class="botao botao-secundario">Buscar</button>
           <div class="contador" id="contador">0 produtos</div>
         </div>
       </div>

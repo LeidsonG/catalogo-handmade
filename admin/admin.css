@@ -1,5 +1,5 @@
 :root {
-  --cor-fundo: #f5f1ec;
+  --cor-fundo: #ebebeb; /*Cor inical #f5f1ec;*/
   --cor-papel: #ffffff;
   --cor-texto: #2a1a10;
   --cor-suave: #8a6e57;
@@ -430,6 +430,15 @@ html, body {
   background: transparent;
   color: var(--cor-suave);
   border-color: var(--cor-linha);
+}
+
+.botao-bloco {
+  width: 100%;
+  justify-content: center;
+}
+
+.filtro-busca {
+  width: 220px;
 }
 
 .botao-perigo {
