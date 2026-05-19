@@ -39,7 +39,11 @@ async function main() {
   console.log('Buscando CSS do Google Fonts…');
   const css = (await buscar(CSS_URL)).toString('utf8');
 
-  // Cada @font-face tem: font-family, font-weight e src com url(...) woff2.
+  // O Google retorna vários blocos @font-face por família/peso, um por subset
+  // (latin, latin-ext, vietnamese, etc.). Cada subset tem `unicode-range`
+  // diferente e um arquivo .woff2 diferente. Para o catálogo só precisamos do
+  // subset `latin` (U+0000-00FF), que cobre A-Z, a-z e todos os acentos do
+  // português. Filtramos pelo unicode-range que inclui U+0000-00FF.
   const blocos = [...css.matchAll(/@font-face\s*\{([^}]+)\}/g)];
   if (!blocos.length) {
     console.error('Nenhum @font-face encontrado no CSS — verifique a URL.');
@@ -53,19 +57,19 @@ async function main() {
     const peso = (conteudo.match(/font-weight:\s*(\d+)/) || [])[1] || '400';
     const estilo = (conteudo.match(/font-style:\s*(\w+)/) || [])[1] || 'normal';
     const url = (conteudo.match(/url\(([^)]+)\)/) || [])[1];
+    const unicodeRange = (conteudo.match(/unicode-range:\s*([^;]+)/) || [])[1] || '';
     if (!familia || !url) continue;
+
+    // Só o subset latin (contém U+0000-00FF). Pula latin-ext, vietnamese, etc.
+    if (!/U\+0000-00FF/i.test(unicodeRange)) continue;
 
     const slugFamilia = familia.toLowerCase().replace(/\s+/g, '-');
     const nomeArquivo = `${slugFamilia}-${peso}-${estilo}.woff2`;
     const caminho = path.join(DESTINO, nomeArquivo);
 
-    if (!fs.existsSync(caminho)) {
-      console.log(`Baixando ${nomeArquivo}…`);
-      const dados = await buscar(url);
-      fs.writeFileSync(caminho, dados);
-    } else {
-      console.log(`Já existe: ${nomeArquivo}`);
-    }
+    console.log(`Baixando ${nomeArquivo} (subset latin)…`);
+    const dados = await buscar(url);
+    fs.writeFileSync(caminho, dados);
 
     declaracoes.push({ familia, peso, estilo, nomeArquivo });
   }
