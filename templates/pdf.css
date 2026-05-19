@@ -138,8 +138,8 @@ html, body {
 .intro-divisor {
   width: 60mm;
   height: 1px;
-  background: var(--cor-linha);
-  margin: 0 auto;
+  background: var(--cor-suave);
+  margin: 8mm auto;
 }
 
 .intro-texto {
@@ -148,7 +148,7 @@ html, body {
   max-width: 140mm;
   color: var(--cor-texto);
   font-style: italic;
-  margin: 15mm 0;
+  margin-bottom: 15mm;
 }
 
 .intro-rodape {
