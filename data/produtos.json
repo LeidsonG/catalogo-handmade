@@ -34,15 +34,15 @@
       "foto": "/uploads/produtos/CF-100.png",
       "corTextura": "/uploads/cores/CF-100-cor.png",
       "ordem": 2,
-      "categoriaId": "c001"
+      "categoriaId": "c002"
     },
     {
       "id": "p00004",
       "codigo": "CM-003",
       "nome": "Cinto exemplo de couro novo",
       "descricao": "Cinto exemplo de couro novo cinto exemplo de couro novo cinto exemplo de couro novo.",
-      "preco": 89.9,
-      "nomeCor": "Marrom arvore nova de couro moderno",
+      "preco": 109.9,
+      "nomeCor": "Marrom arvore nova de couro modernoaaaaaaaaaaaaaaa",
       "foto": "/uploads/produtos/CM-003.png",
       "corTextura": "/uploads/cores/CM-003-cor.png",
       "categoriaId": "c001",

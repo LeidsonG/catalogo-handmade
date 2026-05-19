@@ -553,7 +553,7 @@ function editar(id) {
     void bloco.offsetWidth; // reinicia animação se chamar editar() duas vezes seguidas
     bloco.classList.add('bloco-flash');
     bloco.addEventListener('animationend', () => bloco.classList.remove('bloco-flash'), { once: true });
-  }, 300);
+  }, 200);
 }
 
 async function excluir(id) {
