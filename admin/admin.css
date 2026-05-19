@@ -562,6 +562,7 @@ html, body {
 .item-cor-amostra {
   width: 18px;
   height: 18px;
+  flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid var(--cor-linha);
   background-size: cover;
