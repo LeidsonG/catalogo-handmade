@@ -60,6 +60,7 @@ html, body {
   --cor-texto: #1a1a1a;
   --cor-acento: #1a1a1a;
   --cor-suave: #7a6a5a;
+  --cor-suave2:#a59483;
   --cor-linha: #d8c9b8;
 
   /*intro-scale comando a proporção de fonte da pág 1 do PDF*/
@@ -87,7 +88,7 @@ html, body {
   max-height: 110mm;
   width: auto;
   height: auto;
-  margin: 0 auto 16mm;
+  margin: 0 auto 14mm;
   object-fit: contain;
 }
 
@@ -114,7 +115,7 @@ html, body {
 }
 
 .intro-subtitulo {
-  font-size: calc(14pt * var(--intro-scale));
+  font-size: calc(13pt * var(--intro-scale));
   letter-spacing: 6px;
   text-transform: uppercase;
   color: var(--cor-suave);
@@ -137,7 +138,7 @@ html, body {
 
 .intro-divisor {
   width: 60mm;
-  border-top: 1px solid var(--cor-suave);
+  border-top: 1px solid var(--cor-suave2);
   margin: 0 auto 5mm;
 }
 
