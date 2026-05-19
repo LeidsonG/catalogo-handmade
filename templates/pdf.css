@@ -137,9 +137,8 @@ html, body {
 
 .intro-divisor {
   width: 60mm;
-  height: 1px;
-  background: var(--cor-suave);
-  margin: 8mm auto;
+  border-top: 1px solid var(--cor-suave);
+  margin: 10mm auto;
 }
 
 .intro-texto {
