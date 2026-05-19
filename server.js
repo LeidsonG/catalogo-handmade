@@ -19,6 +19,29 @@ for (const dir of [path.join(UPLOADS, 'produtos'), path.join(UPLOADS, 'cores'), 
 
 const app = express();
 app.use(express.json());
+
+// Autenticação opcional (HTTP Basic). Ativa apenas se ADMIN_PASS estiver
+// definida no ambiente. Sem essa variável, servidor fica aberto (uso local).
+// Exceções: o próprio Puppeteer chama /render/... internamente em localhost
+// — esse caso é deixado passar para não complicar a geração de PDF.
+const ADMIN_USER = process.env.ADMIN_USER || 'admin';
+const ADMIN_PASS = process.env.ADMIN_PASS;
+if (ADMIN_PASS) {
+  app.use((req, res, next) => {
+    const isLocalRender = req.path.startsWith('/render/')
+      && (req.ip === '::1' || req.ip === '127.0.0.1' || req.ip === '::ffff:127.0.0.1');
+    if (isLocalRender) return next();
+    const header = req.headers.authorization || '';
+    const [tipo, credenciais] = header.split(' ');
+    if (tipo === 'Basic' && credenciais) {
+      const [user, pass] = Buffer.from(credenciais, 'base64').toString().split(':');
+      if (user === ADMIN_USER && pass === ADMIN_PASS) return next();
+    }
+    res.set('WWW-Authenticate', 'Basic realm="Catálogo Handmade"');
+    res.status(401).send('Autenticação necessária');
+  });
+}
+
 app.use('/admin', express.static(path.join(ROOT, 'admin')));
 app.use('/uploads', express.static(UPLOADS));
 app.use('/templates', express.static(path.join(ROOT, 'templates')));
@@ -40,7 +63,14 @@ const storage = multer.diskStorage({
     cb(null, `${codigo}${sufixo}${ext}`);
   },
 });
-const upload = multer({ storage, limits: { fileSize: 15 * 1024 * 1024 } });
+const upload = multer({
+  storage,
+  limits: { fileSize: 15 * 1024 * 1024 },
+  fileFilter: (_req, file, cb) => {
+    if (file.mimetype.startsWith('image/')) return cb(null, true);
+    cb(new Error('Apenas arquivos de imagem são aceitos'));
+  },
+});
 
 function backupAntesDe(arquivo) {
   if (fs.existsSync(arquivo)) {
@@ -50,6 +80,15 @@ function backupAntesDe(arquivo) {
 function writeJson(arquivo, dados) {
   backupAntesDe(arquivo);
   fs.writeFileSync(arquivo, JSON.stringify(dados, null, 2));
+}
+
+// Mutex global para serializar todas as operações de read+modify+write
+// nos JSONs. Evita race condition entre requisições concorrentes.
+let mutex = Promise.resolve();
+function comLock(fn) {
+  const tarefa = mutex.then(fn, fn);
+  mutex = tarefa.catch(() => {});
+  return tarefa;
 }
 function readData() {
   return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
@@ -109,7 +148,7 @@ app.get('/api/produtos', (_req, res) => {
   res.json(readData().produtos);
 });
 
-app.post('/api/produtos', (req, res) => {
+app.post('/api/produtos', (req, res) => comLock(() => {
   const data = readData();
   const cats = readCategorias().categorias;
   const categoriaId = req.body.categoriaId || '';
@@ -131,9 +170,9 @@ app.post('/api/produtos', (req, res) => {
   data.produtos.push(novo);
   writeData(data);
   res.json(novo);
-});
+}));
 
-app.put('/api/produtos/:id', (req, res) => {
+app.put('/api/produtos/:id', (req, res) => comLock(() => {
   const data = readData();
   const idx = data.produtos.findIndex((p) => p.id === req.params.id);
   if (idx === -1) return res.status(404).json({ erro: 'não encontrado' });
@@ -148,9 +187,9 @@ app.put('/api/produtos/:id', (req, res) => {
   data.produtos[idx] = { ...data.produtos[idx], ...updates, id: req.params.id };
   writeData(data);
   res.json(data.produtos[idx]);
-});
+}));
 
-app.delete('/api/produtos/:id', (req, res) => {
+app.delete('/api/produtos/:id', (req, res) => comLock(() => {
   const data = readData();
   const produto = data.produtos.find((p) => p.id === req.params.id);
   if (produto) {
@@ -170,9 +209,9 @@ app.delete('/api/produtos/:id', (req, res) => {
   data.produtos = data.produtos.filter((p) => p.id !== req.params.id);
   writeData(data);
   res.json({ ok: true });
-});
+}));
 
-app.post('/api/produtos/reordenar', (req, res) => {
+app.post('/api/produtos/reordenar', (req, res) => comLock(() => {
   const { ordemIds } = req.body;
   if (!Array.isArray(ordemIds)) return res.status(400).json({ erro: 'ordemIds obrigatório' });
   const data = readData();
@@ -184,7 +223,7 @@ app.post('/api/produtos/reordenar', (req, res) => {
   }).filter(Boolean);
   writeData(data);
   res.json({ ok: true });
-});
+}));
 
 app.get('/api/categorias', (_req, res) => {
   const lista = readCategorias().categorias;
@@ -192,7 +231,7 @@ app.get('/api/categorias', (_req, res) => {
   res.json(lista);
 });
 
-app.post('/api/categorias', (req, res) => {
+app.post('/api/categorias', (req, res) => comLock(() => {
   const nome = String(req.body.nome || '').trim();
   if (!nome) return res.status(400).json({ erro: 'nome obrigatório' });
   const data = readCategorias();
@@ -208,9 +247,9 @@ app.post('/api/categorias', (req, res) => {
   data.categorias.push(nova);
   writeCategorias(data);
   res.json(nova);
-});
+}));
 
-app.put('/api/categorias/:id', (req, res) => {
+app.put('/api/categorias/:id', (req, res) => comLock(() => {
   const data = readCategorias();
   const idx = data.categorias.findIndex((c) => c.id === req.params.id);
   if (idx === -1) return res.status(404).json({ erro: 'não encontrado' });
@@ -226,7 +265,7 @@ app.put('/api/categorias/:id', (req, res) => {
   }
   writeCategorias(data);
   res.json(data.categorias[idx]);
-});
+}));
 
 app.get('/api/categorias/:id/proximo-codigo', (req, res) => {
   const categoria = readCategorias().categorias.find((c) => c.id === req.params.id);
@@ -254,7 +293,7 @@ function proximoCodigoCategoria(produtos, categoriaId, prefixo) {
   return `${prefixo}${String(proximo).padStart(tamanhoMin, '0')}`;
 }
 
-app.post('/api/categorias/reordenar', (req, res) => {
+app.post('/api/categorias/reordenar', (req, res) => comLock(() => {
   const { ordemIds } = req.body;
   if (!Array.isArray(ordemIds)) return res.status(400).json({ erro: 'ordemIds obrigatório' });
   const data = readCategorias();
@@ -266,9 +305,9 @@ app.post('/api/categorias/reordenar', (req, res) => {
   }).filter(Boolean);
   writeCategorias(data);
   res.json({ ok: true });
-});
+}));
 
-app.delete('/api/categorias/:id', (req, res) => {
+app.delete('/api/categorias/:id', (req, res) => comLock(() => {
   const produtos = readData().produtos;
   const emUso = produtos.filter((p) => p.categoriaId === req.params.id);
   if (emUso.length > 0) {
@@ -280,21 +319,24 @@ app.delete('/api/categorias/:id', (req, res) => {
   data.categorias = data.categorias.filter((c) => c.id !== req.params.id);
   writeCategorias(data);
   res.json({ ok: true });
-});
+}));
 
-app.post('/api/upload/:tipo', upload.single('arquivo'), (req, res) => {
-  if (!req.file) return res.status(400).json({ erro: 'arquivo obrigatório' });
-  const kind = req.params.tipo === 'cor' ? 'cores' : 'produtos';
-  res.json({ caminho: `/uploads/${kind}/${req.file.filename}` });
+app.post('/api/upload/:tipo', (req, res) => {
+  upload.single('arquivo')(req, res, (err) => {
+    if (err) return res.status(400).json({ erro: err.message });
+    if (!req.file) return res.status(400).json({ erro: 'arquivo obrigatório' });
+    const kind = req.params.tipo === 'cor' ? 'cores' : 'produtos';
+    res.json({ caminho: `/uploads/${kind}/${req.file.filename}` });
+  });
 });
 
 app.get('/api/intro', (_req, res) => res.json(readIntro()));
-app.put('/api/intro', (req, res) => {
+app.put('/api/intro', (req, res) => comLock(() => {
   const atual = readIntro();
   const novo = { ...atual, ...pick(req.body, CAMPOS_INTRO) };
   writeIntro(novo);
   res.json(novo);
-});
+}));
 
 app.get('/render/:layout', (req, res) => {
   const layout = req.params.layout;
