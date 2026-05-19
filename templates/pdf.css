@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Work+Sans:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Rye&family=Work+Sans:wght@500;600;700&display=swap');
 
 @page {
   size: A4;
@@ -84,7 +84,7 @@ html, body {
 }
 
 .intro-subtitulo {
-  font-size: 14pt;
+  font-size: 16pt;
   letter-spacing: 6px;
   text-transform: uppercase;
   color: var(--cor-suave);
@@ -92,12 +92,13 @@ html, body {
 }
 
 .intro-categoria {
-  font-size: 18pt;
-  letter-spacing: 4px;
+  font-family: 'Rye', 'Georgia', serif;
+  font-size: 32pt;
+  letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--cor-acento);
   margin-bottom: 14mm;
-  font-weight: 600;
+  font-weight: 400;
 }
 
 .intro-categoria:empty {
@@ -112,9 +113,9 @@ html, body {
 }
 
 .intro-texto {
-  font-size: 12pt;
-  line-height: 1.8;
-  max-width: 130mm;
+  font-size: 14pt;
+  line-height: 1.7;
+  max-width: 140mm;
   color: var(--cor-texto);
   font-style: italic;
 }
@@ -125,7 +126,7 @@ html, body {
   left: 0;
   right: 0;
   text-align: center;
-  font-size: 9pt;
+  font-size: 10pt;
   letter-spacing: 2px;
   color: var(--cor-suave);
   font-family: 'Work Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -178,24 +179,27 @@ html, body {
 }
 
 .pagina-layout-1 .produto-codigo {
-  font-size: 9pt;
+  font-size: 10pt;
   letter-spacing: 3px;
   color: var(--cor-suave);
   text-transform: uppercase;
-  margin-bottom: 2mm;
-}
-
-.pagina-layout-1 .produto-nome {
-  font-size: 22pt;
-  color: var(--cor-acento);
   margin-bottom: 3mm;
 }
 
+.pagina-layout-1 .produto-nome {
+  font-family: 'Rye', 'Georgia', serif;
+  font-size: 26pt;
+  letter-spacing: 1px;
+  color: var(--cor-acento);
+  margin-bottom: 4mm;
+  font-weight: 400;
+}
+
 .pagina-layout-1 .produto-descricao {
-  font-size: 11pt;
-  line-height: 1.6;
+  font-size: 13pt;
+  line-height: 1.55;
   color: var(--cor-texto);
-  margin-bottom: 6mm;
+  margin-bottom: 7mm;
   font-style: italic;
 }
 
@@ -206,7 +210,7 @@ html, body {
 }
 
 .pagina-layout-1 .produto-preco {
-  font-size: 20pt;
+  font-size: 24pt;
   color: var(--cor-acento);
   font-weight: bold;
 }
@@ -222,7 +226,7 @@ html, body {
 .pagina-layout-2 .produto-bloco {
   flex: 1;
   display: grid;
-  grid-template-columns: 1.8fr 1fr;
+  grid-template-columns: 2fr 1fr;
   gap: 6mm;
   align-items: center;
   padding: 2mm 0;
@@ -266,24 +270,27 @@ html, body {
 }
 
 .pagina-layout-2 .produto-codigo {
-  font-size: 8pt;
+  font-size: 9pt;
   letter-spacing: 3px;
   color: var(--cor-suave);
   text-transform: uppercase;
-  margin-bottom: 2mm;
-}
-
-.pagina-layout-2 .produto-nome {
-  font-size: 17pt;
-  color: var(--cor-acento);
   margin-bottom: 3mm;
 }
 
+.pagina-layout-2 .produto-nome {
+  font-family: 'Rye', 'Georgia', serif;
+  font-size: 20pt;
+  letter-spacing: 1px;
+  color: var(--cor-acento);
+  margin-bottom: 4mm;
+  font-weight: 400;
+}
+
 .pagina-layout-2 .produto-descricao {
-  font-size: 10pt;
-  line-height: 1.55;
+  font-size: 12pt;
+  line-height: 1.5;
   color: var(--cor-texto);
-  margin-bottom: 5mm;
+  margin-bottom: 6mm;
   font-style: italic;
 }
 
@@ -296,7 +303,7 @@ html, body {
 }
 
 .pagina-layout-2 .produto-preco {
-  font-size: 16pt;
+  font-size: 19pt;
   color: var(--cor-acento);
   font-weight: bold;
 }
@@ -320,7 +327,7 @@ html, body {
 }
 
 .produto-cor-nome {
-  font-size: 8pt;
+  font-size: 9pt;
   letter-spacing: 1px;
   color: var(--cor-suave);
   text-transform: uppercase;
