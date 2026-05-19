@@ -63,7 +63,7 @@ html, body {
   --cor-linha: #d8c9b8;
 
   /*intro-scale comando a proporção de fonte da pág 1 do PDF*/
-  --intro-scale: 1.2;
+  --intro-scale: 1.35;
 }
 
 .pagina {
@@ -83,8 +83,8 @@ html, body {
 /* ---------- Logo ---------- */
 .intro-logo {
   display: block;
-  max-width: 110mm;
-  max-height: 90mm;
+  max-width: 130mm;
+  max-height: 110mm;
   width: auto;
   height: auto;
   margin: 0 auto 16mm;
@@ -113,14 +113,6 @@ html, body {
   padding: 30mm 25mm;
 }
 
-.intro-marca {
-  font-size: calc(52pt * var(--intro-scale));
-  letter-spacing: 4px;
-  font-weight: normal;
-  margin: 0 0 6mm;
-  color: var(--cor-acento);
-}
-
 .intro-subtitulo {
   font-size: calc(16pt * var(--intro-scale));
   letter-spacing: 6px;
@@ -135,7 +127,7 @@ html, body {
   letter-spacing: 2px;
   text-transform: uppercase;
   color: var(--cor-acento);
-  margin-bottom: 14mm;
+  margin-bottom: 2mm;
   font-weight: 400;
 }
 
@@ -147,7 +139,7 @@ html, body {
   width: 60mm;
   height: 1px;
   background: var(--cor-linha);
-  margin: 0 auto 14mm;
+  margin: 0 auto 6mm;
 }
 
 .intro-texto {
