@@ -6,7 +6,9 @@
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "node --watch server.js"
+    "dev": "node --watch server.js",
+    "baixar-fontes": "node scripts/baixar-fontes.js",
+    "migrar-ids": "node scripts/migrar-ids.js"
   },
   "dependencies": {
     "express": "^4.19.2",
