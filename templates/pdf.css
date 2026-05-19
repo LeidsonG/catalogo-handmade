@@ -1,35 +1,39 @@
+/* @import precisa vir antes de qualquer outra regra (CSS spec).
+   Fica como fallback caso o script `npm run baixar-fontes` não tenha sido
+   rodado e os arquivos locais não existam. */
+@import url('https://fonts.googleapis.com/css2?family=Rye&family=Work+Sans:wght@500;600;700&display=swap');
+
 /* Fontes locais (baixadas por `node scripts/baixar-fontes.js`).
-   O @import logo abaixo é fallback caso as cópias locais não existam ainda. */
+   font-display: block bloqueia o render até a fonte carregar — essencial
+   no Puppeteer, que pode capturar antes do swap acontecer. */
 @font-face {
   font-family: 'Rye';
   font-weight: 400;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
   src: url('/assets/fonts/rye-400-normal.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Work Sans';
   font-weight: 500;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
   src: url('/assets/fonts/work-sans-500-normal.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Work Sans';
   font-weight: 600;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
   src: url('/assets/fonts/work-sans-600-normal.woff2') format('woff2');
 }
 @font-face {
   font-family: 'Work Sans';
   font-weight: 700;
   font-style: normal;
-  font-display: swap;
+  font-display: block;
   src: url('/assets/fonts/work-sans-700-normal.woff2') format('woff2');
 }
-
-@import url('https://fonts.googleapis.com/css2?family=Rye&family=Work+Sans:wght@500;600;700&display=swap');
 
 @page {
   size: A4;

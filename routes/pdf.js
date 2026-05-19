@@ -45,6 +45,10 @@ function criarRouter(porta) {
         `http://localhost:${porta}/render/${layout}?categoria=${encodeURIComponent(categoriaId)}`,
         { waitUntil: 'networkidle0' },
       );
+      // Garante que todas as fontes (incluindo Rye e Work Sans locais) foram
+      // baixadas/parseadas antes de capturar o PDF. Caso contrário, o Puppeteer
+      // pode renderizar com o fallback serif/sans antes do swap.
+      await page.evaluate(() => document.fonts.ready);
       const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
       const slug = categoria.nome.toLowerCase()
         .normalize('NFD').replace(/[̀-ͯ]/g, '')

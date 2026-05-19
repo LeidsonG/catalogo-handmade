@@ -2,10 +2,22 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const { readData, writeData, readCategorias, comLock, ROOT } = require('../lib/dados');
-const { gerarProximoId } = require('../lib/ids');
+const { gerarProximoId, encontrarConflitoCodigo, proximoCodigoCategoria } = require('../lib/ids');
 const { CAMPOS_PRODUTO, pick } = require('../lib/validacao');
 
 const router = express.Router();
+
+// Constrói resposta 409 (Conflict) com info do conflito e sugestão de código.
+function respostaConflito(res, conflito, categoria, produtos) {
+  const sugestao = categoria?.prefixoCodigo
+    ? proximoCodigoCategoria(produtos, categoria.id, categoria.prefixoCodigo)
+    : '';
+  return res.status(409).json({
+    erro: `Código "${conflito.codigo}" já está em uso pelo produto "${conflito.nome}". Use outro código.`,
+    conflito: { id: conflito.id, codigo: conflito.codigo, nome: conflito.nome },
+    sugestao,
+  });
+}
 
 router.get('/', (_req, res) => {
   res.json(readData().produtos);
@@ -15,12 +27,17 @@ router.post('/', (req, res) => comLock(() => {
   const data = readData();
   const cats = readCategorias().categorias;
   const categoriaId = req.body.categoriaId || '';
-  if (!categoriaId || !cats.find((c) => c.id === categoriaId)) {
+  const categoria = cats.find((c) => c.id === categoriaId);
+  if (!categoria) {
     return res.status(400).json({ erro: 'categoria obrigatória e deve existir' });
   }
+  const codigo = String(req.body.codigo || '').trim();
+  if (!codigo) return res.status(400).json({ erro: 'código obrigatório' });
+  const conflito = encontrarConflitoCodigo(data.produtos, codigo);
+  if (conflito) return respostaConflito(res, conflito, categoria, data.produtos);
   const novo = {
     id: gerarProximoId(data.produtos, 'p', 5),
-    codigo: req.body.codigo || '',
+    codigo,
     nome: req.body.nome || '',
     descricao: req.body.descricao || '',
     preco: Number(req.body.preco) || 0,
@@ -40,10 +57,21 @@ router.put('/:id', (req, res) => comLock(() => {
   const idx = data.produtos.findIndex((p) => p.id === req.params.id);
   if (idx === -1) return res.status(404).json({ erro: 'não encontrado' });
   const updates = pick(req.body, CAMPOS_PRODUTO);
+  const cats = readCategorias().categorias;
   if (updates.categoriaId !== undefined) {
-    const cats = readCategorias().categorias;
     if (!updates.categoriaId || !cats.find((c) => c.id === updates.categoriaId)) {
       return res.status(400).json({ erro: 'categoria obrigatória e deve existir' });
+    }
+  }
+  if ('codigo' in updates) {
+    updates.codigo = String(updates.codigo || '').trim();
+    if (!updates.codigo) return res.status(400).json({ erro: 'código obrigatório' });
+    const conflito = encontrarConflitoCodigo(data.produtos, updates.codigo, req.params.id);
+    if (conflito) {
+      const categoriaAlvo = cats.find(
+        (c) => c.id === (updates.categoriaId || data.produtos[idx].categoriaId),
+      );
+      return respostaConflito(res, conflito, categoriaAlvo, data.produtos);
     }
   }
   if ('preco' in updates) updates.preco = Number(updates.preco) || 0;

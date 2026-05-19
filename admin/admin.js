@@ -450,8 +450,21 @@ formProduto.addEventListener('submit', async (e) => {
     limparForm();
     carregar();
   } else {
-    const { erro } = await resposta.json().catch(() => ({}));
-    mostrarToast(erro || 'Erro ao salvar produto', 'erro');
+    const erroBody = await resposta.json().catch(() => ({}));
+    // 409: código duplicado. Oferece a sugestão (próximo código da categoria).
+    if (resposta.status === 409 && erroBody.sugestao) {
+      const usar = confirm(`${erroBody.erro}\n\nUsar o próximo código disponível: "${erroBody.sugestao}"?`);
+      if (usar) {
+        formProduto.elements.codigo.value = erroBody.sugestao;
+        formProduto.elements.codigo.focus();
+        mostrarToast(`Código alterado para ${erroBody.sugestao}. Clique em salvar novamente.`, 'sucesso');
+      }
+    } else if (resposta.status === 409) {
+      // Conflito mas sem sugestão (categoria sem prefixo definido)
+      alert(erroBody.erro || 'Código já existe.');
+    } else {
+      mostrarToast(erroBody.erro || 'Erro ao salvar produto', 'erro');
+    }
   }
 });
 
