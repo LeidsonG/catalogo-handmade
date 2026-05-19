@@ -578,6 +578,33 @@ async function gerarPdf(layout) {
 btnPdf1.addEventListener('click', () => gerarPdf('1'));
 btnPdf2.addEventListener('click', () => gerarPdf('2'));
 
+/* ---------- Trocar senha ---------- */
+
+const btnTrocarSenha = $('#btn-trocar-senha');
+btnTrocarSenha.addEventListener('click', async () => {
+  const senhaAtual = prompt('Senha atual:');
+  if (senhaAtual === null) return;
+  const senhaNova = prompt('Nova senha (mín. 6 caracteres):');
+  if (senhaNova === null) return;
+  const senhaNovaConfirma = prompt('Confirme a nova senha:');
+  if (senhaNovaConfirma === null) return;
+  if (senhaNova !== senhaNovaConfirma) {
+    mostrarToast('As senhas não coincidem', 'erro');
+    return;
+  }
+  const resposta = await fetch('/api/auth/trocar-senha', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ senhaAtual, senhaNova }),
+  });
+  if (resposta.ok) {
+    alert('Senha alterada com sucesso!\n\nO navegador ainda guarda a senha antiga da sessão. Feche todas as abas do admin e abra de novo para entrar com a senha nova.');
+  } else {
+    const { erro } = await resposta.json().catch(() => ({}));
+    mostrarToast(erro || 'Erro ao trocar senha', 'erro');
+  }
+});
+
 /* ---------- Toast ---------- */
 
 let toastTimer = null;

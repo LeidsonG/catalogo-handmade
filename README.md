@@ -10,9 +10,13 @@ preço mudar.
 
 ## Funcionalidades
 
+- **Autenticação obrigatória** (HTTP Basic Auth, senha criptografada com bcrypt).
+  Padrão inicial: `handmade` / `@Hand55` — pode ser trocada pelo admin.
 - **Admin web local** com CRUD de produtos e categorias
 - **Categorias com prefixo de código** — ao escolher a categoria, o próximo
   código é sugerido automaticamente (`CM-001`, `CM-002`, `CM-003`...)
+- **Validação de código único** — bloqueia produtos duplicados com mensagem
+  clara e sugere o próximo código disponível
 - **Drag-and-drop** para reordenar categorias
 - **Filtro por categoria** na lista de produtos
 - **Upload de fotos** (PNG sem fundo) e recorte de cor (textura real do couro)
@@ -21,6 +25,8 @@ preço mudar.
 - **PDF filtrado por categoria** — gera só os produtos da categoria escolhida
 - **Logo da marca** na página de introdução (grande) e no canto de cada página
   (pequeno)
+- **Fontes country/western** (Rye + Work Sans) servidas localmente, geração
+  de PDF funciona offline
 - **Script Python** para remover fundo das fotos em lote (`rembg`)
 - **IDs sequenciais e legíveis** (`p00001`, `c001`) — arquivos de imagem
   nomeados pelo código do produto (`CM-001.png`)
@@ -112,12 +118,14 @@ catalogo-handmade/
 ├── server.js                  Entry point (setup + middleware + monta routers)
 ├── package.json
 ├── lib/
+│   ├── auth.js                Autenticação bcrypt + token interno
 │   ├── dados.js               Read/write JSONs + mutex + backup
-│   ├── ids.js                 Geração de IDs e códigos sequenciais
+│   ├── ids.js                 IDs e códigos sequenciais + validação de duplicata
 │   ├── render.js              HTML do PDF (intro + páginas de produto)
 │   └── validacao.js           Whitelists de campos editáveis
 ├── routes/
-│   ├── produtos.js            CRUD de produtos
+│   ├── auth.js                GET /me e POST /trocar-senha
+│   ├── produtos.js            CRUD de produtos (com validação de código único)
 │   ├── categorias.js          CRUD de categorias + próximo-código
 │   ├── intro.js               GET/PUT da introdução
 │   ├── uploads.js             Upload de foto e cor (multer)
@@ -127,7 +135,8 @@ catalogo-handmade/
 ├── data/
 │   ├── produtos.json          Banco de produtos
 │   ├── categorias.json        Banco de categorias
-│   └── intro.json             Texto da página de introdução
+│   ├── intro.json             Texto da página de introdução
+│   └── auth.json              Credenciais do admin (criado no 1º start, gitignorado)
 ├── assets/
 │   ├── logo.svg               Logo da marca (você adiciona)
 │   └── fonts/                 Fontes baixadas localmente (npm run baixar-fontes)
@@ -145,13 +154,29 @@ catalogo-handmade/
 
 ## Variáveis de ambiente
 
-Veja [.env.example](.env.example) para a lista completa.
-
-| Variável     | Default | Descrição |
+| Variável | Default  | Descrição |
 |---|---|---|
-| `PORT`       | `3000`  | Porta do servidor |
-| `ADMIN_USER` | `admin` | Usuário do HTTP Basic Auth (só usado se `ADMIN_PASS` definido) |
-| `ADMIN_PASS` | —       | **Se definido**, ativa autenticação. Sem ele, servidor fica aberto (uso local) |
+| `PORT`   | `3000`   | Porta do servidor |
+
+## Autenticação
+
+O servidor **sempre** exige login HTTP Basic. As credenciais ficam em
+[data/auth.json](data/auth.json) com a senha **hasheada com bcrypt** (não fica
+em plaintext). O arquivo é criado no primeiro start com os defaults:
+
+- **Usuário:** `handmade`
+- **Senha:**   `@Hand55`
+
+**Recomendado trocar a senha pelo botão "Trocar senha"** no canto superior
+direito do admin. A nova senha é validada (mínimo 6 caracteres) e regravada
+hasheada.
+
+**Esqueceu a senha?** Apague `data/auth.json` e reinicie o servidor — ele
+recria com os defaults.
+
+> O Puppeteer (renderizador do PDF) usa um **token interno** gerado a cada
+> start do servidor, então não precisa saber a senha pra renderizar o catálogo
+> internamente.
 
 ## Scripts npm
 
@@ -182,6 +207,8 @@ O admin web é apenas um cliente da API HTTP. Você pode integrar outra ferramen
 | GET    | `/api/categorias/:id/proximo-codigo`     | Próximo código sugerido para a categoria |
 | POST   | `/api/upload/:tipo`                      | Upload de foto (`?codigo=XXX`) — tipo `foto` ou `cor` |
 | GET    | `/api/intro` / PUT                        | Texto da página de introdução |
+| GET    | `/api/auth/me`                           | Retorna o usuário autenticado |
+| POST   | `/api/auth/trocar-senha`                 | Troca senha (`senhaAtual`, `senhaNova`) |
 | GET    | `/render/:layout?categoria=ID`           | HTML do catálogo (1 ou 2) |
 | POST   | `/api/gerar-pdf`                         | Gera PDF (`layout`, `categoriaId`) |
 

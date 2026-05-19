@@ -3,6 +3,7 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const { readData, readIntro, readCategorias, ROOT } = require('../lib/dados');
 const { construirHtml } = require('../lib/render');
+const { RENDER_TOKEN } = require('../lib/auth');
 
 const OUTPUT_DIR = path.join(ROOT, 'output');
 
@@ -39,6 +40,10 @@ function criarRouter(porta) {
     try {
       browser = await puppeteer.launch({ headless: 'new' });
       const page = await browser.newPage();
+      // O servidor exige autenticação em tudo, mas o Puppeteer não tem como saber
+      // a senha. Enviamos um token interno gerado no startup que o middleware
+      // reconhece e libera a requisição. O token nunca vai para fora do servidor.
+      await page.setExtraHTTPHeaders({ 'x-render-token': RENDER_TOKEN });
       // Carregamos via rota HTTP (em vez de setContent) para que caminhos absolutos
       // como /uploads/... e /assets/... resolvam para o próprio servidor.
       await page.goto(

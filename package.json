@@ -11,6 +11,7 @@
     "migrar-ids": "node scripts/migrar-ids.js"
   },
   "dependencies": {
+    "bcryptjs": "^3.0.3",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "puppeteer": "^22.10.0"
