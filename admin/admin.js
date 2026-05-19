@@ -332,7 +332,7 @@ function itemHtml(p) {
       <div class="item-rodape">
         <div class="item-cor">
           <span class="item-cor-amostra" style="${corStyle}"></span>
-          <span style="font-size:11px;color:#8a6e57">${esc(p.nomeCor || '')}</span>
+          <span class="item-cor-nome">${esc(p.nomeCor || '')}</span>
         </div>
         <div class="item-preco">${formatarPreco(p.preco)}</div>
       </div>

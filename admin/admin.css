@@ -557,6 +557,8 @@ html, body {
   display: flex;
   align-items: center;
   gap: 6px;
+  flex: 1;
+  min-width: 0;
 }
 
 .item-cor-amostra {
@@ -569,9 +571,20 @@ html, body {
   background-position: center;
 }
 
+.item-cor-nome {
+  font-size: 11px;
+  color: var(--cor-suave);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
 .item-preco {
   font-weight: 600;
   color: var(--cor-acento);
+  flex-shrink: 0;
+  margin-left: 8px;
 }
 
 .item-acoes {
