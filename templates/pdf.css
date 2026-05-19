@@ -268,12 +268,19 @@ html, body {
   gap: 6mm;
   align-items: center;
   padding: 2mm 0;
-  border-bottom: 1px solid var(--cor-linha);
+  position: relative;
   min-height: 0;
 }
 
-.pagina-layout-2 .produto-bloco:last-child {
-  border-bottom: none;
+/* Linha divisória de borda a borda: vaza 19mm (16mm pagina + 3mm layout-2) para cada lado */
+.pagina-layout-2 .produto-bloco:not(:last-child):not(.vazio)::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: -19mm;
+  right: -19mm;
+  height: 1px;
+  background-color: var(--cor-linha);
 }
 
 .pagina-layout-2 .produto-bloco.vazio {
