@@ -91,6 +91,16 @@ html, body {
   box-shadow: var(--sombra);
 }
 
+@keyframes bloco-flash {
+  0%   { background: var(--cor-papel); }
+  25%  { background: #f5e2c0; }
+  100% { background: var(--cor-papel); }
+}
+
+.bloco-flash {
+  animation: bloco-flash 0.8s ease-out;
+}
+
 .bloco h2 {
   margin: 0 0 14px;
   font-size: 14px;

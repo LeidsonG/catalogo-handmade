@@ -547,6 +547,13 @@ function editar(id) {
   tituloForm.textContent = `Editando: ${p.nome || p.codigo}`;
   btnSalvar.textContent = 'Salvar alterações';
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  const bloco = formProduto.closest('.bloco');
+  setTimeout(() => {
+    bloco.classList.remove('bloco-flash');
+    void bloco.offsetWidth; // reinicia animação se chamar editar() duas vezes seguidas
+    bloco.classList.add('bloco-flash');
+    bloco.addEventListener('animationend', () => bloco.classList.remove('bloco-flash'), { once: true });
+  }, 300);
 }
 
 async function excluir(id) {
