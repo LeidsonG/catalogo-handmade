@@ -83,6 +83,17 @@ function normalizarPrefixo(p) {
   return `${limpo}-`;
 }
 
+// Whitelists de campos editáveis — evita aceitar lixo do body
+const CAMPOS_PRODUTO = ['codigo', 'nome', 'descricao', 'preco', 'nomeCor', 'foto', 'corTextura', 'categoriaId'];
+const CAMPOS_CATEGORIA = ['nome', 'prefixoCodigo'];
+const CAMPOS_INTRO = ['marca', 'subtitulo', 'texto', 'ano', 'contato'];
+
+function pick(body, campos) {
+  const out = {};
+  for (const k of campos) if (k in body) out[k] = body[k];
+  return out;
+}
+
 app.get('/', (_req, res) => res.redirect('/admin'));
 
 app.get('/api/produtos', (_req, res) => {
@@ -117,20 +128,36 @@ app.put('/api/produtos/:id', (req, res) => {
   const data = readData();
   const idx = data.produtos.findIndex((p) => p.id === req.params.id);
   if (idx === -1) return res.status(404).json({ erro: 'não encontrado' });
-  if (req.body.categoriaId !== undefined) {
+  const updates = pick(req.body, CAMPOS_PRODUTO);
+  if (updates.categoriaId !== undefined) {
     const cats = readCategorias().categorias;
-    if (!req.body.categoriaId || !cats.find((c) => c.id === req.body.categoriaId)) {
+    if (!updates.categoriaId || !cats.find((c) => c.id === updates.categoriaId)) {
       return res.status(400).json({ erro: 'categoria obrigatória e deve existir' });
     }
   }
-  data.produtos[idx] = { ...data.produtos[idx], ...req.body, id: req.params.id };
-  data.produtos[idx].preco = Number(data.produtos[idx].preco) || 0;
+  if ('preco' in updates) updates.preco = Number(updates.preco) || 0;
+  data.produtos[idx] = { ...data.produtos[idx], ...updates, id: req.params.id };
   writeData(data);
   res.json(data.produtos[idx]);
 });
 
 app.delete('/api/produtos/:id', (req, res) => {
   const data = readData();
+  const produto = data.produtos.find((p) => p.id === req.params.id);
+  if (produto) {
+    // Apaga os arquivos físicos (foto e cor) para não acumular órfãos no disco
+    for (const campo of ['foto', 'corTextura']) {
+      const url = produto[campo];
+      if (url && url.startsWith('/uploads/')) {
+        const caminho = path.join(ROOT, url.replace(/^\//, ''));
+        try {
+          if (fs.existsSync(caminho)) fs.unlinkSync(caminho);
+        } catch (err) {
+          console.warn(`Falha ao remover ${caminho}:`, err.message);
+        }
+      }
+    }
+  }
   data.produtos = data.produtos.filter((p) => p.id !== req.params.id);
   writeData(data);
   res.json({ ok: true });
@@ -255,7 +282,7 @@ app.post('/api/upload/:tipo', upload.single('arquivo'), (req, res) => {
 app.get('/api/intro', (_req, res) => res.json(readIntro()));
 app.put('/api/intro', (req, res) => {
   const atual = readIntro();
-  const novo = { ...atual, ...req.body };
+  const novo = { ...atual, ...pick(req.body, CAMPOS_INTRO) };
   writeIntro(novo);
   res.json(novo);
 });
@@ -286,8 +313,9 @@ app.post('/api/gerar-pdf', async (req, res) => {
   const categoria = readCategorias().categorias.find((c) => c.id === categoriaId);
   if (!categoria) return res.status(404).json({ erro: 'categoria não encontrada' });
 
-  const browser = await puppeteer.launch({ headless: 'new' });
+  let browser;
   try {
+    browser = await puppeteer.launch({ headless: 'new' });
     const page = await browser.newPage();
     // Carregamos via rota HTTP (em vez de setContent) para que caminhos absolutos
     // como /uploads/... e /assets/... resolvam para o próprio servidor.
@@ -308,8 +336,11 @@ app.post('/api/gerar-pdf', async (req, res) => {
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
     });
     res.json({ ok: true, arquivo: nome, caminho: `/output/${nome}` });
+  } catch (err) {
+    console.error('Erro ao gerar PDF:', err);
+    res.status(500).json({ erro: 'falha ao gerar PDF', detalhe: err.message });
   } finally {
-    await browser.close();
+    if (browser) await browser.close().catch(() => {});
   }
 });
 
