@@ -578,6 +578,7 @@ html, body {
   display: flex;
   justify-content: flex-end;
   gap: 4px;
+  margin-top: auto;
 }
 
 .item-acoes .botao {
