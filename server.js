@@ -43,6 +43,17 @@ app.use('/api/upload', uploadsRouter);
 app.use('/api/auth', authRouter);
 app.use(criarPdfRouter(PORTA)); // expõe /render/:layout e /api/gerar-pdf
 
-app.listen(PORTA, () => {
+const server = app.listen(PORTA, () => {
   console.log(`Servidor: http://localhost:${PORTA}/admin`);
+});
+
+server.on('error', (err) => {
+  if (err.code !== 'EADDRINUSE') throw err;
+  console.error(`\nA porta ${PORTA} já está em uso. Provavelmente é outra instância do servidor que ficou aberta.\n`);
+  console.error('Para resolver, escolha UMA das opções:');
+  console.error(`  1) Encerre o processo na porta ${PORTA} (PowerShell):`);
+  console.error(`     Get-NetTCPConnection -LocalPort ${PORTA} | Select-Object -ExpandProperty OwningProcess | ForEach-Object { Stop-Process -Id $_ -Force }`);
+  console.error(`  2) Suba em outra porta:`);
+  console.error(`     $env:PORT = ${PORTA + 1}; npm start`);
+  process.exit(1);
 });
