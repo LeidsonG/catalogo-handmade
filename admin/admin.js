@@ -550,8 +550,9 @@ async function gerarPdf(layout) {
       const { erro } = await resposta.json().catch(() => ({}));
       throw new Error(erro || 'Falha na geração');
     }
-    const { caminho, arquivo } = await resposta.json();
-    mostrarToast(`PDF gerado: ${arquivo}`, 'sucesso');
+    const { caminho, arquivo, aviso } = await resposta.json();
+    if (aviso) mostrarToast(`PDF gerado, mas: ${aviso}`, 'erro');
+    else mostrarToast(`PDF gerado: ${arquivo}`, 'sucesso');
     window.open(caminho, '_blank');
   } catch (err) {
     mostrarToast(err.message || 'Erro ao gerar PDF', 'erro');

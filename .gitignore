@@ -2,6 +2,7 @@ node_modules/
 output/*.pdf
 fotos-originais/
 data/*.backup-*
+data/*.bak
 .claude/
 .DS_Store
 *.log

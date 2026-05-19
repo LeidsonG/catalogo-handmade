@@ -42,24 +42,33 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage, limits: { fileSize: 15 * 1024 * 1024 } });
 
+function backupAntesDe(arquivo) {
+  if (fs.existsSync(arquivo)) {
+    try { fs.copyFileSync(arquivo, `${arquivo}.bak`); } catch {}
+  }
+}
+function writeJson(arquivo, dados) {
+  backupAntesDe(arquivo);
+  fs.writeFileSync(arquivo, JSON.stringify(dados, null, 2));
+}
 function readData() {
   return JSON.parse(fs.readFileSync(DATA_FILE, 'utf8'));
 }
 function writeData(data) {
-  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  writeJson(DATA_FILE, data);
 }
 function readIntro() {
   return JSON.parse(fs.readFileSync(INTRO_FILE, 'utf8'));
 }
 function writeIntro(intro) {
-  fs.writeFileSync(INTRO_FILE, JSON.stringify(intro, null, 2));
+  writeJson(INTRO_FILE, intro);
 }
 function readCategorias() {
   if (!fs.existsSync(CATEGORIAS_FILE)) return { categorias: [] };
   return JSON.parse(fs.readFileSync(CATEGORIAS_FILE, 'utf8'));
 }
 function writeCategorias(data) {
-  fs.writeFileSync(CATEGORIAS_FILE, JSON.stringify(data, null, 2));
+  writeJson(CATEGORIAS_FILE, data);
 }
 
 function gerarProximoId(itens, prefixo, tamanho) {
@@ -335,7 +344,13 @@ app.post('/api/gerar-pdf', async (req, res) => {
       printBackground: true,
       margin: { top: 0, right: 0, bottom: 0, left: 0 },
     });
-    res.json({ ok: true, arquivo: nome, caminho: `/output/${nome}` });
+    const semFoto = readData().produtos
+      .filter((p) => p.categoriaId === categoriaId && !p.foto);
+    const resposta = { ok: true, arquivo: nome, caminho: `/output/${nome}` };
+    if (semFoto.length) {
+      resposta.aviso = `${semFoto.length} produto(s) sem foto: ${semFoto.map((p) => p.codigo).join(', ')}`;
+    }
+    res.json(resposta);
   } catch (err) {
     console.error('Erro ao gerar PDF:', err);
     res.status(500).json({ erro: 'falha ao gerar PDF', detalhe: err.message });
