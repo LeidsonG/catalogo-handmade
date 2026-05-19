@@ -192,7 +192,7 @@ formCategoria.addEventListener('submit', async (e) => {
   if (resposta.ok) {
     mostrarToast(id ? 'Categoria atualizada' : 'Categoria adicionada', 'sucesso');
     limparFormCategoria();
-    carregar();
+    recarregarPagina();
   } else {
     const { erro } = await resposta.json().catch(() => ({}));
     mostrarToast(erro || 'Erro ao salvar categoria', 'erro');
@@ -233,7 +233,7 @@ async function excluirCategoria(id) {
   const resposta = await fetch(`/api/categorias/${id}`, { method: 'DELETE' });
   if (resposta.ok) {
     mostrarToast('Categoria excluída', 'sucesso');
-    carregar();
+    recarregarPagina();
   } else {
     const { erro } = await resposta.json().catch(() => ({}));
     mostrarToast(erro || 'Erro ao excluir', 'erro');
@@ -353,8 +353,12 @@ formIntro.addEventListener('submit', async (e) => {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(dados),
   });
-  if (resposta.ok) mostrarToast('Introdução salva', 'sucesso');
-  else mostrarToast('Erro ao salvar introdução', 'erro');
+  if (resposta.ok) {
+    mostrarToast('Introdução salva', 'sucesso');
+    recarregarPagina();
+  } else {
+    mostrarToast('Erro ao salvar introdução', 'erro');
+  }
 });
 
 /* ---------- Upload ---------- */
@@ -448,7 +452,7 @@ formProduto.addEventListener('submit', async (e) => {
   if (resposta.ok) {
     mostrarToast(id ? 'Produto atualizado' : 'Produto adicionado', 'sucesso');
     limparForm();
-    carregar();
+    recarregarPagina();
   } else {
     const erroBody = await resposta.json().catch(() => ({}));
     // 409: código duplicado. Oferece a sugestão (próximo código da categoria).
@@ -531,7 +535,7 @@ async function excluir(id) {
   const resposta = await fetch(`/api/produtos/${id}`, { method: 'DELETE' });
   if (resposta.ok) {
     mostrarToast('Produto excluído', 'sucesso');
-    carregar();
+    recarregarPagina();
   } else {
     mostrarToast('Erro ao excluir', 'erro');
   }
@@ -604,6 +608,15 @@ btnTrocarSenha.addEventListener('click', async () => {
     mostrarToast(erro || 'Erro ao trocar senha', 'erro');
   }
 });
+
+/* ---------- Reload ---------- */
+
+// Após salvar/excluir, recarrega a página inteira para garantir que tudo
+// que está na tela (incluindo imagens que podem estar em cache) reflita
+// o novo estado. Pequeno delay para o toast de sucesso ser visível antes.
+function recarregarPagina() {
+  setTimeout(() => location.reload(), 700);
+}
 
 /* ---------- Toast ---------- */
 
