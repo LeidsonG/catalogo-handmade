@@ -109,8 +109,19 @@ estão marcados com comentários para você achar rápido. Os mais úteis:
 
 ```
 catalogo-handmade/
-├── server.js                  Servidor Express + API + geração de PDF
+├── server.js                  Entry point (setup + middleware + monta routers)
 ├── package.json
+├── lib/
+│   ├── dados.js               Read/write JSONs + mutex + backup
+│   ├── ids.js                 Geração de IDs e códigos sequenciais
+│   ├── render.js              HTML do PDF (intro + páginas de produto)
+│   └── validacao.js           Whitelists de campos editáveis
+├── routes/
+│   ├── produtos.js            CRUD de produtos
+│   ├── categorias.js          CRUD de categorias + próximo-código
+│   ├── intro.js               GET/PUT da introdução
+│   ├── uploads.js             Upload de foto e cor (multer)
+│   └── pdf.js                 Render HTML + geração PDF (Puppeteer)
 ├── admin/                     Interface web (index.html, admin.js, admin.css)
 ├── templates/                 HTML/CSS do PDF (pdf.css, intro/layout-1/layout-2.html)
 ├── data/
@@ -118,17 +129,38 @@ catalogo-handmade/
 │   ├── categorias.json        Banco de categorias
 │   └── intro.json             Texto da página de introdução
 ├── assets/
-│   └── logo.svg               Logo da marca (você adiciona)
+│   ├── logo.svg               Logo da marca (você adiciona)
+│   └── fonts/                 Fontes baixadas localmente (npm run baixar-fontes)
 ├── uploads/
 │   ├── produtos/              Fotos dos cintos (PNG sem fundo)
 │   └── cores/                 Recortes de textura para o círculo de cor
 ├── scripts/
 │   ├── remove-bg.py           Remoção de fundo em lote (rembg)
 │   ├── migrar-ids.js          Migração one-shot de IDs/arquivos
+│   ├── baixar-fontes.js       Baixa Work Sans + Rye localmente
 │   └── requirements.txt
 ├── fotos-originais/           Fotos com fundo (entrada do remove-bg.py)
 └── output/                    PDFs gerados
 ```
+
+## Variáveis de ambiente
+
+Veja [.env.example](.env.example) para a lista completa.
+
+| Variável     | Default | Descrição |
+|---|---|---|
+| `PORT`       | `3000`  | Porta do servidor |
+| `ADMIN_USER` | `admin` | Usuário do HTTP Basic Auth (só usado se `ADMIN_PASS` definido) |
+| `ADMIN_PASS` | —       | **Se definido**, ativa autenticação. Sem ele, servidor fica aberto (uso local) |
+
+## Scripts npm
+
+| Comando | O que faz |
+|---|---|
+| `npm start`             | Sobe o servidor em `http://localhost:3000` |
+| `npm run dev`           | Igual, com `--watch` (reinicia ao salvar arquivos) |
+| `npm run baixar-fontes` | Baixa Work Sans + Rye do Google Fonts para `assets/fonts/` (geração de PDF passa a funcionar offline) |
+| `npm run migrar-ids`    | One-shot: migra IDs antigos (hash hex) para o formato sequencial novo, renomeia arquivos |
 
 ## API REST
 

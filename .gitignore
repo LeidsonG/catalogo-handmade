@@ -4,6 +4,7 @@ fotos-originais/
 data/*.backup-*
 data/*.bak
 .claude/
+.env
 .DS_Store
 *.log
 .venv/
