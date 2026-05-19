@@ -7,10 +7,13 @@ const listaCategorias = $('#lista-categorias');
 const selectCategoriaProduto = $('#select-categoria-produto');
 const seletorCategoriaPdf = $('#seletor-categoria-pdf');
 const filtroCategoriaLista = $('#filtro-categoria-lista');
+const buscaProduto = $('#busca-produto');
+const btnBuscar = $('#btn-buscar');
 const grupos = $('#grupos');
 const contador = $('#contador');
 
 let filtroCategoria = '';
+let filtroTexto = '';
 const tituloForm = $('#titulo-form');
 const btnSalvar = $('#btn-salvar');
 const btnLimpar = $('#btn-limpar');
@@ -175,6 +178,15 @@ filtroCategoriaLista.addEventListener('change', () => {
   renderProdutos();
 });
 
+function aplicarBusca() {
+  filtroTexto = buscaProduto.value;
+  renderProdutos();
+}
+
+btnBuscar.addEventListener('click', aplicarBusca);
+buscaProduto.addEventListener('keydown', (e) => { if (e.key === 'Enter') aplicarBusca(); });
+buscaProduto.addEventListener('search', aplicarBusca); // limpa com o ×
+
 formCategoria.addEventListener('submit', async (e) => {
   e.preventDefault();
   const nome = formCategoria.elements.nome.value.trim();
@@ -243,11 +255,8 @@ async function excluirCategoria(id) {
 /* ---------- Produtos ---------- */
 
 function renderProdutos() {
-  contador.textContent = `${produtos.length} produto${produtos.length === 1 ? '' : 's'}`;
-  if (!produtos.length) {
-    grupos.innerHTML = '<div class="vazio">Nenhum produto cadastrado ainda.</div>';
-    return;
-  }
+  const q = filtroTexto.trim().toLowerCase();
+
   const porCategoria = new Map(categorias.map((c) => [c.id, []]));
   const semCategoria = [];
   for (const p of produtos) {
@@ -260,9 +269,12 @@ function renderProdutos() {
     : categorias;
   const mostrarSemCategoria = !filtroCategoria && semCategoria.length;
 
+  let totalVisiveis = 0;
   let html = '';
   for (const cat of categoriasFiltradas) {
-    const itens = porCategoria.get(cat.id) || [];
+    const itens = (porCategoria.get(cat.id) || [])
+      .filter((p) => !q || p.nome.toLowerCase().includes(q) || p.codigo.toLowerCase().includes(q));
+    totalVisiveis += itens.length;
     html += `
       <section class="grupo">
         <h3 class="grupo-titulo">
@@ -276,20 +288,27 @@ function renderProdutos() {
     `;
   }
   if (mostrarSemCategoria) {
-    html += `
-      <section class="grupo grupo-orfao">
-        <h3 class="grupo-titulo">
-          Sem categoria
-          <span class="grupo-contador">${semCategoria.length}</span>
-        </h3>
-        <div class="grupo-aviso">Estes produtos foram cadastrados antes do sistema de categorias. Edite cada um para atribuir uma categoria.</div>
-        <ul class="lista">${semCategoria.map(itemHtml).join('')}</ul>
-      </section>
-    `;
+    const itensSemCat = semCategoria.filter(
+      (p) => !q || p.nome.toLowerCase().includes(q) || p.codigo.toLowerCase().includes(q),
+    );
+    totalVisiveis += itensSemCat.length;
+    if (itensSemCat.length) {
+      html += `
+        <section class="grupo grupo-orfao">
+          <h3 class="grupo-titulo">
+            Sem categoria
+            <span class="grupo-contador">${itensSemCat.length}</span>
+          </h3>
+          <div class="grupo-aviso">Estes produtos foram cadastrados antes do sistema de categorias. Edite cada um para atribuir uma categoria.</div>
+          <ul class="lista">${itensSemCat.map(itemHtml).join('')}</ul>
+        </section>
+      `;
+    }
   }
   if (!html) {
-    html = '<div class="vazio">Nenhum produto nessa categoria.</div>';
+    html = `<div class="vazio">${q ? 'Nenhum produto encontrado para "' + q + '".' : 'Nenhum produto nessa categoria.'}</div>`;
   }
+  contador.textContent = `${totalVisiveis} produto${totalVisiveis === 1 ? '' : 's'}${q ? ` encontrado${totalVisiveis === 1 ? '' : 's'}` : ''}`;
   grupos.innerHTML = html;
   grupos.querySelectorAll('[data-editar]').forEach((el) => {
     el.addEventListener('click', () => editar(el.dataset.editar));

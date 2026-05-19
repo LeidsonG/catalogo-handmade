@@ -432,6 +432,15 @@ html, body {
   border-color: var(--cor-linha);
 }
 
+.botao-bloco {
+  width: 100%;
+  justify-content: center;
+}
+
+.filtro-busca {
+  min-width: 160px;
+}
+
 .botao-perigo {
   background: transparent;
   color: var(--cor-erro);
