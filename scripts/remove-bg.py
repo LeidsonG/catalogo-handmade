@@ -13,8 +13,12 @@ Requer: pip install "rembg[cpu]" pillow
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
+
+# Garante cache persistente para não baixar o modelo a cada execução
+os.environ.setdefault("REMBG_CACHE_DIR", str(Path.home() / ".cache" / "rembg"))
 
 try:
     from rembg import remove, new_session
@@ -27,8 +31,9 @@ except ImportError:
 EXTENSOES = {".jpg", ".jpeg", ".png", ".webp", ".bmp"}
 
 
-def processar_pasta(entrada: Path, saida: Path, modelo: str) -> tuple[int, int]:
+def processar_pasta(entrada: Path, saida: Path, ok: Path, modelo: str) -> tuple[int, int]:
     saida.mkdir(parents=True, exist_ok=True)
+    ok.mkdir(parents=True, exist_ok=True)
     arquivos = sorted(
         f for f in entrada.iterdir()
         if f.is_file() and f.suffix.lower() in EXTENSOES
@@ -48,7 +53,8 @@ def processar_pasta(entrada: Path, saida: Path, modelo: str) -> tuple[int, int]:
     for i, arq in enumerate(arquivos, 1):
         destino = saida / (arq.stem + ".png")
         if destino.exists():
-            print(f"[{i:3}/{len(arquivos)}] PULANDO {arq.name} (já existe)")
+            arq.rename(ok / arq.name)
+            print(f"[{i:3}/{len(arquivos)}] PULANDO {arq.name} (já existe, movendo para fotos-ok)")
             sucesso += 1
             continue
 
@@ -56,6 +62,7 @@ def processar_pasta(entrada: Path, saida: Path, modelo: str) -> tuple[int, int]:
             with Image.open(arq) as img:
                 resultado = remove(img, session=session)
             resultado.save(destino, "PNG")
+            arq.rename(ok / arq.name)
             print(f"[{i:3}/{len(arquivos)}] OK   {arq.name} -> {destino.name}")
             sucesso += 1
         except Exception as exc:
@@ -82,7 +89,7 @@ def main() -> int:
     )
     parser.add_argument(
         "--modelo",
-        default="isnet-general-use",
+        default="birefnet-general",
         help=(
             "Modelo do rembg: u2net (rápido), isnet-general-use (qualidade alta, padrão), "
             "birefnet-general (melhor para objetos detalhados, mais pesado)"
@@ -95,7 +102,8 @@ def main() -> int:
         print("Crie a pasta e coloque as fotos originais lá.")
         return 1
 
-    sucesso, erro = processar_pasta(args.entrada, args.saida, args.modelo)
+    ok = args.entrada / "fotos-ok"
+    sucesso, erro = processar_pasta(args.entrada, args.saida, ok, args.modelo)
     print()
     print(f"Concluído. Sucesso: {sucesso}, Erros: {erro}")
     print(f"PNGs salvos em: {args.saida}")

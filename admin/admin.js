@@ -29,6 +29,25 @@ const toast = $('#toast');
 
 let produtos = [];
 let categorias = [];
+let prefixoAtual = '';
+
+function atualizarEstadoForm() {
+  const temCategoria = !!selectCategoriaProduto.value;
+  const temCodigo = !!formProduto.elements.codigo.value.trim();
+
+  formProduto.elements.codigo.disabled = !temCategoria;
+
+  const camposResto = [
+    formProduto.elements.nome,
+    formProduto.elements.preco,
+    formProduto.elements.descricao,
+    formProduto.elements.nomeCor,
+    arquivoFoto,
+    arquivoCor,
+    btnSalvar,
+  ];
+  for (const el of camposResto) el.disabled = !temCodigo;
+}
 
 async function carregar() {
   const [pProds, pCats, pIntro] = await Promise.all([
@@ -42,6 +61,7 @@ async function carregar() {
   popularSelectsCategoria();
   renderProdutos();
   preencherIntro(pIntro);
+  atualizarEstadoForm();
 }
 
 function esc(s) {
@@ -332,7 +352,7 @@ function itemHtml(p) {
       <div class="item-rodape">
         <div class="item-cor">
           <span class="item-cor-amostra" style="${corStyle}"></span>
-          <span style="font-size:11px;color:#8a6e57">${esc(p.nomeCor || '')}</span>
+          <span class="item-cor-nome">${esc(p.nomeCor || '')}</span>
         </div>
         <div class="item-preco">${formatarPreco(p.preco)}</div>
       </div>
@@ -452,7 +472,7 @@ formProduto.addEventListener('submit', async (e) => {
   }
   const dados = {
     categoriaId,
-    codigo: formProduto.elements.codigo.value,
+    codigo: prefixoAtual + formProduto.elements.codigo.value,
     nome: formProduto.elements.nome.value,
     descricao: formProduto.elements.descricao.value,
     preco: Number(formProduto.elements.preco.value) || 0,
@@ -478,7 +498,10 @@ formProduto.addEventListener('submit', async (e) => {
     if (resposta.status === 409 && erroBody.sugestao) {
       const usar = confirm(`${erroBody.erro}\n\nUsar o próximo código disponível: "${erroBody.sugestao}"?`);
       if (usar) {
-        formProduto.elements.codigo.value = erroBody.sugestao;
+        const sugestaoNum = prefixoAtual && erroBody.sugestao.startsWith(prefixoAtual)
+          ? erroBody.sugestao.slice(prefixoAtual.length)
+          : erroBody.sugestao;
+        formProduto.elements.codigo.value = sugestaoNum;
         formProduto.elements.codigo.focus();
         mostrarToast(`Código alterado para ${erroBody.sugestao}. Clique em salvar novamente.`, 'sucesso');
       }
@@ -491,7 +514,19 @@ formProduto.addEventListener('submit', async (e) => {
   }
 });
 
-selectCategoriaProduto.addEventListener('change', sugerirCodigo);
+selectCategoriaProduto.addEventListener('change', () => {
+  atualizarPrefixoCodigo(selectCategoriaProduto.value);
+  atualizarEstadoForm();
+  sugerirCodigo();
+});
+
+formProduto.elements.codigo.addEventListener('input', atualizarEstadoForm);
+
+function atualizarPrefixoCodigo(categoriaId) {
+  const cat = categorias.find((c) => c.id === categoriaId);
+  prefixoAtual = (cat && cat.prefixoCodigo) ? cat.prefixoCodigo : '';
+  document.getElementById('codigo-prefixo-exibido').textContent = prefixoAtual;
+}
 
 async function sugerirCodigo() {
   // Só sugere ao criar produto novo, e só se o campo de código estiver vazio.
@@ -503,7 +538,13 @@ async function sugerirCodigo() {
     const resp = await fetch(`/api/categorias/${categoriaId}/proximo-codigo`);
     if (!resp.ok) return;
     const { codigo } = await resp.json();
-    if (codigo) formProduto.elements.codigo.value = codigo;
+    if (codigo) {
+      const numero = prefixoAtual && codigo.startsWith(prefixoAtual)
+        ? codigo.slice(prefixoAtual.length)
+        : codigo;
+      formProduto.elements.codigo.value = numero;
+      atualizarEstadoForm();
+    }
   } catch {}
 }
 
@@ -514,6 +555,9 @@ function limparForm() {
   formProduto.elements.id.value = '';
   formProduto.elements.foto.value = '';
   formProduto.elements.corTextura.value = '';
+  prefixoAtual = '';
+  document.getElementById('codigo-prefixo-exibido').textContent = '';
+  atualizarEstadoForm();
   previewFoto.innerHTML = '';
   previewCor.className = 'preview preview-cor';
   previewCor.style.backgroundImage = '';
@@ -527,7 +571,11 @@ function editar(id) {
   if (!p) return;
   formProduto.elements.id.value = p.id;
   formProduto.elements.categoriaId.value = p.categoriaId || '';
-  formProduto.elements.codigo.value = p.codigo;
+  atualizarPrefixoCodigo(p.categoriaId || '');
+  const codigoNumero = prefixoAtual && p.codigo.startsWith(prefixoAtual)
+    ? p.codigo.slice(prefixoAtual.length)
+    : p.codigo;
+  formProduto.elements.codigo.value = codigoNumero;
   formProduto.elements.nome.value = p.nome;
   formProduto.elements.descricao.value = p.descricao;
   formProduto.elements.preco.value = p.preco;
@@ -544,9 +592,17 @@ function editar(id) {
     previewCor.style.backgroundImage = '';
     previewCor.innerHTML = '';
   }
+  atualizarEstadoForm();
   tituloForm.textContent = `Editando: ${p.nome || p.codigo}`;
   btnSalvar.textContent = 'Salvar alterações';
   window.scrollTo({ top: 0, behavior: 'smooth' });
+  const bloco = formProduto.closest('.bloco');
+  setTimeout(() => {
+    bloco.classList.remove('bloco-flash');
+    void bloco.offsetWidth; // reinicia animação se chamar editar() duas vezes seguidas
+    bloco.classList.add('bloco-flash');
+    bloco.addEventListener('animationend', () => bloco.classList.remove('bloco-flash'), { once: true });
+  }, 200);
 }
 
 async function excluir(id) {

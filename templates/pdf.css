@@ -265,15 +265,21 @@ html, body {
   min-height: 0;
 }
 
-/* Linha divisória de borda a borda: vaza 19mm (16mm pagina + 3mm layout-2) para cada lado */
+/* Risco divisório com gradiente: sólido no centro, some nas extremidades */
 .pagina-layout-2 .produto-bloco:not(:last-child):not(.vazio)::after {
   content: '';
   position: absolute;
   bottom: 0;
-  left: -19mm;
-  right: -19mm;
-  height: 1px;
-  background-color: var(--cor-linha);
+  left: 0;
+  right: 0;
+  height: 0.4mm;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--cor-suave2) 18%,
+    var(--cor-suave2) 82%,
+    transparent 100%
+  );
 }
 
 .pagina-layout-2 .produto-bloco.vazio {
