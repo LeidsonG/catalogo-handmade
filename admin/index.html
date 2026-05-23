@@ -26,7 +26,12 @@
             <select name="categoriaId" id="select-categoria-produto" required></select>
           </label>
           <div class="grid-2">
-            <label>Código <input name="codigo" required placeholder="Ex: CM-001"></label>
+            <label>Código
+              <span class="codigo-wrap">
+                <span class="codigo-prefixo" id="codigo-prefixo-exibido"></span>
+                <input name="codigo" required placeholder="001">
+              </span>
+            </label>
             <label>Preço (R$) <input name="preco" type="number" step="0.01" required></label>
           </div>
           <label>Nome <input name="nome" required></label>

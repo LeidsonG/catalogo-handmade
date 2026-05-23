@@ -150,6 +150,26 @@ html, body {
   background: var(--cor-papel);
 }
 
+.form input:disabled,
+.form select:disabled,
+.form textarea:disabled,
+.form input[type=file]:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.form button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.codigo-wrap:has(input:disabled) {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
 .form-inline {
   flex-direction: row;
   align-items: stretch;
@@ -171,6 +191,46 @@ html, body {
 
 .grid-cat > label {
   white-space: nowrap;
+}
+
+.codigo-wrap {
+  display: flex;
+  border: 1px solid var(--cor-linha);
+  border-radius: var(--raio);
+  overflow: hidden;
+  background: var(--cor-fundo);
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.codigo-wrap:focus-within {
+  border-color: var(--cor-acento);
+  background: var(--cor-papel);
+}
+
+.codigo-prefixo {
+  display: flex;
+  align-items: center;
+  min-width: 10px;
+  padding: 8px 6px 8px 10px;
+  background: transparent;
+  font-weight: 700;
+  white-space: nowrap;
+  color: var(--cor-acento);
+  letter-spacing: 1px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  border-right: 1px solid var(--cor-linha);
+  pointer-events: none;
+}
+
+.codigo-wrap input {
+  border: none !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  flex: 1;
+  min-width: 0;
+  outline: none !important;
+  letter-spacing: 1px;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 .prefixo-wrap {
