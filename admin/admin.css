@@ -423,6 +423,14 @@ html, body {
   gap: 12px;
 }
 
+.grid-2 > label {
+  min-width: 0;
+}
+
+.grid-2 > label .codigo-wrap {
+  width: 100%;
+}
+
 .campo-arquivo {
   display: flex;
   flex-direction: column;
