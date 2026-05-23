@@ -265,15 +265,15 @@ html, body {
   min-height: 0;
 }
 
-/* Linha divisória de borda a borda: vaza 19mm (16mm pagina + 3mm layout-2) para cada lado */
+/* Risco divisório de borda a borda: vaza 19mm (16mm pagina + 3mm layout-2) para cada lado */
 .pagina-layout-2 .produto-bloco:not(:last-child):not(.vazio)::after {
   content: '';
   position: absolute;
   bottom: 0;
   left: -19mm;
   right: -19mm;
-  height: 1px;
-  background-color: var(--cor-linha);
+  height: 0.4mm;
+  background-color: var(--cor-suave2);
 }
 
 .pagina-layout-2 .produto-bloco.vazio {
@@ -284,14 +284,15 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  align-self: stretch;
+  overflow: hidden;
 }
 
 .pagina-layout-2 .produto-foto {
   max-width: 100%;
   max-height: 100%;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
 }
 
@@ -305,6 +306,31 @@ html, body {
   justify-content: center;
   color: var(--cor-suave);
   font-style: italic;
+}
+
+.pagina-layout-2 .produto-info {
+  position: relative;
+  overflow: hidden;
+  border-radius: 3mm;
+  padding: 4mm 5mm;
+}
+
+/* Foto do produto embaçada como background da área de info */
+.pagina-layout-2 .produto-info::before {
+  content: '';
+  position: absolute;
+  inset: -15mm;
+  background-image: var(--foto-bg);
+  background-size: cover;
+  background-position: center;
+  filter: blur(18px);
+  opacity: 0.13;
+  z-index: 0;
+}
+
+.pagina-layout-2 .produto-info > * {
+  position: relative;
+  z-index: 1;
 }
 
 .pagina-layout-2 .produto-codigo {
