@@ -374,8 +374,8 @@ html, body {
   background-image: url('/uploads/Background marrom.png');
   background-size: cover;
   background-position: center;
-  filter: blur(6px);
-  opacity: 0.4;
+  filter: blur(5px);
+  opacity: 0.6;
   z-index: 0;
 }
 
