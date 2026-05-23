@@ -188,9 +188,9 @@ html, body {
 
 .pagina-layout-1 .produto-foto {
   max-width: 100%;
-  max-height: 215mm;
+  max-height: 100%;
   width: 100%;
-  height: 215mm;
+  height: 100%;
   object-fit: contain;
 }
 
@@ -299,7 +299,7 @@ html, body {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
+  align-self: stretch;
   position: relative;
   overflow: hidden;
 }
@@ -307,8 +307,8 @@ html, body {
 .pagina-layout-2 .produto-foto {
   max-width: 100%;
   max-height: 100%;
-  width: 100%;
-  height: 100%;
+  width: auto;
+  height: auto;
   object-fit: contain;
 }
 
