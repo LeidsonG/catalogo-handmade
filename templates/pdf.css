@@ -250,7 +250,7 @@ html, body {
 .pagina-layout-2 {
   display: flex;
   flex-direction: column;
-  gap: 6mm;
+  gap: 0;
   padding: 8mm 3mm;
 }
 
@@ -265,11 +265,18 @@ html, body {
   min-height: 0;
 }
 
-/* Risco divisório apenas entre os dois produtos (primeiro bloco) */
-.pagina-layout-2 .produto-bloco:first-child::after {
+/* Elemento separador entre os dois produtos */
+.divisor-pagina {
+  flex-shrink: 0;
+  height: 8mm;
+  position: relative;
+}
+
+.divisor-pagina::after {
   content: '';
   position: absolute;
-  bottom: 0;
+  top: 50%;
+  transform: translateY(-50%);
   left: 0;
   right: 0;
   height: 0.4mm;
