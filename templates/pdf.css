@@ -182,6 +182,8 @@ html, body {
   justify-content: center;
   margin-bottom: 6mm;
   min-height: 0;
+  position: relative;
+  overflow: hidden;
 }
 
 .pagina-layout-1 .produto-foto {
@@ -298,6 +300,8 @@ html, body {
   align-items: center;
   justify-content: center;
   height: 100%;
+  position: relative;
+  overflow: hidden;
 }
 
 .pagina-layout-2 .produto-foto {
@@ -358,6 +362,23 @@ html, body {
   font-size: 24pt;
   color: var(--cor-acento);
   font-weight: bold;
+}
+
+/* ---------- Background marrom atrás da foto ---------- */
+.produto-foto-wrap::before {
+  content: '';
+  position: absolute;
+  inset: -8mm;
+  background-image: url('/uploads/Background marrom.png');
+  background-size: cover;
+  background-position: center;
+  filter: blur(6px);
+  z-index: 0;
+}
+
+.produto-foto-wrap > * {
+  position: relative;
+  z-index: 1;
 }
 
 /* ---------- Cor (amostra) ---------- */
