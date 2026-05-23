@@ -25,18 +25,6 @@
       "categoriaId": "c001"
     },
     {
-      "id": "p00003",
-      "codigo": "CF-100",
-      "nome": "Cinto exemplo 3",
-      "descricao": "Descrição de exemplo",
-      "preco": 190.9,
-      "nomeCor": "Rosa",
-      "foto": "/uploads/produtos/CF-100.png",
-      "corTextura": "/uploads/cores/CF-100-cor.png",
-      "ordem": 2,
-      "categoriaId": "c002"
-    },
-    {
       "id": "p00004",
       "codigo": "CM-003",
       "nome": "Cinto exemplo de couro novo",
@@ -47,6 +35,30 @@
       "corTextura": "/uploads/cores/CM-003-cor.png",
       "categoriaId": "c001",
       "ordem": 3
+    },
+    {
+      "id": "p00005",
+      "codigo": "CF-100",
+      "nome": "Cinto com Pena e Ramo Bordado",
+      "descricao": "• Costura artesanal\n• 100% Couro legítimo",
+      "preco": 75,
+      "nomeCor": "Natural Antique Pinhão com Rosa Pink",
+      "foto": "/uploads/produtos/CF-100.png",
+      "corTextura": "/uploads/cores/CF-100-cor.svg",
+      "categoriaId": "c002",
+      "ordem": 3
+    },
+    {
+      "id": "p00006",
+      "codigo": "CF-101",
+      "nome": "Cinto com Flecha",
+      "descricao": "• Costura artesanal\n• Couro 100% legítimo",
+      "preco": 100,
+      "nomeCor": "Natural Antique Pinhão com Amarelo",
+      "foto": "/uploads/produtos/101.png",
+      "corTextura": "/uploads/cores/101-cor.svg",
+      "categoriaId": "c002",
+      "ordem": 4
     }
   ]
 }
