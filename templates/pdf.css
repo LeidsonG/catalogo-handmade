@@ -265,8 +265,8 @@ html, body {
   min-height: 0;
 }
 
-/* Risco divisório com gradiente: sólido no centro, some nas extremidades */
-.pagina-layout-2 .produto-bloco:not(:last-child):not(.vazio)::after {
+/* Risco divisório apenas entre os dois produtos (primeiro bloco) */
+.pagina-layout-2 .produto-bloco:first-child::after {
   content: '';
   position: absolute;
   bottom: 0;
@@ -276,8 +276,8 @@ html, body {
   background: linear-gradient(
     to right,
     transparent 0%,
-    var(--cor-suave2) 18%,
-    var(--cor-suave2) 82%,
+    var(--cor-suave2) 30%,
+    var(--cor-suave2) 70%,
     transparent 100%
   );
 }
