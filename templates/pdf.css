@@ -184,6 +184,7 @@ html, body {
   min-height: 0;
   position: relative;
   overflow: hidden;
+  padding: 4mm;
 }
 
 .pagina-layout-1 .produto-foto {
@@ -259,7 +260,7 @@ html, body {
 .pagina-layout-2 .produto-bloco {
   flex: 1;
   display: grid;
-  grid-template-columns: 2.6fr 1fr;
+  grid-template-columns: 2.3fr 1fr;
   gap: 6mm;
   align-items: center;
   padding: 2mm 0;
@@ -302,6 +303,7 @@ html, body {
   align-self: stretch;
   position: relative;
   overflow: hidden;
+  padding: 4mm;
 }
 
 .pagina-layout-2 .produto-foto {
