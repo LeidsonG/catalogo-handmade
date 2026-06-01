@@ -1,8 +1,8 @@
 {
-  "name": "handmade-cintos",
+  "name": "catalogo-handmade",
   "version": "0.1.0",
   "private": true,
-  "description": "Sistema de catálogo PDF para cintos de couro artesanais — marca Tati",
+  "description": "Sistema de catálogo PDF para cintos de couro artesanais — marca Handmade — Tati",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
