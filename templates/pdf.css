@@ -169,85 +169,8 @@ html, body {
   margin-top: 4mm;
 }
 
-/* ---------- Layout 1 produto por página ---------- */
-.pagina-layout-1 {
-  display: flex;
-  flex-direction: column;
-}
-
-.pagina-layout-1 .produto-foto-wrap {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 6mm;
-  min-height: 0;
-  position: relative;
-  overflow: hidden;
-  padding: 4mm;
-}
-
-.pagina-layout-1 .produto-foto {
-  max-width: 100%;
-  max-height: 100%;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.pagina-layout-1 .produto-foto-placeholder {
-  width: 100%;
-  height: 215mm;
-  background: var(--cor-papel);
-  border: 1px dashed var(--cor-linha);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--cor-suave);
-  font-style: italic;
-}
-
-.pagina-layout-1 .produto-info {
-  border-top: 1px solid var(--cor-linha);
-  padding-top: 6mm;
-}
-
-.pagina-layout-1 .produto-codigo {
-  font-size: 10pt;
-  letter-spacing: 3px;
-  color: var(--cor-suave);
-  text-transform: uppercase;
-  margin-bottom: 3mm;
-}
-
-.pagina-layout-1 .produto-nome {
-  font-family: 'Rye', 'Georgia', serif;
-  font-size: 26pt;
-  letter-spacing: 1px;
-  color: var(--cor-acento);
-  margin-bottom: 4mm;
-  font-weight: 400;
-}
-
-.pagina-layout-1 .produto-descricao {
-  font-size: 13pt;
-  line-height: 1.55;
-  color: var(--cor-texto);
-  margin-bottom: 7mm;
-  font-style: italic;
-}
-
-.pagina-layout-1 .produto-rodape {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.pagina-layout-1 .produto-preco {
-  font-size: 24pt;
-  color: var(--cor-acento);
-  font-weight: bold;
-}
+/* Layout 1 (1 produto por página) está desativado.
+   Seu CSS foi movido para templates/_backup/layout-1.css. */
 
 /* ---------- Layout 2 produtos por página ---------- */
 .pagina-layout-2 {
