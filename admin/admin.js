@@ -19,8 +19,8 @@ const btnSalvar = $('#btn-salvar');
 const btnLimpar = $('#btn-limpar');
 const btnSalvarCategoria = $('#btn-salvar-categoria');
 const btnCancelarCategoria = $('#btn-cancelar-categoria');
-const btnPdf1 = $('#btn-pdf-1');
 const btnPdf2 = $('#btn-pdf-2');
+const btnPdf3 = $('#btn-pdf-3');
 const arquivoFoto = $('#arquivo-foto');
 const arquivoCor = $('#arquivo-cor');
 const previewFoto = $('#preview-foto');
@@ -628,7 +628,7 @@ async function gerarPdf(layout) {
     mostrarToast('Escolha uma categoria para gerar o PDF', 'erro');
     return;
   }
-  const btn = layout === '1' ? btnPdf1 : btnPdf2;
+  const btn = layout === '3' ? btnPdf3 : btnPdf2;
   const textoOriginal = btn.textContent;
   btn.disabled = true;
   btn.textContent = 'Gerando…';
@@ -654,8 +654,8 @@ async function gerarPdf(layout) {
   }
 }
 
-btnPdf1.addEventListener('click', () => gerarPdf('1'));
 btnPdf2.addEventListener('click', () => gerarPdf('2'));
+btnPdf3.addEventListener('click', () => gerarPdf('3'));
 
 /* ---------- Trocar senha ---------- */
 

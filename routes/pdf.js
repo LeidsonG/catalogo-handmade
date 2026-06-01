@@ -12,7 +12,7 @@ function criarRouter(porta) {
 
   router.get('/render/:layout', (req, res) => {
     const layout = req.params.layout;
-    if (!['1', '2'].includes(layout)) return res.status(400).send('layout inválido');
+    if (!['2', '3'].includes(layout)) return res.status(400).send('layout inválido');
     const categoriaId = String(req.query.categoria || '');
     if (!categoriaId) return res.status(400).send('parâmetro categoria obrigatório');
     const cats = readCategorias().categorias;
@@ -30,7 +30,7 @@ function criarRouter(porta) {
 
   router.post('/api/gerar-pdf', async (req, res) => {
     const layout = String(req.body.layout || '2');
-    if (!['1', '2'].includes(layout)) return res.status(400).json({ erro: 'layout inválido' });
+    if (!['2', '3'].includes(layout)) return res.status(400).json({ erro: 'layout inválido' });
     const categoriaId = String(req.body.categoriaId || '');
     if (!categoriaId) return res.status(400).json({ erro: 'categoriaId obrigatório' });
     const categoria = readCategorias().categorias.find((c) => c.id === categoriaId);
