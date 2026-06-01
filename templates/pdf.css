@@ -67,7 +67,8 @@ html, body {
   --intro-scale: 1.35;
 
   /* Fundo sólido atrás da imagem de background da foto.
-     Aparece quando a opacidade do ::before é reduzida. */
+     Aparece quando a opacidade do ::before é reduzida.
+     Para desativar (sem fundo), troque por: --cor-fundo-foto: transparent; */
   --cor-fundo-foto: #000000;
 }
 
