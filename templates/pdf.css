@@ -393,6 +393,7 @@ html, body {
 
 .produto-cor-amostra {
   display: inline-block;
+  flex-shrink: 0;
   width: 5mm;
   height: 5mm;
   border-radius: 50%;
