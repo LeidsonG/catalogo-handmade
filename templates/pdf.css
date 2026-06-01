@@ -59,6 +59,7 @@ html, body {
   --cor-papel: #f7f3ee;
   --cor-texto: #1a1a1a;
   --cor-acento: #1a1a1a;
+  --cor-categ: #462e18;
   --cor-suave: #7a6a5a;
   --cor-suave2:#a59483;
   --cor-linha: #d8c9b8;
@@ -132,9 +133,10 @@ html, body {
   font-size: calc(32pt * var(--intro-scale));
   letter-spacing: 2px;
   text-transform: uppercase;
-  color: var(--cor-acento);
+  color: var(--cor-categ);
   margin-bottom: 2mm;
   font-weight: 400;
+  text-shadow: 2px 3px 8px rgba(30, 10, 2, 0.45);
 }
 
 .intro-categoria:empty {
@@ -272,7 +274,7 @@ html, body {
 }
 
 .pagina-layout-2 .produto-descricao {
-  font-size: 13pt;
+  font-size: 12pt;
   line-height: 1.5;
   color: var(--cor-texto);
   margin-bottom: 6mm;
