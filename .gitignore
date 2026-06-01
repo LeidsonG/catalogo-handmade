@@ -5,6 +5,7 @@ data/*.backup-*
 data/*.bak
 data/auth.json
 .claude/
+CLAUDE.md
 .DS_Store
 *.log
 .venv/
