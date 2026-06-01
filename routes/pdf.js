@@ -61,11 +61,13 @@ function criarRouter(porta) {
       // baixadas/parseadas antes de capturar o PDF. Caso contrário, o Puppeteer
       // pode renderizar com o fallback serif/sans antes do swap.
       await page.evaluate(() => document.fonts.ready);
-      const stamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, 19);
+      const agora = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+      const stamp = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}_${String(agora.getHours()).padStart(2, '0')}-${String(agora.getMinutes()).padStart(2, '0')}`;
       const slug = categoria.nome.toLowerCase()
         .normalize('NFD').replace(/[̀-ͯ]/g, '')
         .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      const nome = `catalogo-${slug}-layout${layout}-${stamp}.pdf`;
+      const variante = layout === '3' ? 'sem-preco' : 'com-preco';
+      const nome = `catalogo-${slug}-${variante}-${stamp}.pdf`;
       const caminho = path.join(OUTPUT_DIR, nome);
       await page.pdf({
         path: caminho,
