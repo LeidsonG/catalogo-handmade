@@ -65,6 +65,10 @@ html, body {
 
   /*intro-scale comando a proporção de fonte da pág 1 do PDF*/
   --intro-scale: 1.35;
+
+  /* Fundo sólido atrás da imagem de background da foto.
+     Aparece quando a opacidade do ::before é reduzida. */
+  --cor-fundo-foto: #000000;
 }
 
 .pagina {
@@ -289,7 +293,14 @@ html, body {
   font-weight: bold;
 }
 
-/* ---------- Background marrom atrás da foto ---------- */
+/* ---------- Background atrás da foto ---------- */
+/* Camada 1 — cor sólida (variável --cor-fundo-foto em :root).
+   Fica sempre visível; quando a opacidade do ::before baixa, essa cor aparece. */
+.pagina-layout-2 .produto-foto-wrap {
+  background-color: var(--cor-fundo-foto);
+}
+
+/* Camada 2 — imagem desfocada sobreposta à cor sólida. */
 .produto-foto-wrap::before {
   content: '';
   position: absolute;
@@ -297,8 +308,8 @@ html, body {
   background-image: url('/uploads/Background marrom.png');
   background-size: cover;
   background-position: center;
-  filter: blur(5px);
-  opacity: 0.6;
+  filter: blur(3px);
+  opacity: 0.7;
   z-index: 0;
 }
 
