@@ -1,3 +1,7 @@
+/* Estilos do painel admin (admin/index.html). NÃO afeta o PDF — o visual do
+   catálogo gerado fica em templates/pdf.css. As variáveis de cor abaixo
+   controlam o tema do painel. */
+
 :root {
   --cor-fundo: #ebebeb; /*Cor inical #f5f1ec;*/
   --cor-papel: #ffffff;

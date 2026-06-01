@@ -1,3 +1,7 @@
+// Rotas /api/upload/:tipo — recebe imagem (foto do produto ou textura de cor)
+// via multer e salva em uploads/produtos/ ou uploads/cores/ nomeada pelo código
+// do produto. Aceita só imagens, limite de 15MB. Retorna o caminho público.
+
 const express = require('express');
 const multer = require('multer');
 const path = require('path');

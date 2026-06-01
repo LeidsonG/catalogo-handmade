@@ -1,3 +1,7 @@
+// Rotas /api/categorias — CRUD de categorias, reordenação (drag-and-drop)
+// e sugestão do próximo código por prefixo. Bloqueia exclusão de categoria
+// que ainda tem produtos.
+
 const express = require('express');
 const { readData, readCategorias, writeCategorias, comLock } = require('../lib/dados');
 const { gerarProximoId, normalizarPrefixo, proximoCodigoCategoria } = require('../lib/ids');

@@ -1,3 +1,10 @@
+// Entry point do servidor. Responsável por:
+//  - garantir que as pastas de upload/output existam no startup;
+//  - aplicar o middleware de autenticação (tudo é protegido);
+//  - servir os arquivos estáticos (admin, uploads, templates, assets, output);
+//  - montar cada router de routes/ sob seu prefixo /api/*.
+// A lógica de verdade mora em lib/ e routes/ — aqui é só a "fiação".
+
 const express = require('express');
 const path = require('path');
 const fs = require('fs');

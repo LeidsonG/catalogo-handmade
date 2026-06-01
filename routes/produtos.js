@@ -1,3 +1,7 @@
+// Rotas /api/produtos — CRUD de produtos.
+// Valida categoria existente e código único (com sugestão de próximo código),
+// serializa escritas com comLock e apaga os arquivos de imagem ao excluir.
+
 const express = require('express');
 const fs = require('fs');
 const path = require('path');

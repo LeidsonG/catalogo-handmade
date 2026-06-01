@@ -1,3 +1,10 @@
+// Rotas de geração de PDF:
+//  - GET  /render/:layout  → HTML do catálogo (usado internamente pelo Puppeteer)
+//  - POST /api/gerar-pdf   → abre o HTML no Chrome headless e salva o PDF
+// Layouts: '2' = 2 por página com preço ("PDF Catálogo"); '3' = igual, sem preço.
+// O HTML é carregado via HTTP (não setContent) para que /uploads e /assets
+// resolvam, autenticando com o token interno do lib/auth.
+
 const express = require('express');
 const path = require('path');
 const puppeteer = require('puppeteer');

@@ -1,3 +1,6 @@
+// Rotas /api/auth — quem está logado (GET /me) e troca de senha
+// (POST /trocar-senha). A lógica de hash/verificação fica em lib/auth.js.
+
 const express = require('express');
 const auth = require('../lib/auth');
 

@@ -1,3 +1,6 @@
+// Rotas /api/intro — lê e atualiza o texto da página de introdução do PDF
+// (marca, subtítulo, texto, ano, contato). Só os campos da whitelist passam.
+
 const express = require('express');
 const { readIntro, writeIntro, comLock } = require('../lib/dados');
 const { CAMPOS_INTRO, pick } = require('../lib/validacao');

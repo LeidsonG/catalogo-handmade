@@ -1,3 +1,8 @@
+// Frontend do painel admin (JS puro, sem framework). Cliente da API HTTP:
+// carrega produtos/categorias/intro, faz o CRUD via fetch, controla os forms,
+// o filtro/busca da lista, o drag-and-drop de categorias, os uploads e o
+// disparo da geração de PDF. Toda a persistência acontece no servidor.
+
 const $ = (sel) => document.querySelector(sel);
 
 const formProduto = $('#form-produto');
