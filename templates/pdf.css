@@ -69,7 +69,7 @@ html, body {
   /* Fundo sólido atrás da imagem de background da foto.
      Aparece quando a opacidade do ::before é reduzida.
      Para desativar (sem fundo), troque por: --cor-fundo-foto: transparent; */
-  --cor-fundo-foto: #000000;
+  --cor-fundo-foto: transparent;
 }
 
 .pagina {
@@ -277,6 +277,7 @@ html, body {
   color: var(--cor-texto);
   margin-bottom: 6mm;
   font-style: italic;
+  white-space: pre-line;
 }
 
 .pagina-layout-2 .produto-rodape {
@@ -289,7 +290,7 @@ html, body {
 }
 
 .pagina-layout-2 .produto-preco {
-  font-size: 24pt;
+  font-size: 22pt;
   color: var(--cor-acento);
   font-weight: bold;
 }
@@ -310,7 +311,7 @@ html, body {
   background-size: cover;
   background-position: center;
   filter: blur(3px);
-  opacity: 0.7;
+  opacity: 0.9;
   z-index: 0;
 }
 
