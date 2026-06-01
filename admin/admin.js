@@ -623,7 +623,7 @@ async function excluir(id) {
 
 /* ---------- Gerar PDF ---------- */
 
-async function gerarPdf(layout) {
+async function gerarPdf(layout, sobrescrever = false) {
   if (!categorias.length) {
     mostrarToast('Crie ao menos uma categoria antes de gerar PDF', 'erro');
     return;
@@ -641,8 +641,14 @@ async function gerarPdf(layout) {
     const resposta = await fetch('/api/gerar-pdf', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ layout, categoriaId }),
+      body: JSON.stringify({ layout, categoriaId, sobrescrever }),
     });
+    if (resposta.status === 409) {
+      const { arquivo } = await resposta.json();
+      const confirmar = window.confirm(`O arquivo "${arquivo}" já existe.\nDeseja substituí-lo?`);
+      if (confirmar) gerarPdf(layout, true);
+      return;
+    }
     if (!resposta.ok) {
       const { erro } = await resposta.json().catch(() => ({}));
       throw new Error(erro || 'Falha na geração');

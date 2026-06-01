@@ -6,6 +6,7 @@
 // resolvam, autenticando com o token interno do lib/auth.
 
 const express = require('express');
+const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
 const { readData, readIntro, readCategorias, ROOT } = require('../lib/dados');
@@ -43,6 +44,20 @@ function criarRouter(porta) {
     const categoria = readCategorias().categorias.find((c) => c.id === categoriaId);
     if (!categoria) return res.status(404).json({ erro: 'categoria não encontrada' });
 
+    const agora = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
+    const stamp = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}_${String(agora.getHours()).padStart(2, '0')}-${String(agora.getMinutes()).padStart(2, '0')}`;
+    const slug = categoria.nome.toLowerCase()
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+    const variante = layout === '3' ? 'sem-preco' : 'com-preco';
+    const nome = `catalogo-${slug}-${variante}-${stamp}.pdf`;
+    const caminho = path.join(OUTPUT_DIR, nome);
+
+    // Se o arquivo já existe e o cliente não confirmou a substituição, avisa.
+    if (fs.existsSync(caminho) && !req.body.sobrescrever) {
+      return res.status(409).json({ conflito: true, arquivo: nome });
+    }
+
     let browser;
     try {
       browser = await puppeteer.launch({ headless: 'new' });
@@ -61,14 +76,6 @@ function criarRouter(porta) {
       // baixadas/parseadas antes de capturar o PDF. Caso contrário, o Puppeteer
       // pode renderizar com o fallback serif/sans antes do swap.
       await page.evaluate(() => document.fonts.ready);
-      const agora = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
-      const stamp = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}_${String(agora.getHours()).padStart(2, '0')}-${String(agora.getMinutes()).padStart(2, '0')}`;
-      const slug = categoria.nome.toLowerCase()
-        .normalize('NFD').replace(/[̀-ͯ]/g, '')
-        .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-      const variante = layout === '3' ? 'sem-preco' : 'com-preco';
-      const nome = `catalogo-${slug}-${variante}-${stamp}.pdf`;
-      const caminho = path.join(OUTPUT_DIR, nome);
       await page.pdf({
         path: caminho,
         format: 'A4',
