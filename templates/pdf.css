@@ -55,7 +55,7 @@ html, body {
 }
 
 :root {
-  --cor-fundo: #ffffff;
+  --cor-fundo: #f7f3ee;
   --cor-papel: #f7f3ee;
   --cor-texto: #1a1a1a;
   --cor-acento: #1a1a1a;
@@ -136,7 +136,7 @@ html, body {
   color: var(--cor-categ);
   margin-bottom: 2mm;
   font-weight: 400;
-  text-shadow: 2px 3px 8px rgba(30, 10, 2, 0.45);
+  text-shadow: 2px 3px 4px rgba(30, 10, 2, 0.534);
 }
 
 .intro-categoria:empty {
@@ -234,6 +234,7 @@ html, body {
   position: relative;
   overflow: hidden;
   padding: 4mm;
+  border-radius: 4mm;
 }
 
 .pagina-layout-2 .produto-foto {
