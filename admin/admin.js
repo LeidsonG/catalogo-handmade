@@ -645,6 +645,8 @@ async function gerarPdf(layout, sobrescrever = false) {
     });
     if (resposta.status === 409) {
       const { arquivo } = await resposta.json();
+      btn.disabled = false;
+      btn.textContent = textoOriginal;
       const confirmar = window.confirm(`O arquivo "${arquivo}" já existe.\nDeseja substituí-lo?`);
       if (confirmar) gerarPdf(layout, true);
       return;
