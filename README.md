@@ -20,8 +20,9 @@ preço mudar.
 - **Drag-and-drop** para reordenar categorias
 - **Filtro por categoria** na lista de produtos
 - **Upload de fotos** (PNG sem fundo) e recorte de cor (textura real do couro)
-- **Dois layouts de PDF**: 1 produto por página (luxuoso) ou 2 produtos por
-  página (equilibrado)
+- **Dois PDFs, mesmo layout (2 produtos por página)**: "PDF Catálogo" (com
+  preço) e "PDF sem preço". Compartilham 100% do template e do CSS — a única
+  diferença é a linha de preço
 - **PDF filtrado por categoria** — gera só os produtos da categoria escolhida
 - **Logo da marca** na página de introdução (grande) e no canto de cada página
   (pequeno)
@@ -76,8 +77,8 @@ Abra http://localhost:3000/admin no navegador.
 5. **Editar a introdução** — bloco de Introdução no admin (marca, subtítulo,
    texto, ano, Instagram, WhatsApp).
 6. **Gerar PDF** — no topo do admin, escolha a categoria e clique em
-   "Gerar PDF (1 por página)" ou "Gerar PDF (2 por página)". O PDF abre
-   numa aba nova e fica salvo em [output/](output/) com o nome
+   "PDF Catálogo" (com preço) ou "PDF sem preço". O PDF abre numa aba nova
+   e fica salvo em [output/](output/) com o nome
    `catalogo-<categoria>-layout<N>-<timestamp>.pdf`.
 
 ### Atualizar preços
@@ -101,12 +102,14 @@ estão marcados com comentários para você achar rápido. Os mais úteis:
 
 | O que mudar | Onde mexer |
 |---|---|
-| Margem das páginas | `.pagina-layout-1 { padding: ... }` ou `.pagina-layout-2 { padding: ... }` |
-| Tamanho da foto (layout 1) | `.pagina-layout-1 .produto-foto { max-height: ... }` |
-| Tamanho da foto (layout 2) | `.pagina-layout-2 .produto-foto { max-height: ... }` |
-| Proporção foto/info (layout 2) | `.pagina-layout-2 .produto-bloco { grid-template-columns: ... }` |
+| Margem das páginas | `.pagina-layout-2 { padding: ... }` |
+| Tamanho da foto | `.pagina-layout-2 .produto-foto { max-height: ... }` |
+| Proporção foto/info | `.pagina-layout-2 .produto-bloco { grid-template-columns: ... }` |
 | Tamanho do círculo de cor | `.produto-cor-amostra { width: ...; height: ... }` |
 | Logo de canto | `.logo-canto { width: ...; top: ...; right: ... }` |
+
+> Os dois PDFs ("Catálogo" e "sem preço") usam o **mesmo** `.pagina-layout-2`,
+> então qualquer ajuste de CSS afeta os dois automaticamente.
 
 > Mudou só o CSS? **Não precisa reiniciar o servidor** — clique "Gerar PDF"
 > de novo. Mudou `server.js`? Precisa reiniciar.
@@ -131,7 +134,8 @@ catalogo-handmade/
 │   ├── uploads.js             Upload de foto e cor (multer)
 │   └── pdf.js                 Render HTML + geração PDF (Puppeteer)
 ├── admin/                     Interface web (index.html, admin.js, admin.css)
-├── templates/                 HTML/CSS do PDF (pdf.css, intro/layout-1/layout-2.html)
+├── templates/                 HTML/CSS do PDF (pdf.css, intro.html, layout-2.html)
+│   └── _backup/               Layout-1 desativado (html+css+README de reativação)
 ├── data/
 │   ├── produtos.json          Banco de produtos
 │   ├── categorias.json        Banco de categorias
