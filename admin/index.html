@@ -46,11 +46,23 @@
             <div class="preview" id="preview-foto"></div>
             <input type="hidden" name="foto">
           </div>
-          <div class="campo-arquivo">
-            <label>Recorte da textura do couro</label>
-            <input type="file" id="arquivo-cor" accept="image/*">
-            <div class="preview preview-cor" id="preview-cor"></div>
-            <input type="hidden" name="corTextura">
+          <div class="campo-cor">
+            <label>Cor do produto</label>
+            <div class="cores-grid">
+              <div class="cor-campo">
+                <input type="color" id="cor1" name="cor1" value="#3b2416">
+                <button type="button" class="botao botao-fantasma botao-mini" data-conta-gota="cor1" title="Pegar cor da foto do produto">🔍 da foto</button>
+              </div>
+              <div class="cor-campo cor-campo-2" id="cor2-wrap" hidden>
+                <input type="color" id="cor2" name="cor2" value="#caa472">
+                <button type="button" class="botao botao-fantasma botao-mini" data-conta-gota="cor2" title="Pegar cor da foto do produto">🔍 da foto</button>
+              </div>
+              <span class="cor-preview" id="preview-cor" title="Prévia da amostra"></span>
+            </div>
+            <label class="cor-toggle">
+              <input type="checkbox" id="usar-cor2"> Duas cores (dividido na diagonal)
+            </label>
+            <p class="cor-dica">Clique no seletor para escolher (o seletor do Chrome tem conta-gota próprio). Ou use <strong>🔍 da foto</strong> e clique na foto acima para amostrar a cor.</p>
           </div>
 
           <div class="acoes-form">

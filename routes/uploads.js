@@ -1,6 +1,6 @@
-// Rotas /api/upload/:tipo — recebe imagem (foto do produto ou textura de cor)
-// via multer e salva em uploads/produtos/ ou uploads/cores/ nomeada pelo código
-// do produto. Aceita só imagens, limite de 15MB. Retorna o caminho público.
+// Rotas /api/upload/:tipo — recebe a foto do produto via multer e salva em
+// uploads/produtos/ nomeada pelo código do produto. Aceita só imagens, limite
+// de 15MB. Retorna o caminho público. (As cores agora são hex, não arquivos.)
 
 const express = require('express');
 const multer = require('multer');
@@ -12,9 +12,8 @@ const { sanitizarCodigo } = require('../lib/ids');
 const UPLOADS = path.join(ROOT, 'uploads');
 
 const storage = multer.diskStorage({
-  destination: (req, _file, cb) => {
-    const kind = req.params.tipo === 'cor' ? 'cores' : 'produtos';
-    cb(null, path.join(UPLOADS, kind));
+  destination: (_req, _file, cb) => {
+    cb(null, path.join(UPLOADS, 'produtos'));
   },
   filename: (req, file, cb) => {
     const codigo = sanitizarCodigo(req.query.codigo);
@@ -23,8 +22,7 @@ const storage = multer.diskStorage({
       // Fallback: hash aleatório se não veio código (não deveria acontecer pelo admin)
       return cb(null, `${crypto.randomBytes(6).toString('hex')}${ext}`);
     }
-    const sufixo = req.params.tipo === 'cor' ? '-cor' : '';
-    cb(null, `${codigo}${sufixo}${ext}`);
+    cb(null, `${codigo}${ext}`);
   },
 });
 
@@ -43,8 +41,7 @@ router.post('/:tipo', (req, res) => {
   upload.single('arquivo')(req, res, (err) => {
     if (err) return res.status(400).json({ erro: err.message });
     if (!req.file) return res.status(400).json({ erro: 'arquivo obrigatório' });
-    const kind = req.params.tipo === 'cor' ? 'cores' : 'produtos';
-    res.json({ caminho: `/uploads/${kind}/${req.file.filename}` });
+    res.json({ caminho: `/uploads/produtos/${req.file.filename}` });
   });
 });
 

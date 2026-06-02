@@ -47,7 +47,8 @@ router.post('/', (req, res) => comLock(() => {
     preco: Number(req.body.preco) || 0,
     nomeCor: req.body.nomeCor || '',
     foto: req.body.foto || '',
-    corTextura: req.body.corTextura || '',
+    cor1: req.body.cor1 || '',
+    cor2: req.body.cor2 || '',
     categoriaId,
     ordem: data.produtos.length,
   };
@@ -88,16 +89,15 @@ router.delete('/:id', (req, res) => comLock(() => {
   const data = readData();
   const produto = data.produtos.find((p) => p.id === req.params.id);
   if (produto) {
-    // Apaga os arquivos físicos (foto e cor) para não acumular órfãos no disco
-    for (const campo of ['foto', 'corTextura']) {
-      const url = produto[campo];
-      if (url && url.startsWith('/uploads/')) {
-        const caminho = path.join(ROOT, url.replace(/^\//, ''));
-        try {
-          if (fs.existsSync(caminho)) fs.unlinkSync(caminho);
-        } catch (err) {
-          console.warn(`Falha ao remover ${caminho}:`, err.message);
-        }
+    // Apaga a foto física para não acumular órfãos no disco. As cores agora
+    // são hex (cor1/cor2), não arquivos, então não há nada a remover delas.
+    const url = produto.foto;
+    if (url && url.startsWith('/uploads/')) {
+      const caminho = path.join(ROOT, url.replace(/^\//, ''));
+      try {
+        if (fs.existsSync(caminho)) fs.unlinkSync(caminho);
+      } catch (err) {
+        console.warn(`Falha ao remover ${caminho}:`, err.message);
       }
     }
   }

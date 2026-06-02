@@ -27,9 +27,12 @@ const btnCancelarCategoria = $('#btn-cancelar-categoria');
 const btnPdf2 = $('#btn-pdf-2');
 const btnPdf3 = $('#btn-pdf-3');
 const arquivoFoto = $('#arquivo-foto');
-const arquivoCor = $('#arquivo-cor');
 const previewFoto = $('#preview-foto');
 const previewCor = $('#preview-cor');
+const inputCor1 = $('#cor1');
+const inputCor2 = $('#cor2');
+const usarCor2 = $('#usar-cor2');
+const cor2Wrap = $('#cor2-wrap');
 const toast = $('#toast');
 
 let produtos = [];
@@ -48,7 +51,9 @@ function atualizarEstadoForm() {
     formProduto.elements.descricao,
     formProduto.elements.nomeCor,
     arquivoFoto,
-    arquivoCor,
+    inputCor1,
+    inputCor2,
+    usarCor2,
     btnSalvar,
   ];
   for (const el of camposResto) el.disabled = !temCodigo;
@@ -83,6 +88,15 @@ function formatarPreco(v) {
     style: 'currency',
     currency: 'BRL',
   });
+}
+
+// CSS de fundo da amostra: sólido (só cor1) ou dividido na diagonal de
+// cima-esquerda p/ baixo-direita (gradiente 45° com corte seco em 50%).
+function fundoAmostra(c1, c2) {
+  const base = c1 || '#3b2416';
+  return c2
+    ? `background:linear-gradient(45deg, ${base} 50%, ${c2} 50%)`
+    : `background:${base}`;
 }
 
 /* ---------- Categorias ---------- */
@@ -344,9 +358,7 @@ function renderProdutos() {
 }
 
 function itemHtml(p) {
-  const corStyle = p.corTextura
-    ? `background-image:url('${p.corTextura}')`
-    : 'background:#3b2416';
+  const corStyle = fundoAmostra(p.cor1, p.cor2);
   return `
     <li class="item">
       <div class="item-foto">
@@ -443,23 +455,81 @@ arquivoFoto.addEventListener('change', async (e) => {
   }
 });
 
-arquivoCor.addEventListener('change', async (e) => {
-  const file = e.target.files[0];
-  if (!file) return;
-  const codigo = codigoPreenchidoOuAvisa();
-  if (!codigo) {
-    arquivoCor.value = '';
+/* ---------- Cores do produto ---------- */
+
+// Atualiza o círculo de prévia conforme cor1, cor2 e o toggle "duas cores".
+function atualizarPreviewCor() {
+  const c1 = inputCor1.value;
+  const c2 = usarCor2.checked ? inputCor2.value : '';
+  previewCor.style.cssText = fundoAmostra(c1, c2);
+}
+
+usarCor2.addEventListener('change', () => {
+  cor2Wrap.hidden = !usarCor2.checked;
+  atualizarPreviewCor();
+});
+inputCor1.addEventListener('input', atualizarPreviewCor);
+inputCor2.addEventListener('input', atualizarPreviewCor);
+
+// Conta-gota: amostra a cor de um pixel da foto do produto já carregada.
+// alvoContaGota guarda qual input ('cor1'/'cor2') receberá a cor no próximo
+// clique sobre a foto.
+let alvoContaGota = null;
+
+document.querySelectorAll('[data-conta-gota]').forEach((btn) => {
+  btn.addEventListener('click', () => {
+    const img = previewFoto.querySelector('img');
+    if (!img) {
+      mostrarToast('Carregue a foto do produto antes de usar o conta-gota', 'erro');
+      return;
+    }
+    alvoContaGota = btn.dataset.contaGota;
+    previewFoto.classList.add('amostrando');
+    mostrarToast('Clique na foto para escolher a cor', 'sucesso');
+  });
+});
+
+// Lê a cor RGB de um pixel da foto a partir do clique, considerando o
+// letterbox do object-fit: contain. Pixels transparentes (PNG sem fundo)
+// são ignorados para não amostrar o "vazio" em vez do couro.
+function corDoPixel(img, ev) {
+  const rect = img.getBoundingClientRect();
+  const escala = Math.min(rect.width / img.naturalWidth, rect.height / img.naturalHeight);
+  const larguraExibida = img.naturalWidth * escala;
+  const alturaExibida = img.naturalHeight * escala;
+  const offsetX = (rect.width - larguraExibida) / 2;
+  const offsetY = (rect.height - alturaExibida) / 2;
+  const x = (ev.clientX - rect.left - offsetX) / escala;
+  const y = (ev.clientY - rect.top - offsetY) / escala;
+  if (x < 0 || y < 0 || x >= img.naturalWidth || y >= img.naturalHeight) return null;
+
+  const canvas = document.createElement('canvas');
+  canvas.width = img.naturalWidth;
+  canvas.height = img.naturalHeight;
+  const ctx = canvas.getContext('2d');
+  ctx.drawImage(img, 0, 0);
+  const [r, g, b, a] = ctx.getImageData(Math.floor(x), Math.floor(y), 1, 1).data;
+  if (a === 0) return null;
+  return '#' + [r, g, b].map((v) => v.toString(16).padStart(2, '0')).join('');
+}
+
+previewFoto.addEventListener('click', (ev) => {
+  if (!alvoContaGota) return;
+  const img = previewFoto.querySelector('img');
+  if (!img) return;
+  const cor = corDoPixel(img, ev);
+  if (!cor) {
+    mostrarToast('Pixel transparente — clique sobre o produto', 'erro');
     return;
   }
-  try {
-    const { caminho } = await uploadArquivo(file, 'cor', codigo);
-    formProduto.elements.corTextura.value = caminho;
-    previewCor.className = 'preview preview-cor com-textura';
-    previewCor.style.backgroundImage = `url('${caminho}?t=${Date.now()}')`;
-    previewCor.innerHTML = '';
-  } catch (err) {
-    mostrarToast('Erro no upload da cor', 'erro');
+  if (alvoContaGota === 'cor2' && !usarCor2.checked) {
+    usarCor2.checked = true;
+    cor2Wrap.hidden = false;
   }
+  (alvoContaGota === 'cor2' ? inputCor2 : inputCor1).value = cor;
+  atualizarPreviewCor();
+  alvoContaGota = null;
+  previewFoto.classList.remove('amostrando');
 });
 
 /* ---------- Produto (formulário) ---------- */
@@ -483,7 +553,8 @@ formProduto.addEventListener('submit', async (e) => {
     preco: Number(formProduto.elements.preco.value) || 0,
     nomeCor: formProduto.elements.nomeCor.value,
     foto: formProduto.elements.foto.value,
-    corTextura: formProduto.elements.corTextura.value,
+    cor1: inputCor1.value,
+    cor2: usarCor2.checked ? inputCor2.value : '',
   };
   const id = formProduto.elements.id.value;
   const url = id ? `/api/produtos/${id}` : '/api/produtos';
@@ -559,14 +630,17 @@ function limparForm() {
   formProduto.reset();
   formProduto.elements.id.value = '';
   formProduto.elements.foto.value = '';
-  formProduto.elements.corTextura.value = '';
   prefixoAtual = '';
   document.getElementById('codigo-prefixo-exibido').textContent = '';
   atualizarEstadoForm();
   previewFoto.innerHTML = '';
-  previewCor.className = 'preview preview-cor';
-  previewCor.style.backgroundImage = '';
-  previewCor.innerHTML = '';
+  previewFoto.classList.remove('amostrando');
+  alvoContaGota = null;
+  inputCor1.value = '#3b2416';
+  inputCor2.value = '#caa472';
+  usarCor2.checked = false;
+  cor2Wrap.hidden = true;
+  atualizarPreviewCor();
   tituloForm.textContent = 'Novo produto';
   btnSalvar.textContent = 'Adicionar produto';
 }
@@ -586,17 +660,12 @@ function editar(id) {
   formProduto.elements.preco.value = p.preco;
   formProduto.elements.nomeCor.value = p.nomeCor;
   formProduto.elements.foto.value = p.foto;
-  formProduto.elements.corTextura.value = p.corTextura;
   previewFoto.innerHTML = p.foto ? `<img src="${p.foto}">` : '';
-  if (p.corTextura) {
-    previewCor.className = 'preview preview-cor com-textura';
-    previewCor.style.backgroundImage = `url('${p.corTextura}')`;
-    previewCor.innerHTML = '';
-  } else {
-    previewCor.className = 'preview preview-cor';
-    previewCor.style.backgroundImage = '';
-    previewCor.innerHTML = '';
-  }
+  inputCor1.value = p.cor1 || '#3b2416';
+  usarCor2.checked = !!p.cor2;
+  inputCor2.value = p.cor2 || '#caa472';
+  cor2Wrap.hidden = !p.cor2;
+  atualizarPreviewCor();
   atualizarEstadoForm();
   tituloForm.textContent = `Editando: ${p.nome || p.codigo}`;
   btnSalvar.textContent = 'Salvar alterações';
@@ -718,4 +787,5 @@ function mostrarToast(msg, tipo = '') {
   }, 2500);
 }
 
+atualizarPreviewCor();
 carregar();

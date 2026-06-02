@@ -468,17 +468,74 @@ html, body {
   object-fit: contain;
 }
 
-.preview-cor {
-  height: 60px;
+/* ---------- Seletor de cores do produto ---------- */
+.campo-cor {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
 }
 
-.preview-cor.com-textura {
-  height: 60px;
-  width: 60px;
+.cores-grid {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.cor-campo {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.cor-campo input[type="color"] {
+  width: 44px;
+  height: 36px;
+  padding: 2px;
+  border: 1px solid var(--cor-linha);
+  border-radius: var(--raio);
+  background: var(--cor-fundo);
+  cursor: pointer;
+}
+
+.cor-campo input[type="color"]:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.cor-preview {
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   border: 1px solid var(--cor-linha);
-  background-size: cover;
-  background-position: center;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
+  margin-left: auto;
+  background: #3b2416;
+}
+
+.cor-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.cor-toggle input {
+  width: auto;
+}
+
+.cor-dica {
+  margin: 0;
+  font-size: 11px;
+  line-height: 1.4;
+  color: var(--cor-suave);
+}
+
+/* Foto em modo conta-gota: cursor de mira sobre a prévia */
+.preview.amostrando,
+.preview.amostrando img {
+  cursor: crosshair;
 }
 
 .acoes-form {
@@ -658,8 +715,6 @@ html, body {
   flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid var(--cor-linha);
-  background-size: cover;
-  background-position: center;
 }
 
 .item-cor-nome {
