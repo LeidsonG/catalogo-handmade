@@ -335,10 +335,8 @@ html, body {
   flex-shrink: 0;
   width: 5mm;
   height: 5mm;
-  border-radius: 50%;
-  overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.2);
+  overflow: visible;
+  vertical-align: middle;
 }
 
 .produto-cor-nome {
