@@ -452,7 +452,7 @@ html, body {
 
 .preview {
   margin-top: 6px;
-  height: 90px;
+  aspect-ratio: 1 / 1;
   border: 1px dashed var(--cor-linha);
   border-radius: var(--raio);
   background: var(--cor-fundo);
@@ -475,11 +475,18 @@ html, body {
   gap: 6px;
 }
 
-.cores-grid {
+/* Linha principal: coluna esquerda (pickers + toggle) + círculo à direita */
+.cores-linha {
   display: flex;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cores-esquerda {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
 }
 
 .cor-campo {
@@ -489,13 +496,14 @@ html, body {
 }
 
 .cor-campo input[type="color"] {
-  width: 44px;
-  height: 36px;
+  width: 36px;
+  height: 28px;
   padding: 2px;
   border: 1px solid var(--cor-linha);
   border-radius: var(--raio);
   background: var(--cor-fundo);
   cursor: pointer;
+  flex-shrink: 0;
 }
 
 .cor-campo input[type="color"]:disabled {
@@ -503,26 +511,33 @@ html, body {
   cursor: not-allowed;
 }
 
+/* Círculo de prévia: grande e centralizado verticalmente pelo align-items:center do pai */
 .cor-preview {
-  width: 48px;
-  height: 48px;
+  width: 72px;
+  height: 72px;
+  flex-shrink: 0;
   border-radius: 50%;
   border: 1px solid var(--cor-linha);
-  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.2);
-  margin-left: auto;
+  box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.25);
   background: #3b2416;
 }
 
-.cor-toggle {
-  display: flex;
+/* Sobrescreve o .form label que força flex-direction:column em todos os labels */
+.form .cor-toggle {
+  flex-direction: row;
   align-items: center;
   gap: 6px;
-  font-size: 13px;
+  font-size: 12px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0;
+  color: var(--cor-texto, inherit);
   cursor: pointer;
 }
 
-.cor-toggle input {
+.cor-toggle input[type="checkbox"] {
   width: auto;
+  flex-shrink: 0;
 }
 
 .cor-dica {
