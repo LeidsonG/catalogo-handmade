@@ -2,7 +2,7 @@
   "produtos": [
     {
       "id": "p00001",
-      "codigo": "CF-001",
+      "codigo": "CF-101",
       "nome": "Pena e Ramo Bordado",
       "descricao": "• Pintura e Entalhe Artesanal\n• Couro Legítimo",
       "preco": 75,
@@ -12,6 +12,20 @@
       "cor2": "#c19a89",
       "categoriaId": "c002",
       "ordem": 0
+    },
+    {
+      "id": "p00002",
+      "codigo": "CF-102",
+      "nome": "Floral Bordado",
+      "descricao": "• Cravejado com Strass\n• Pintura e Entalhe Artesanal\n• Couro Legítimo",
+      "preco": 129,
+      "nomeCor": "Natural Antique Pinhão com Rosa Pink",
+      "foto": "/uploads/produtos/102.png",
+      "corTextura": "",
+      "categoriaId": "c002",
+      "ordem": 1,
+      "cor1": "#ee75cf",
+      "cor2": "#cd9a85"
     }
   ]
 }

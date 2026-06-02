@@ -51,9 +51,6 @@ function atualizarEstadoForm() {
     formProduto.elements.descricao,
     formProduto.elements.nomeCor,
     arquivoFoto,
-    inputCor1,
-    inputCor2,
-    usarCor2,
     btnSalvar,
   ];
   for (const el of camposResto) el.disabled = !temCodigo;
@@ -469,7 +466,9 @@ usarCor2.addEventListener('change', () => {
   atualizarPreviewCor();
 });
 inputCor1.addEventListener('input', atualizarPreviewCor);
+inputCor1.addEventListener('change', atualizarPreviewCor);
 inputCor2.addEventListener('input', atualizarPreviewCor);
+inputCor2.addEventListener('change', atualizarPreviewCor);
 
 // Conta-gota: amostra a cor de um pixel da foto do produto já carregada.
 // alvoContaGota guarda qual input ('cor1'/'cor2') receberá a cor no próximo
