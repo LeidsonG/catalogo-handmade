@@ -310,7 +310,7 @@ html, body {
   content: '';
   position: absolute;
   inset: -8mm;
-  background-image: url('/uploads/Background marrom.png');
+  background-image: url('/uploads/background/Background marrom.png');
   background-size: cover;
   background-position: center;
   filter: blur(3px);
