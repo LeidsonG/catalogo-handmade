@@ -1,12 +1,26 @@
+# Dependências
 node_modules/
-output/*.pdf
-fotos-originais/
-data/*.backup-*
-data/*.bak
+
+# Uploads de usuário (fotos, cores, imagens avulsas)
+uploads/
+
+# PDFs gerados
+output/
+
+# Dados sensíveis e backups
 data/auth.json
-.claude/
-CLAUDE.md
+data/*.bak
+data/*.backup-*
+
+# Sistema e editores
 .DS_Store
 *.log
 .venv/
 __pycache__/
+
+# Claude Code
+.claude/
+CLAUDE.md
+
+# Pastas locais de trabalho
+fotos-originais/
