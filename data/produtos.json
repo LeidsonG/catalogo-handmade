@@ -104,7 +104,8 @@
       "cor1": "#946343",
       "cor2": "#eccf65",
       "categoriaId": "c002",
-      "ordem": 7
+      "ordem": 7,
+      "ativo": true
     },
     {
       "id": "p00009",
@@ -125,7 +126,7 @@
       "nome": "Cinto Floral",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
-      "nomeCor": "Natural Pinhã c/ Borda Preta e Flor Rosa",
+      "nomeCor": "Natural Pinhão c/ Borda Preta e Flor Rosa",
       "foto": "/uploads/produtos/CF-109-A.png",
       "cor1": "#141416",
       "cor2": "#e47c9b",

@@ -11,6 +11,12 @@
       "nome": "Cintos Masculino",
       "ordem": 1,
       "prefixoCodigo": "CM-"
+    },
+    {
+      "id": "c003",
+      "nome": "Cintos Infantil",
+      "prefixoCodigo": "CI-",
+      "ordem": 2
     }
   ]
 }
