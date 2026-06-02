@@ -2,63 +2,16 @@
   "produtos": [
     {
       "id": "p00001",
-      "codigo": "CM-001",
-      "nome": "Cinto exemplo",
-      "descricao": "Exemplo curto.",
-      "preco": 119.9,
-      "nomeCor": "Marrom",
-      "foto": "/uploads/produtos/CM-001.png",
-      "corTextura": "/uploads/cores/CM-001-cor.png",
-      "ordem": 0,
-      "categoriaId": "c001"
-    },
-    {
-      "id": "p00002",
-      "codigo": "CM-002",
-      "nome": "Cinto exemplo 2",
-      "descricao": "Descrição curta...",
-      "preco": 249.9,
-      "nomeCor": "Vermelho",
-      "foto": "/uploads/produtos/CM-002.png",
-      "corTextura": "/uploads/cores/CM-002-cor.png",
-      "ordem": 1,
-      "categoriaId": "c001"
-    },
-    {
-      "id": "p00004",
-      "codigo": "CM-003",
-      "nome": "Cinto exemplo de couro novo",
-      "descricao": "Cinto exemplo de couro novo cinto exemplo de couro novo cinto exemplo de couro novo.",
-      "preco": 109.9,
-      "nomeCor": "Marrom arvore nova de couro modernoaaaaaaaaaaaaaaa",
-      "foto": "/uploads/produtos/CM-003.png",
-      "corTextura": "/uploads/cores/CM-003-cor.png",
-      "categoriaId": "c001",
-      "ordem": 3
-    },
-    {
-      "id": "p00005",
-      "codigo": "CF-100",
-      "nome": "Cinto com Pena e Ramo Bordado",
-      "descricao": "• Costura artesanal\n• 100% Couro legítimo",
+      "codigo": "CF-001",
+      "nome": "Pena e Ramo Bordado",
+      "descricao": "• Pintura e Entalhe Artesanal\n• Couro Legítimo",
       "preco": 75,
       "nomeCor": "Natural Antique Pinhão com Rosa Pink",
-      "foto": "/uploads/produtos/CF-100.png",
-      "corTextura": "/uploads/cores/CF-100-cor.svg",
+      "foto": "/uploads/produtos/001.png",
+      "cor1": "#a0366a",
+      "cor2": "#c19a89",
       "categoriaId": "c002",
-      "ordem": 3
-    },
-    {
-      "id": "p00006",
-      "codigo": "CF-101",
-      "nome": "Cinto com Flecha",
-      "descricao": "• Costura artesanal   \n• Couro 100% legítimo",
-      "preco": 100,
-      "nomeCor": "Natural Antique Pinhão com Amarelo",
-      "foto": "/uploads/produtos/101.png",
-      "corTextura": "/uploads/cores/101-cor.svg",
-      "categoriaId": "c002",
-      "ordem": 4
+      "ordem": 0
     }
   ]
 }
