@@ -771,6 +771,11 @@ html, body {
   font-size: 11px;
 }
 
+/* Toggle Ativar/Desativar fica grudado à esquerda; Editar e Excluir à direita. */
+.item-acoes [data-toggle-ativo] {
+  margin-right: auto;
+}
+
 /* ---------- Produto inativo (fora do PDF) ---------- */
 /* Esmaece foto, código, nome e rodapé; badge e ações ficam em destaque para
    que o usuário continue conseguindo identificar e religar o produto. */
