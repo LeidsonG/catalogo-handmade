@@ -352,12 +352,17 @@ function renderProdutos() {
   grupos.querySelectorAll('[data-excluir]').forEach((el) => {
     el.addEventListener('click', () => excluir(el.dataset.excluir));
   });
+  grupos.querySelectorAll('[data-toggle-ativo]').forEach((el) => {
+    el.addEventListener('click', () => alternarAtivo(el.dataset.toggleAtivo));
+  });
 }
 
 function itemHtml(p) {
   const corStyle = fundoAmostra(p.cor1, p.cor2);
+  const inativo = p.ativo === false;
   return `
-    <li class="item">
+    <li class="item${inativo ? ' item-inativo' : ''}">
+      ${inativo ? '<span class="item-badge">Inativo</span>' : ''}
       <div class="item-foto">
         ${p.foto ? `<img src="${p.foto}" alt="">` : '<span style="color:#aaa;font-size:11px">sem foto</span>'}
       </div>
@@ -371,6 +376,7 @@ function itemHtml(p) {
         <div class="item-preco">${formatarPreco(p.preco)}</div>
       </div>
       <div class="item-acoes">
+        <button class="botao botao-fantasma" data-toggle-ativo="${p.id}">${inativo ? 'Ativar' : 'Desativar'}</button>
         <button class="botao botao-secundario" data-editar="${p.id}">Editar</button>
         <button class="botao botao-perigo" data-excluir="${p.id}">Excluir</button>
       </div>
@@ -686,6 +692,26 @@ async function excluir(id) {
     recarregarPagina();
   } else {
     mostrarToast('Erro ao excluir', 'erro');
+  }
+}
+
+// Liga/desliga o produto sem recarregar a página: atualiza o estado local e
+// re-renderiza a lista. Produto inativo não entra no PDF do catálogo.
+async function alternarAtivo(id) {
+  const p = produtos.find((x) => x.id === id);
+  if (!p) return;
+  const novoAtivo = p.ativo === false; // estava inativo? agora ativa
+  const resposta = await fetch(`/api/produtos/${id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ativo: novoAtivo }),
+  });
+  if (resposta.ok) {
+    p.ativo = novoAtivo;
+    mostrarToast(novoAtivo ? 'Produto ativado' : 'Produto desativado — fora do PDF', 'sucesso');
+    renderProdutos();
+  } else {
+    mostrarToast('Erro ao alterar status do produto', 'erro');
   }
 }
 

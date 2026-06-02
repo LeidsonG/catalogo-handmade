@@ -678,6 +678,7 @@ html, body {
 }
 
 .item {
+  position: relative;
   background: var(--cor-fundo);
   border-radius: var(--raio);
   padding: 12px;
@@ -768,6 +769,37 @@ html, body {
 .item-acoes .botao {
   padding: 4px 10px;
   font-size: 11px;
+}
+
+/* ---------- Produto inativo (fora do PDF) ---------- */
+/* Esmaece foto, código, nome e rodapé; badge e ações ficam em destaque para
+   que o usuário continue conseguindo identificar e religar o produto. */
+.item-inativo {
+  border-style: dashed;
+  background: #f3f0ec;
+}
+
+.item-inativo .item-foto,
+.item-inativo .item-codigo,
+.item-inativo .item-nome,
+.item-inativo .item-rodape {
+  opacity: 0.4;
+  filter: grayscale(0.7);
+}
+
+.item-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  z-index: 2;
+  background: var(--cor-suave);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 2px 8px;
+  border-radius: 10px;
 }
 
 .vazio {

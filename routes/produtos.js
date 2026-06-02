@@ -50,6 +50,7 @@ router.post('/', (req, res) => comLock(() => {
     cor1: req.body.cor1 || '',
     cor2: req.body.cor2 || '',
     categoriaId,
+    ativo: req.body.ativo !== false,
     ordem: data.produtos.length,
   };
   data.produtos.push(novo);
@@ -80,6 +81,7 @@ router.put('/:id', (req, res) => comLock(() => {
     }
   }
   if ('preco' in updates) updates.preco = Number(updates.preco) || 0;
+  if ('ativo' in updates) updates.ativo = updates.ativo !== false;
   data.produtos[idx] = { ...data.produtos[idx], ...updates, id: req.params.id };
   writeData(data);
   res.json(data.produtos[idx]);

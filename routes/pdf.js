@@ -26,7 +26,11 @@ function criarRouter(porta) {
     const cats = readCategorias().categorias;
     const categoria = cats.find((c) => c.id === categoriaId);
     if (!categoria) return res.status(404).send('categoria não encontrada');
-    const produtos = readData().produtos.filter((p) => p.categoriaId === categoriaId);
+    // Produtos inativos (ativo === false) ficam de fora do catálogo. Os legados
+    // sem o campo `ativo` contam como ativos (ativo !== false).
+    const produtos = readData().produtos.filter(
+      (p) => p.categoriaId === categoriaId && p.ativo !== false,
+    );
     const html = construirHtml({
       produtos,
       intro: readIntro(),
@@ -83,7 +87,7 @@ function criarRouter(porta) {
         margin: { top: 0, right: 0, bottom: 0, left: 0 },
       });
       const semFoto = readData().produtos
-        .filter((p) => p.categoriaId === categoriaId && !p.foto);
+        .filter((p) => p.categoriaId === categoriaId && p.ativo !== false && !p.foto);
       const resposta = { ok: true, arquivo: nome, caminho: `/output/${nome}` };
       if (semFoto.length) {
         resposta.aviso = `${semFoto.length} produto(s) sem foto: ${semFoto.map((p) => p.codigo).join(', ')}`;
