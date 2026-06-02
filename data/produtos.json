@@ -11,7 +11,8 @@
       "cor1": "#be9c92",
       "cor2": "#9e3a6a",
       "categoriaId": "c002",
-      "ordem": 0
+      "ordem": 0,
+      "ativo": true
     },
     {
       "id": "p00002",
