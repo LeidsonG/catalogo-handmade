@@ -49,18 +49,25 @@ function criarRouter(porta) {
     if (!categoria) return res.status(404).json({ erro: 'categoria não encontrada' });
 
     const agora = new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' }));
-    const stamp = `${agora.getFullYear()}-${String(agora.getMonth() + 1).padStart(2, '0')}-${String(agora.getDate()).padStart(2, '0')}_${String(agora.getHours()).padStart(2, '0')}-${String(agora.getMinutes()).padStart(2, '0')}`;
-    const slug = categoria.nome.toLowerCase()
-      .normalize('NFD').replace(/[̀-ͯ]/g, '')
-      .replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
-    const variante = layout === '3' ? 'sem-preco' : 'com-preco';
-    const nome = `catalogo-${slug}-${variante}-${stamp}.pdf`;
-    const caminho = path.join(OUTPUT_DIR, nome);
+    const p2 = (n) => String(n).padStart(2, '0');
+    const dataHora = `${agora.getFullYear()}-${p2(agora.getMonth() + 1)}-${p2(agora.getDate())} ${p2(agora.getHours())}h${p2(agora.getMinutes())}`;
+    // Mantém acentos, espaços e maiúsculas do nome da categoria; remove só os
+    // caracteres proibidos em nome de arquivo (\ / : * ? " < > |).
+    const nomeCategoria = categoria.nome.replace(/[\\/:*?"<>|]/g, '').trim();
+    const prefixo = layout === '3' ? 'Catálogo sem preço' : 'Catálogo';
+    const base = `${prefixo} - ${nomeCategoria} - Handmade Custom Leather - ${dataHora} `;
 
-    // Se o arquivo já existe e o cliente não confirmou a substituição, avisa.
-    if (fs.existsSync(caminho) && !req.body.sobrescrever) {
-      return res.status(409).json({ conflito: true, arquivo: nome });
-    }
+    // Contador de 2 dígitos começando em 00; incrementa enquanto já existir um
+    // arquivo com o mesmo minuto. Substitui o antigo fluxo de "substituir?":
+    // como o nome agora é sempre único, nunca há colisão a confirmar.
+    let nome;
+    let caminho;
+    let contador = 0;
+    do {
+      nome = `${base}${p2(contador)}.pdf`;
+      caminho = path.join(OUTPUT_DIR, nome);
+      contador += 1;
+    } while (fs.existsSync(caminho));
 
     let browser;
     try {
@@ -88,7 +95,9 @@ function criarRouter(porta) {
       });
       const semFoto = readData().produtos
         .filter((p) => p.categoriaId === categoriaId && p.ativo !== false && !p.foto);
-      const resposta = { ok: true, arquivo: nome, caminho: `/output/${nome}` };
+      // O nome tem espaços e acentos; codifica para a URL casar com o arquivo
+      // ao servir por /output (o nome legível vai em `arquivo` para o toast).
+      const resposta = { ok: true, arquivo: nome, caminho: `/output/${encodeURIComponent(nome)}` };
       if (semFoto.length) {
         resposta.aviso = `${semFoto.length} produto(s) sem foto: ${semFoto.map((p) => p.codigo).join(', ')}`;
       }
