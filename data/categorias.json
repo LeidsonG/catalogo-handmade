@@ -17,6 +17,18 @@
       "nome": "Cintos Infantil",
       "prefixoCodigo": "CI-",
       "ordem": 2
+    },
+    {
+      "id": "c004",
+      "nome": "Acessórios",
+      "prefixoCodigo": "AC-",
+      "ordem": 3
+    },
+    {
+      "id": "c005",
+      "nome": "Selas e Arreio",
+      "prefixoCodigo": "SL-",
+      "ordem": 4
     }
   ]
 }
