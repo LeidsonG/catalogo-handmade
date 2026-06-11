@@ -120,22 +120,24 @@ html, body {
   padding: 30mm 25mm;
 }
 
-/* Background da intro: usa CSS custom property --intro-bg injetada inline
-   quando existe uma imagem com o nome da categoria em uploads/background/.
-   Sem a variável, background-image: none → pseudoelemento invisível. */
-.pagina-intro::before {
-  content: '';
+/* Background da intro: <img> posicionado absolutamente em vez de ::before +
+   background-image CSS, porque visualizadores de PDF no iOS interpretam
+   background em pseudo-elementos de forma inconsistente (flip + zoom). */
+.intro-bg-img {
   position: absolute;
-  inset: 6mm;
+  top: 6mm;
+  left: 6mm;
+  width: calc(100% - 12mm);
+  height: calc(100% - 12mm);
+  object-fit: cover;
+  object-position: center;
   border-radius: 4mm;
-  background-image: var(--intro-bg, none);
-  background-size: cover;
-  background-position: center;
   opacity: 0.3;
   z-index: 0;
+  display: block;
 }
 
-.pagina-intro > * {
+.pagina-intro > *:not(.intro-bg-img) {
   position: relative;
   z-index: 1;
 }
