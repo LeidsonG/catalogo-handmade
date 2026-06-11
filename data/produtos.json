@@ -12,7 +12,7 @@
       "cor2": "#9e3a6a",
       "categoriaId": "c002",
       "ordem": 0,
-      "ativo": true
+      "ativo": false
     },
     {
       "id": "p00002",
@@ -27,7 +27,7 @@
       "ordem": 1,
       "cor1": "#c89582",
       "cor2": "#f36bcf",
-      "ativo": true
+      "ativo": false
     },
     {
       "id": "p00003",
@@ -40,7 +40,8 @@
       "cor1": "#262d35",
       "cor2": "",
       "categoriaId": "c002",
-      "ordem": 2
+      "ordem": 2,
+      "ativo": false
     },
     {
       "id": "p00004",
@@ -53,7 +54,8 @@
       "cor1": "#111820",
       "cor2": "#dee0e3",
       "categoriaId": "c002",
-      "ordem": 3
+      "ordem": 3,
+      "ativo": false
     },
     {
       "id": "p00005",
@@ -66,7 +68,8 @@
       "cor1": "#1d1719",
       "cor2": "#92534a",
       "categoriaId": "c002",
-      "ordem": 4
+      "ordem": 4,
+      "ativo": false
     },
     {
       "id": "p00006",
@@ -79,7 +82,8 @@
       "cor1": "#283434",
       "cor2": "",
       "categoriaId": "c002",
-      "ordem": 5
+      "ordem": 5,
+      "ativo": false
     },
     {
       "id": "p00007",
@@ -92,7 +96,8 @@
       "cor1": "#121a21",
       "cor2": "",
       "categoriaId": "c002",
-      "ordem": 6
+      "ordem": 6,
+      "ativo": false
     },
     {
       "id": "p00008",
@@ -106,7 +111,7 @@
       "cor2": "#eccf65",
       "categoriaId": "c002",
       "ordem": 7,
-      "ativo": true
+      "ativo": false
     },
     {
       "id": "p00009",
@@ -119,7 +124,8 @@
       "cor1": "#734e3b",
       "cor2": "",
       "categoriaId": "c002",
-      "ordem": 8
+      "ordem": 8,
+      "ativo": false
     },
     {
       "id": "p00010",
@@ -132,7 +138,8 @@
       "cor1": "#141416",
       "cor2": "#e47c9b",
       "categoriaId": "c002",
-      "ordem": 9
+      "ordem": 9,
+      "ativo": false
     },
     {
       "id": "p00011",
@@ -145,7 +152,7 @@
       "cor1": "#141519",
       "cor2": "#bf8664",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 10
     },
     {
@@ -159,7 +166,7 @@
       "cor1": "#a4633b",
       "cor2": "#e8879a",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 11
     },
     {
@@ -173,7 +180,7 @@
       "cor1": "#1b161c",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 12
     },
     {
@@ -187,7 +194,7 @@
       "cor1": "#fafafa",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 13
     },
     {
@@ -201,7 +208,7 @@
       "cor1": "#8d0710",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 14
     },
     {
@@ -215,7 +222,7 @@
       "cor1": "#af7a62",
       "cor2": "#e887b3",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 15
     },
     {
@@ -229,7 +236,7 @@
       "cor1": "#9b3827",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 16
     },
     {
@@ -243,7 +250,7 @@
       "cor1": "#2e2e2e",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 17
     },
     {
@@ -257,7 +264,7 @@
       "cor1": "#0d5d73",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 18
     },
     {
@@ -271,7 +278,7 @@
       "cor1": "#943323",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 19
     },
     {
@@ -285,7 +292,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 20
     },
     {
@@ -299,7 +306,7 @@
       "cor1": "#be9d8e",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 21
     },
     {
@@ -313,7 +320,7 @@
       "cor1": "#a6785a",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 22
     },
     {
@@ -327,7 +334,7 @@
       "cor1": "#7d221f",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 23
     },
     {
@@ -341,7 +348,7 @@
       "cor1": "#7d221f",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 24
     },
     {
@@ -355,7 +362,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 25
     },
     {
@@ -369,7 +376,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 26
     },
     {
@@ -383,7 +390,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 27
     },
     {
@@ -397,7 +404,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 28
     },
     {
@@ -411,7 +418,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 29
     },
     {
@@ -425,7 +432,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 30
     },
     {
@@ -439,7 +446,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 31
     },
     {
@@ -453,7 +460,7 @@
       "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c002",
-      "ativo": true,
+      "ativo": false,
       "ordem": 32
     },
     {
@@ -1365,6 +1372,20 @@
       "categoriaId": "c001",
       "ativo": true,
       "ordem": 97
+    },
+    {
+      "id": "p00099",
+      "codigo": "CI-001",
+      "nome": "aaa",
+      "descricao": "aaa",
+      "preco": 1,
+      "nomeCor": "",
+      "foto": "",
+      "cor1": "#3b2416",
+      "cor2": "",
+      "categoriaId": "c003",
+      "ativo": true,
+      "ordem": 98
     }
   ]
 }
