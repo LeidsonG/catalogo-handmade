@@ -120,9 +120,18 @@ html, body {
   padding: 30mm 25mm;
 }
 
+/* Todos os filhos diretos da intro ficam acima da camada de background. */
+.pagina-intro > * {
+  position: relative;
+  z-index: 1;
+}
+
 /* Background da intro: <img> posicionado absolutamente em vez de ::before +
    background-image CSS, porque visualizadores de PDF no iOS interpretam
-   background em pseudo-elementos de forma inconsistente (flip + zoom). */
+   background em pseudo-elementos de forma inconsistente (flip + zoom).
+   Vem depois de .pagina-intro > * para sobrescrever position: relative com
+   position: absolute sem precisar de :not() (que aumentaria a especificidade
+   e quebraria .intro-rodape e outros filhos com position própria). */
 .intro-bg-img {
   position: absolute;
   top: 6mm;
@@ -135,11 +144,6 @@ html, body {
   opacity: 0.3;
   z-index: 0;
   display: block;
-}
-
-.pagina-intro > *:not(.intro-bg-img) {
-  position: relative;
-  z-index: 1;
 }
 
 .intro-subtitulo {
