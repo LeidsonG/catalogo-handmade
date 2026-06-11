@@ -120,6 +120,25 @@ html, body {
   padding: 30mm 25mm;
 }
 
+/* Background da intro: usa CSS custom property --intro-bg injetada inline
+   quando existe uma imagem com o nome da categoria em uploads/background/.
+   Sem a variável, background-image: none → pseudoelemento invisível. */
+.pagina-intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image: var(--intro-bg, none);
+  background-size: cover;
+  background-position: center;
+  opacity: 0.25;
+  z-index: 0;
+}
+
+.pagina-intro > * {
+  position: relative;
+  z-index: 1;
+}
+
 .intro-subtitulo {
   font-size: calc(13pt * var(--intro-scale));
   letter-spacing: 6px;
