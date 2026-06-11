@@ -69,8 +69,8 @@ html, body {
 
   /* Fundo sólido atrás da imagem de background da foto.
      Aparece quando a opacidade do ::before é reduzida.
-     Para desativar (sem fundo), troque por: --cor-fundo-foto: transparent; */
-  --cor-fundo-foto: transparent;
+     Para desativar (sem fundo), troque por: --cor-fundo-cinto: transparent; */
+  --cor-fundo-cinto: transparent;
 }
 
 .pagina {
@@ -126,7 +126,8 @@ html, body {
 .pagina-intro::before {
   content: '';
   position: absolute;
-  inset: 0;
+  inset: 10mm;
+  border-radius: 6mm;
   background-image: var(--intro-bg, none);
   background-size: cover;
   background-position: center;
@@ -318,10 +319,10 @@ html, body {
 }
 
 /* ---------- Background atrás da foto ---------- */
-/* Camada 1 — cor sólida (variável --cor-fundo-foto em :root).
+/* Camada 1 — cor sólida (variável --cor-fundo-cinto em :root).
    Fica sempre visível; quando a opacidade do ::before baixa, essa cor aparece. */
 .pagina-layout-2 .produto-foto-wrap {
-  background-color: var(--cor-fundo-foto);
+  background-color: var(--cor-fundo-cinto);
 }
 
 /* Camada 2 — imagem desfocada sobreposta à cor sólida. */
