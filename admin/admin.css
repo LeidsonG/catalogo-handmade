@@ -400,6 +400,13 @@ html, body {
   color: var(--cor-suave);
 }
 
+.grupo-btn-bulk {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+
 .grupo-vazio {
   padding: 12px;
   text-align: center;

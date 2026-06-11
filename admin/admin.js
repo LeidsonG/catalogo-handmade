@@ -308,14 +308,20 @@ function renderProdutos() {
   let totalVisiveis = 0;
   let html = '';
   for (const cat of categoriasFiltradas) {
-    const itens = (porCategoria.get(cat.id) || [])
+    const todosDaCategoria = porCategoria.get(cat.id) || [];
+    const itens = todosDaCategoria
       .filter((p) => !q || p.nome.toLowerCase().includes(q) || p.codigo.toLowerCase().includes(q));
     totalVisiveis += itens.length;
+    const todosAtivos = todosDaCategoria.length > 0 && todosDaCategoria.every((p) => p.ativo !== false);
+    const btnBulk = todosDaCategoria.length
+      ? `<button class="botao botao-fantasma grupo-btn-bulk" data-bulk-catid="${cat.id}" data-bulk-ativo="${todosAtivos ? 'false' : 'true'}">${todosAtivos ? 'Desativar todos' : 'Ativar todos'}</button>`
+      : '';
     html += `
       <section class="grupo">
         <h3 class="grupo-titulo">
           ${esc(cat.nome)}
           <span class="grupo-contador">${itens.length}</span>
+          ${btnBulk}
         </h3>
         ${itens.length
           ? `<ul class="lista">${itens.map(itemHtml).join('')}</ul>`
@@ -354,6 +360,9 @@ function renderProdutos() {
   });
   grupos.querySelectorAll('[data-toggle-ativo]').forEach((el) => {
     el.addEventListener('click', () => alternarAtivo(el.dataset.toggleAtivo));
+  });
+  grupos.querySelectorAll('[data-bulk-catid]').forEach((el) => {
+    el.addEventListener('click', () => alternarAtivosGrupo(el.dataset.bulkCatid, el.dataset.bulkAtivo === 'true'));
   });
 }
 
@@ -713,6 +722,26 @@ async function alternarAtivo(id) {
   } else {
     mostrarToast('Erro ao alterar status do produto', 'erro');
   }
+}
+
+async function alternarAtivosGrupo(categoriaId, ativar) {
+  const alvo = produtos.filter((p) => p.categoriaId === categoriaId);
+  if (!alvo.length) return;
+  const resultados = await Promise.all(
+    alvo.map((p) =>
+      fetch(`/api/produtos/${p.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ativo: ativar }),
+      }),
+    ),
+  );
+  const falhas = resultados.filter((r) => !r.ok).length;
+  alvo.forEach((p) => { p.ativo = ativar; });
+  const n = alvo.length - falhas;
+  if (falhas) mostrarToast(`${falhas} produto(s) não puderam ser alterados`, 'erro');
+  if (n > 0) mostrarToast(`${n} produto${n > 1 ? 's' : ''} ${ativar ? 'ativado' : 'desativado'}${n > 1 ? 's' : ''}`, 'sucesso');
+  renderProdutos();
 }
 
 /* ---------- Gerar PDF ---------- */
