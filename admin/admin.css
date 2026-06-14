@@ -832,7 +832,7 @@ html, body {
   color: var(--cor-suave);
   font-size: 14px;
   line-height: 1;
-  letter-spacing: -2px;
+  letter-spacing: 1px;
   user-select: none;
   cursor: grab;
   opacity: 0.5;
