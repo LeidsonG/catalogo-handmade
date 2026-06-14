@@ -632,6 +632,20 @@
       "ordem": 44
     },
     {
+      "id": "p00100",
+      "codigo": "CM-007",
+      "nome": "Bordado Jasmim",
+      "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
+      "preco": 59,
+      "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
+      "foto": "/uploads/produtos/007.png",
+      "cor1": "#7e5044",
+      "cor2": "",
+      "categoriaId": "c001",
+      "ativo": true,
+      "ordem": 45
+    },
+    {
       "id": "p00046",
       "codigo": "CM-008",
       "nome": "Cinto Bordado Folha Seca",
@@ -643,7 +657,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 45
+      "ordem": 46
     },
     {
       "id": "p00047",
@@ -657,7 +671,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 46
+      "ordem": 47
     },
     {
       "id": "p00048",
@@ -671,7 +685,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 47
+      "ordem": 48
     },
     {
       "id": "p00049",
@@ -685,7 +699,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 48
+      "ordem": 49
     },
     {
       "id": "p00050",
@@ -699,7 +713,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 49
+      "ordem": 50
     },
     {
       "id": "p00051",
@@ -713,7 +727,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 50
+      "ordem": 51
     },
     {
       "id": "p00052",
@@ -727,7 +741,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 51
+      "ordem": 52
     },
     {
       "id": "p00053",
@@ -741,7 +755,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 52
+      "ordem": 53
     },
     {
       "id": "p00054",
@@ -755,7 +769,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 53
+      "ordem": 54
     },
     {
       "id": "p00055",
@@ -769,7 +783,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 54
+      "ordem": 55
     },
     {
       "id": "p00056",
@@ -783,7 +797,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 55
+      "ordem": 56
     },
     {
       "id": "p00057",
@@ -797,7 +811,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 56
+      "ordem": 57
     },
     {
       "id": "p00058",
@@ -811,7 +825,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 57
+      "ordem": 58
     },
     {
       "id": "p00059",
@@ -825,7 +839,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 58
+      "ordem": 59
     },
     {
       "id": "p00060",
@@ -839,7 +853,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 59
+      "ordem": 60
     },
     {
       "id": "p00061",
@@ -853,7 +867,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 60
+      "ordem": 61
     },
     {
       "id": "p00062",
@@ -867,7 +881,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 61
+      "ordem": 62
     },
     {
       "id": "p00063",
@@ -881,7 +895,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 62
+      "ordem": 63
     },
     {
       "id": "p00064",
@@ -895,7 +909,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 63
+      "ordem": 64
     },
     {
       "id": "p00065",
@@ -909,7 +923,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 64
+      "ordem": 65
     },
     {
       "id": "p00066",
@@ -923,7 +937,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 65
+      "ordem": 66
     },
     {
       "id": "p00067",
@@ -937,7 +951,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 66
+      "ordem": 67
     },
     {
       "id": "p00068",
@@ -951,7 +965,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 67
+      "ordem": 68
     },
     {
       "id": "p00069",
@@ -965,7 +979,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 68
+      "ordem": 69
     },
     {
       "id": "p00070",
@@ -979,7 +993,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 69
+      "ordem": 70
     },
     {
       "id": "p00071",
@@ -993,7 +1007,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 70
+      "ordem": 71
     },
     {
       "id": "p00072",
@@ -1007,7 +1021,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 71
+      "ordem": 72
     },
     {
       "id": "p00073",
@@ -1021,7 +1035,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 72
+      "ordem": 73
     },
     {
       "id": "p00074",
@@ -1035,7 +1049,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 73
+      "ordem": 74
     },
     {
       "id": "p00075",
@@ -1049,7 +1063,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 74
+      "ordem": 75
     },
     {
       "id": "p00076",
@@ -1063,7 +1077,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 75
+      "ordem": 76
     },
     {
       "id": "p00077",
@@ -1077,7 +1091,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 76
+      "ordem": 77
     },
     {
       "id": "p00078",
@@ -1091,7 +1105,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 77
+      "ordem": 78
     },
     {
       "id": "p00079",
@@ -1105,7 +1119,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 78
+      "ordem": 79
     },
     {
       "id": "p00080",
@@ -1119,7 +1133,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 79
+      "ordem": 80
     },
     {
       "id": "p00081",
@@ -1133,7 +1147,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 80
+      "ordem": 81
     },
     {
       "id": "p00082",
@@ -1147,7 +1161,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 81
+      "ordem": 82
     },
     {
       "id": "p00083",
@@ -1161,7 +1175,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 82
+      "ordem": 83
     },
     {
       "id": "p00084",
@@ -1175,7 +1189,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 83
+      "ordem": 84
     },
     {
       "id": "p00085",
@@ -1189,7 +1203,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 84
+      "ordem": 85
     },
     {
       "id": "p00086",
@@ -1203,7 +1217,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 85
+      "ordem": 86
     },
     {
       "id": "p00087",
@@ -1217,7 +1231,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 86
+      "ordem": 87
     },
     {
       "id": "p00088",
@@ -1231,7 +1245,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 87
+      "ordem": 88
     },
     {
       "id": "p00089",
@@ -1245,7 +1259,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 88
+      "ordem": 89
     },
     {
       "id": "p00090",
@@ -1259,7 +1273,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 89
+      "ordem": 90
     },
     {
       "id": "p00091",
@@ -1273,7 +1287,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 90
+      "ordem": 91
     },
     {
       "id": "p00092",
@@ -1287,7 +1301,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 91
+      "ordem": 92
     },
     {
       "id": "p00093",
@@ -1301,7 +1315,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 92
+      "ordem": 93
     },
     {
       "id": "p00094",
@@ -1315,7 +1329,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 93
+      "ordem": 94
     },
     {
       "id": "p00095",
@@ -1329,7 +1343,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 94
+      "ordem": 95
     },
     {
       "id": "p00096",
@@ -1343,7 +1357,7 @@
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
-      "ordem": 95
+      "ordem": 96
     },
     {
       "id": "p00097",
@@ -1352,20 +1366,6 @@
       "descricao": "• Costura\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
-      "foto": "",
-      "cor1": "#3b2416",
-      "cor2": "",
-      "categoriaId": "c001",
-      "ativo": true,
-      "ordem": 96
-    },
-    {
-      "id": "p00098",
-      "codigo": "CM-050",
-      "nome": "Cinto Bordado Girassol",
-      "descricao": "• Costura\n• Entalhe Personalizado\n• Couro Legítimo",
-      "preco": 59,
-      "nomeCor": "Marrom",
       "foto": "",
       "cor1": "#3b2416",
       "cor2": "",
@@ -1388,14 +1388,14 @@
       "ordem": 98
     },
     {
-      "id": "p00100",
-      "codigo": "CM-007",
-      "nome": "Bordado Jasmim",
-      "descricao": "",
+      "id": "p00098",
+      "codigo": "CM-050",
+      "nome": "Cinto Bordado Girassol",
+      "descricao": "• Costura\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
-      "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
-      "foto": "/uploads/produtos/007.png",
-      "cor1": "#7e5044",
+      "nomeCor": "Marrom",
+      "foto": "",
+      "cor1": "#3b2416",
       "cor2": "",
       "categoriaId": "c001",
       "ativo": true,
