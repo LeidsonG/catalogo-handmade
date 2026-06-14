@@ -814,6 +814,38 @@ html, body {
   border-radius: 10px;
 }
 
+.item.arrastando {
+  opacity: 0.4;
+}
+
+.item.alvo-drop {
+  border-color: var(--cor-acento);
+  border-style: solid;
+  box-shadow: inset 3px 0 0 var(--cor-acento);
+}
+
+.item-drag {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 2;
+  color: var(--cor-suave);
+  font-size: 14px;
+  line-height: 1;
+  letter-spacing: 1px;
+  user-select: none;
+  cursor: grab;
+  opacity: 0.5;
+}
+
+.item:hover .item-drag {
+  opacity: 1;
+}
+
+.item-drag:active {
+  cursor: grabbing;
+}
+
 .vazio {
   grid-column: 1 / -1;
   text-align: center;
