@@ -377,7 +377,7 @@ function itemHtml(p, arrastavel) {
   const corStyle = fundoAmostra(p.cor1, p.cor2);
   const inativo = p.ativo === false;
   return `
-    <li class="item${inativo ? ' item-inativo' : ''}"${arrastavel ? ` draggable="true" data-id="${p.id}"` : ''}>
+    <li class="item${inativo ? ' item-inativo' : ''}"${arrastavel ? ` data-id="${p.id}"` : ''}>
       ${arrastavel ? '<span class="item-drag" title="Arraste para reordenar">⋮⋮</span>' : ''}
       ${inativo ? '<span class="item-badge">Inativo</span>' : ''}
       <div class="item-foto">
@@ -406,7 +406,14 @@ let dragProdId = null;
 // Drag-and-drop dos cards de produto. Só reordena DENTRO da mesma categoria
 // (mesma <ul class="lista">); arrastar para outra categoria é ignorado.
 function ativarDragProdutos() {
-  grupos.querySelectorAll('.item[draggable="true"]').forEach((el) => {
+  grupos.querySelectorAll('.item[data-id]').forEach((el) => {
+    // O card só fica arrastável enquanto o handle (⋮⋮) está pressionado — assim
+    // arrastar o corpo do card não move nada, só a "alça" no canto superior.
+    const handle = el.querySelector('.item-drag');
+    if (handle) {
+      handle.addEventListener('mousedown', () => { el.draggable = true; });
+      handle.addEventListener('mouseup', () => { el.draggable = false; });
+    }
     el.addEventListener('dragstart', (e) => {
       dragProdId = el.dataset.id;
       el.classList.add('arrastando');
@@ -414,6 +421,7 @@ function ativarDragProdutos() {
       e.dataTransfer.setData('text/plain', el.dataset.id);
     });
     el.addEventListener('dragend', () => {
+      el.draggable = false;
       el.classList.remove('arrastando');
       grupos.querySelectorAll('.item.alvo-drop').forEach((x) => x.classList.remove('alvo-drop'));
       dragProdId = null;

@@ -814,14 +814,6 @@ html, body {
   border-radius: 10px;
 }
 
-.item[draggable="true"] {
-  cursor: grab;
-}
-
-.item[draggable="true"]:active {
-  cursor: grabbing;
-}
-
 .item.arrastando {
   opacity: 0.4;
 }
@@ -848,6 +840,10 @@ html, body {
 
 .item:hover .item-drag {
   opacity: 1;
+}
+
+.item-drag:active {
+  cursor: grabbing;
 }
 
 .vazio {
