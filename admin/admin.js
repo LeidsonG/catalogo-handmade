@@ -307,8 +307,13 @@ function renderProdutos() {
 
   let totalVisiveis = 0;
   let html = '';
+  // Arrastar para reordenar só faz sentido sem busca por texto: com filtro a
+  // lista exibida é parcial e mover um card seria ambíguo.
+  const arrastavel = !q;
   for (const cat of categoriasFiltradas) {
-    const todosDaCategoria = porCategoria.get(cat.id) || [];
+    const todosDaCategoria = (porCategoria.get(cat.id) || [])
+      .slice()
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
     const itens = todosDaCategoria
       .filter((p) => !q || p.nome.toLowerCase().includes(q) || p.codigo.toLowerCase().includes(q));
     totalVisiveis += itens.length;
@@ -324,15 +329,16 @@ function renderProdutos() {
           ${btnBulk}
         </h3>
         ${itens.length
-          ? `<ul class="lista">${itens.map(itemHtml).join('')}</ul>`
+          ? `<ul class="lista">${itens.map((p) => itemHtml(p, arrastavel)).join('')}</ul>`
           : '<div class="grupo-vazio">Sem produtos nesta categoria.</div>'}
       </section>
     `;
   }
   if (mostrarSemCategoria) {
-    const itensSemCat = semCategoria.filter(
-      (p) => !q || p.nome.toLowerCase().includes(q) || p.codigo.toLowerCase().includes(q),
-    );
+    const itensSemCat = semCategoria
+      .slice()
+      .sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0))
+      .filter((p) => !q || p.nome.toLowerCase().includes(q) || p.codigo.toLowerCase().includes(q));
     totalVisiveis += itensSemCat.length;
     if (itensSemCat.length) {
       html += `
@@ -342,7 +348,7 @@ function renderProdutos() {
             <span class="grupo-contador">${itensSemCat.length}</span>
           </h3>
           <div class="grupo-aviso">Estes produtos foram cadastrados antes do sistema de categorias. Edite cada um para atribuir uma categoria.</div>
-          <ul class="lista">${itensSemCat.map(itemHtml).join('')}</ul>
+          <ul class="lista">${itensSemCat.map((p) => itemHtml(p, arrastavel)).join('')}</ul>
         </section>
       `;
     }
@@ -364,13 +370,15 @@ function renderProdutos() {
   grupos.querySelectorAll('[data-bulk-catid]').forEach((el) => {
     el.addEventListener('click', () => alternarAtivosGrupo(el.dataset.bulkCatid, el.dataset.bulkAtivo === 'true'));
   });
+  ativarDragProdutos();
 }
 
-function itemHtml(p) {
+function itemHtml(p, arrastavel) {
   const corStyle = fundoAmostra(p.cor1, p.cor2);
   const inativo = p.ativo === false;
   return `
-    <li class="item${inativo ? ' item-inativo' : ''}">
+    <li class="item${inativo ? ' item-inativo' : ''}"${arrastavel ? ` draggable="true" data-id="${p.id}"` : ''}>
+      ${arrastavel ? '<span class="item-drag" title="Arraste para reordenar">⋮⋮</span>' : ''}
       ${inativo ? '<span class="item-badge">Inativo</span>' : ''}
       <div class="item-foto">
         ${p.foto ? `<img src="${p.foto}" alt="">` : '<span style="color:#aaa;font-size:11px">sem foto</span>'}
@@ -391,6 +399,64 @@ function itemHtml(p) {
       </div>
     </li>
   `;
+}
+
+let dragProdId = null;
+
+// Drag-and-drop dos cards de produto. Só reordena DENTRO da mesma categoria
+// (mesma <ul class="lista">); arrastar para outra categoria é ignorado.
+function ativarDragProdutos() {
+  grupos.querySelectorAll('.item[draggable="true"]').forEach((el) => {
+    el.addEventListener('dragstart', (e) => {
+      dragProdId = el.dataset.id;
+      el.classList.add('arrastando');
+      e.dataTransfer.effectAllowed = 'move';
+      e.dataTransfer.setData('text/plain', el.dataset.id);
+    });
+    el.addEventListener('dragend', () => {
+      el.classList.remove('arrastando');
+      grupos.querySelectorAll('.item.alvo-drop').forEach((x) => x.classList.remove('alvo-drop'));
+      dragProdId = null;
+    });
+    el.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      if (!dragProdId || el.dataset.id === dragProdId) return;
+      const origem = grupos.querySelector(`.item[data-id="${dragProdId}"]`);
+      if (!origem || origem.closest('.lista') !== el.closest('.lista')) return;
+      grupos.querySelectorAll('.item.alvo-drop').forEach((x) => x.classList.remove('alvo-drop'));
+      el.classList.add('alvo-drop');
+    });
+    el.addEventListener('drop', async (e) => {
+      e.preventDefault();
+      const origemId = dragProdId;
+      const destinoId = el.dataset.id;
+      if (!origemId || origemId === destinoId) return;
+      const lista = el.closest('.lista');
+      const origemEl = grupos.querySelector(`.item[data-id="${origemId}"]`);
+      if (!origemEl || origemEl.closest('.lista') !== lista) return; // categorias diferentes
+      const idsCategoria = Array.from(lista.querySelectorAll('.item')).map((x) => x.dataset.id);
+      const nova = idsCategoria.filter((id) => id !== origemId);
+      nova.splice(nova.indexOf(destinoId), 0, origemId);
+      await reordenarProdutos(nova);
+    });
+  });
+}
+
+// Reconstrói a ordem global substituindo, in-place, os produtos da categoria
+// reordenada pela nova sequência — preservando a posição relativa das demais
+// categorias — e envia a lista COMPLETA para não arriscar perda de dados.
+async function reordenarProdutos(novaOrdemCategoria) {
+  const fila = [...novaOrdemCategoria];
+  const setCat = new Set(novaOrdemCategoria);
+  const global = [...produtos].sort((a, b) => (a.ordem ?? 0) - (b.ordem ?? 0));
+  const ordemIds = global.map((p) => (setCat.has(p.id) ? fila.shift() : p.id));
+  const resposta = await fetch('/api/produtos/reordenar', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ ordemIds }),
+  });
+  if (resposta.ok) carregar();
+  else mostrarToast('Erro ao reordenar', 'erro');
 }
 
 /* ---------- Introdução ---------- */

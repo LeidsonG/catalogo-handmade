@@ -113,11 +113,23 @@ router.post('/reordenar', (req, res) => comLock(() => {
   if (!Array.isArray(ordemIds)) return res.status(400).json({ erro: 'ordemIds obrigatório' });
   const data = readData();
   const mapa = new Map(data.produtos.map((p) => [p.id, p]));
-  data.produtos = ordemIds.map((id, i) => {
+  // Reordena os produtos citados em ordemIds e, em seguida, ANEXA os que não
+  // vieram na lista preservando sua ordem atual. Isso impede que uma lista
+  // parcial (ex.: reordenar dentro de uma categoria) apague os demais produtos.
+  const usados = new Set();
+  const reordenados = [];
+  for (const id of ordemIds) {
     const p = mapa.get(id);
-    if (p) p.ordem = i;
-    return p;
-  }).filter(Boolean);
+    if (p && !usados.has(id)) {
+      usados.add(id);
+      reordenados.push(p);
+    }
+  }
+  for (const p of data.produtos) {
+    if (!usados.has(p.id)) reordenados.push(p);
+  }
+  reordenados.forEach((p, i) => { p.ordem = i; });
+  data.produtos = reordenados;
   writeData(data);
   res.json({ ok: true });
 }));
