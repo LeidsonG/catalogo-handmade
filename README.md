@@ -86,6 +86,28 @@ Abra http://localhost:3000/admin no navegador.
 Abra o admin, clique **Editar** no produto, mude o preço, salve, regere o PDF.
 São 5 segundos por mudança em vez de reabrir todo o documento de design.
 
+### Compactar o PDF gerado
+
+O PDF gerado pelo Puppeteer sai a 96 DPI, o que pode resultar em arquivos
+grandes dependendo da quantidade de fotos. Para reduzir o tamanho sem perder
+qualidade visível, use o **PDF24**:
+
+1. Acesse https://tools.pdf24.org/pt/comprimir-pdf
+2. Faça upload do PDF gerado (pasta `output/`)
+3. Configure as opções:
+   - **DPI:** `150`
+   - **Qualidade de imagem:** `100%`
+4. Marque **todos os checkboxes:**
+   - [x] Remover miniaturas
+   - [x] Deduplicar fluxos
+   - [x] Rasterizar gráficos pesados
+   - [x] Reduzir fontes incorporadas
+   - [x] Remover anotações
+   - [x] Remover tópicos
+   - [x] Remover metadados
+   - [x] Remover informações estruturais
+5. Clique em **Compactar** e baixe o resultado
+
 ## Personalização visual
 
 Todo o visual do PDF está em [templates/pdf.css](templates/pdf.css). Os blocos

@@ -192,7 +192,7 @@ html, body {
   text-align: center;
   font-size: calc(10pt * var(--intro-scale));
   letter-spacing: 2px;
-  color: var(--cor-suave);
+  color: var(--cor-categ);
   font-family: 'Work Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   font-variant-numeric: tabular-nums lining-nums;
   font-weight: 500;
