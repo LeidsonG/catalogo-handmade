@@ -1386,6 +1386,62 @@
       "categoriaId": "c001",
       "ativo": true,
       "ordem": 99
+    },
+    {
+      "id": "p00101",
+      "codigo": "CF-134",
+      "nome": "Cinto com Pedrarias e Aplique",
+      "descricao": "• Pedraria\n• Cravejado\n• Couro Legítimo",
+      "preco": 149,
+      "nomeCor": "Café c/ Pedraria Verde",
+      "foto": "/uploads/produtos/134.png",
+      "cor1": "#773311",
+      "cor2": "#0d6a47",
+      "categoriaId": "c002",
+      "ativo": true,
+      "ordem": 99
+    },
+    {
+      "id": "p00102",
+      "codigo": "CF-135",
+      "nome": "Tipo Pirarucu c/ Ponteira",
+      "descricao": "• Ponteira Premium\n• Couro Legítimo",
+      "preco": 79,
+      "nomeCor": "Caramelo",
+      "foto": "/uploads/produtos/135.png",
+      "cor1": "#8c4d3b",
+      "cor2": "",
+      "categoriaId": "c002",
+      "ativo": true,
+      "ordem": 100
+    },
+    {
+      "id": "p00103",
+      "codigo": "CF-136",
+      "nome": "Cinto Girassol Premium",
+      "descricao": "• Entalhe Personalizado Premium\n• Cravejado\n• Couro Legítimo",
+      "preco": 99,
+      "nomeCor": "Op c/ Creme Pinhão",
+      "foto": "/uploads/produtos/136.png",
+      "cor1": "#98624e",
+      "cor2": "",
+      "categoriaId": "c002",
+      "ativo": true,
+      "ordem": 101
+    },
+    {
+      "id": "p00104",
+      "codigo": "CF-137",
+      "nome": "Cinto Bordado Floral",
+      "descricao": "• Entralhe personalizado\n• Couro Legítimo",
+      "preco": 59,
+      "nomeCor": "Natural Antique Pinhão",
+      "foto": "/uploads/produtos/137.png",
+      "cor1": "#74543c",
+      "cor2": "",
+      "categoriaId": "c002",
+      "ativo": true,
+      "ordem": 102
     }
   ]
 }
