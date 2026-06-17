@@ -102,6 +102,7 @@ qualidade visível, use o **PDF24**:
    - [x] Deduplicar fluxos
    - [x] Rasterizar gráficos pesados
    - [x] Reduzir fontes incorporadas
+   - [x] Compressão Flat Máxima
    - [x] Remover anotações
    - [x] Remover tópicos
    - [x] Remover metadados
