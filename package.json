@@ -8,7 +8,8 @@
     "start": "node server.js",
     "dev": "node --watch server.js",
     "baixar-fontes": "node scripts/baixar-fontes.js",
-    "migrar-ids": "node scripts/migrar-ids.js"
+    "migrar-ids": "node scripts/migrar-ids.js",
+    "renumerar-codigos": "node scripts/renumerar-codigos.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
