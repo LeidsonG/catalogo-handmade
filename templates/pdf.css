@@ -1,11 +1,15 @@
-/* @import precisa vir antes de qualquer outra regra (CSS spec).
-   Fica como fallback caso o script `npm run baixar-fontes` não tenha sido
-   rodado e os arquivos locais não existam. */
-@import url('https://fonts.googleapis.com/css2?family=Rye&family=Work+Sans:wght@500;600;700&display=swap');
+/* Fontes locais (baixadas do Google por `node scripts/baixar-fontes.js`),
+   versionadas em assets/fonts/ e servidas por /assets. São a ÚNICA fonte da
+   verdade: o render é totalmente offline e não depende de internet na máquina
+   do Puppeteer. Mesmos glifos do Google Fonts — qualidade idêntica, texto sai
+   vetorial e selecionável no PDF.
 
-/* Fontes locais (baixadas por `node scripts/baixar-fontes.js`).
-   font-display: block bloqueia o render até a fonte carregar — essencial
-   no Puppeteer, que pode capturar antes do swap acontecer. */
+   Não reintroduzir @import do Google Fonts aqui. O `goto` usa networkidle0, que
+   espera todas as conexões fecharem; um @import externo trava por 30s quando a
+   máquina não alcança fonts.googleapis.com (timeout na geração do PDF).
+
+   font-display: block bloqueia o render até a fonte carregar — essencial no
+   Puppeteer, que pode capturar antes do swap acontecer. */
 @font-face {
   font-family: 'Rye';
   font-weight: 400;
