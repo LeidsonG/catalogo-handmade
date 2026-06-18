@@ -74,6 +74,9 @@ function criarRouter(porta) {
       browser = await puppeteer.launch({
         headless: 'new',
         args: ['--no-sandbox', '--disable-setuid-sandbox'],
+        // Catálogos grandes (ex.: 84 produtos) levam ~60s no page.pdf(). O
+        // protocolTimeout padrão (180s) é o teto de segurança contra travas.
+        protocolTimeout: 180000,
       });
       const page = await browser.newPage();
       // O servidor exige autenticação em tudo, mas o Puppeteer não tem como saber
@@ -84,7 +87,7 @@ function criarRouter(porta) {
       // como /uploads/... e /assets/... resolvam para o próprio servidor.
       await page.goto(
         `http://localhost:${porta}/render/${layout}?categoria=${encodeURIComponent(categoriaId)}`,
-        { waitUntil: 'networkidle0' },
+        { waitUntil: 'networkidle0', timeout: 120000 },
       );
       // Garante que todas as fontes (incluindo Rye e Work Sans locais) foram
       // baixadas/parseadas antes de capturar o PDF. Caso contrário, o Puppeteer
@@ -94,6 +97,9 @@ function criarRouter(porta) {
         path: caminho,
         format: 'A4',
         printBackground: true,
+        // Sem esse timeout, o page.pdf() usa o default de 30s e estoura em
+        // catálogos grandes (a c001, com 84 produtos, leva ~60s).
+        timeout: 150000,
         margin: { top: 0, right: 0, bottom: 0, left: 0 },
       });
       const semFoto = readData().produtos
