@@ -321,12 +321,18 @@ function renderProdutos() {
     const btnBulk = todosDaCategoria.length
       ? `<button class="botao botao-fantasma grupo-btn-bulk" data-bulk-catid="${cat.id}" data-bulk-ativo="${todosAtivos ? 'false' : 'true'}">${todosAtivos ? 'Desativar todos' : 'Ativar todos'}</button>`
       : '';
+    // Renumerar só faz sentido com prefixo, com produtos e sem busca/filtro de
+    // texto (a renumeração segue a ordem real, não a lista parcial exibida).
+    const btnRenumerar = (cat.prefixoCodigo && todosDaCategoria.length && !q)
+      ? `<button class="botao botao-fantasma grupo-btn-renumerar" data-renumerar-catid="${cat.id}">Renumerar números</button>`
+      : '';
     html += `
       <section class="grupo">
         <h3 class="grupo-titulo">
           ${esc(cat.nome)}
           <span class="grupo-contador">${itens.length}</span>
           ${btnBulk}
+          ${btnRenumerar}
         </h3>
         ${itens.length
           ? `<ul class="lista">${itens.map((p) => itemHtml(p, arrastavel)).join('')}</ul>`
@@ -369,6 +375,9 @@ function renderProdutos() {
   });
   grupos.querySelectorAll('[data-bulk-catid]').forEach((el) => {
     el.addEventListener('click', () => alternarAtivosGrupo(el.dataset.bulkCatid, el.dataset.bulkAtivo === 'true'));
+  });
+  grupos.querySelectorAll('[data-renumerar-catid]').forEach((el) => {
+    el.addEventListener('click', () => renumerarCategoria(el.dataset.renumerarCatid));
   });
   ativarDragProdutos();
 }
@@ -824,6 +833,63 @@ async function alternarAtivosGrupo(categoriaId, ativar) {
   if (falhas) mostrarToast(`${falhas} produto(s) não puderam ser alterados`, 'erro');
   if (n > 0) mostrarToast(`${n} produto${n > 1 ? 's' : ''} ${ativar ? 'ativado' : 'desativado'}${n > 1 ? 's' : ''}`, 'sucesso');
   renderProdutos();
+}
+
+// Renumera os códigos da categoria para ficarem sequenciais e contíguos,
+// seguindo a ordem atual dos cards, e renomeia as fotos junto. Mostra a prévia
+// "de->para" para o usuário confirmar antes de aplicar (operação visível ao
+// cliente: o código aparece no PDF e é o nome do arquivo da foto).
+async function renumerarCategoria(categoriaId) {
+  const cat = categorias.find((c) => c.id === categoriaId);
+  if (!cat) return;
+
+  let plano;
+  try {
+    const resp = await fetch(`/api/categorias/${categoriaId}/renumerar/preview`);
+    if (!resp.ok) {
+      const { erro } = await resp.json().catch(() => ({}));
+      mostrarToast(erro || 'Erro ao montar a prévia', 'erro');
+      return;
+    }
+    plano = await resp.json();
+  } catch {
+    mostrarToast('Erro ao montar a prévia', 'erro');
+    return;
+  }
+
+  if (!plano.mudancas) {
+    mostrarToast(`"${cat.nome}" já está numerada em ordem`, 'sucesso');
+    return;
+  }
+
+  // Lista só o que muda, limitada para o confirm não ficar gigante.
+  const mudancas = plano.itens.filter((it) => it.mudou);
+  const LIMITE = 25;
+  const linhas = mudancas.slice(0, LIMITE).map((it) => `  ${it.de} → ${it.para}`);
+  if (mudancas.length > LIMITE) linhas.push(`  …e mais ${mudancas.length - LIMITE}`);
+  const msg = `Renumerar "${cat.nome}" — ${plano.mudancas} código(s) vão mudar:\n\n`
+    + `${linhas.join('\n')}\n\n`
+    + 'As fotos serão renomeadas junto para casar com o novo código.\n'
+    + 'Tem certeza?';
+  if (!confirm(msg)) return;
+
+  try {
+    const resp = await fetch(`/api/categorias/${categoriaId}/renumerar`, { method: 'POST' });
+    if (!resp.ok) {
+      const { erro } = await resp.json().catch(() => ({}));
+      mostrarToast(erro || 'Erro ao renumerar', 'erro');
+      return;
+    }
+    const r = await resp.json();
+    let aviso = `${r.mudancas} código(s) renumerado(s)`;
+    if (r.ausentes && r.ausentes.length) {
+      aviso += ` (${r.ausentes.length} foto(s) não estavam no disco)`;
+    }
+    mostrarToast(aviso, 'sucesso');
+    recarregarPagina();
+  } catch {
+    mostrarToast('Erro ao renumerar', 'erro');
+  }
 }
 
 /* ---------- Gerar PDF ---------- */

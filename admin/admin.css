@@ -407,6 +407,18 @@ html, body {
   letter-spacing: 0.5px;
 }
 
+/* Quando não há botão de bulk (categoria filtrada/vazia), este empurra-se
+   sozinho para a direita; com o bulk presente, segue logo após ele. */
+.grupo-btn-renumerar {
+  margin-left: auto;
+  font-size: 10px;
+  padding: 2px 8px;
+  letter-spacing: 0.5px;
+}
+.grupo-btn-bulk ~ .grupo-btn-renumerar {
+  margin-left: 0;
+}
+
 .grupo-vazio {
   padding: 12px;
   text-align: center;
