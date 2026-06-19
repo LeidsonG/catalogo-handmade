@@ -3,8 +3,9 @@
 // que ainda tem produtos.
 
 const express = require('express');
-const { readData, readCategorias, writeCategorias, comLock } = require('../lib/dados');
+const { readData, writeData, readCategorias, writeCategorias, comLock } = require('../lib/dados');
 const { gerarProximoId, normalizarPrefixo, proximoCodigoCategoria } = require('../lib/ids');
+const { planejarRenumeracao, aplicarRenumeracao } = require('../lib/renumerar');
 
 const router = express.Router();
 
@@ -58,6 +59,29 @@ router.get('/:id/proximo-codigo', (req, res) => {
   const codigo = proximoCodigoCategoria(readData().produtos, categoria.id, prefixo);
   res.json({ codigo });
 });
+
+// Prévia da renumeração: mostra o plano "de->para" sem alterar nada.
+router.get('/:id/renumerar/preview', (req, res) => {
+  const categoria = readCategorias().categorias.find((c) => c.id === req.params.id);
+  if (!categoria) return res.status(404).json({ erro: 'categoria não encontrada' });
+  const plano = planejarRenumeracao(readData().produtos, categoria);
+  if (plano.erro) return res.status(400).json({ erro: plano.erro });
+  res.json(plano);
+});
+
+// Aplica a renumeração da categoria. Recalcula o plano do zero sob o lock (não
+// confia em nada enviado pelo cliente) para não agir sobre um estado obsoleto.
+router.post('/:id/renumerar', (req, res) => comLock(() => {
+  const categoria = readCategorias().categorias.find((c) => c.id === req.params.id);
+  if (!categoria) return res.status(404).json({ erro: 'categoria não encontrada' });
+  const data = readData();
+  const plano = planejarRenumeracao(data.produtos, categoria);
+  if (plano.erro) return res.status(400).json({ erro: plano.erro });
+  if (!plano.mudancas) return res.json({ ok: true, mudancas: 0, renomeadas: 0, ausentes: [] });
+  const { renomeadas, ausentes } = aplicarRenumeracao(data.produtos, plano);
+  writeData(data);
+  res.json({ ok: true, mudancas: plano.mudancas, renomeadas, ausentes });
+}));
 
 router.post('/reordenar', (req, res) => comLock(() => {
   const { ordemIds } = req.body;
