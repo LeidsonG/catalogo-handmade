@@ -515,13 +515,21 @@ async function uploadArquivo(file, tipo, codigo) {
 }
 
 function codigoPreenchidoOuAvisa() {
-  const codigo = formProduto.elements.codigo.value.trim();
-  if (!codigo) {
+  if (!selectCategoriaProduto.value) {
+    mostrarToast('Escolha a categoria antes do upload', 'erro');
+    selectCategoriaProduto.focus();
+    return null;
+  }
+  const numero = formProduto.elements.codigo.value.trim();
+  if (!numero) {
     mostrarToast('Preencha o código do produto antes do upload', 'erro');
     formProduto.elements.codigo.focus();
     return null;
   }
-  return codigo;
+  // A foto precisa seguir o código completo (prefixo da categoria + número),
+  // igual ao que o salvamento monta em prefixoAtual + numero. Sem o prefixo,
+  // a foto era salva só com o número (ex.: 137.png em vez de CF-137.png).
+  return prefixoAtual + numero;
 }
 
 arquivoFoto.addEventListener('change', async (e) => {
