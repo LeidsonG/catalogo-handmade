@@ -12,7 +12,7 @@ _(vazio por enquanto)_
 
 ## PDF / Catálogo
 
-_(vazio por enquanto)_
+- [] Cor Worn nos masculino 082 e 083.
 
 ---
 
