@@ -6,8 +6,7 @@ Lista de melhorias e features planejadas para o sistema de catálogo.
 
 ## Admin
 
-- [x] Desativar produtos específicos para não sair no PDF ao gerar o catálogo
-- [x] O nome do arquivo de foto deve seguir o código do produto como aparece no PDF (ex: CF-101.png)
+_(vazio por enquanto)_
 
 ---
 
@@ -19,4 +18,4 @@ _(vazio por enquanto)_
 
 ## Outros
 
-_(vazio por enquanto)_
+- [] Tirar os riscos das fotos dos produtos masculino 091, 090, 089 e 088.
