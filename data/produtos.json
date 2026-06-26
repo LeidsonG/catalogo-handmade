@@ -31,7 +31,7 @@
     {
       "id": "p00033",
       "codigo": "CF-103",
-      "nome": "Cinto Western",
+      "nome": "Western",
       "descricao": "• Costura\n• Cravejado\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 99,
       "nomeCor": "Café",
@@ -45,8 +45,8 @@
     {
       "id": "p00124",
       "codigo": "CF-104",
-      "nome": "Couro & Pelo",
-      "descricao": "• Pelo\n• Entalhe Personalizado\n• Couro Legítimo",
+      "nome": "Cinto c/ Pelo e Ponteira",
+      "descricao": "• Pelo\n• Aplique Cobre Velho\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 129,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
       "foto": "/uploads/produtos/CF-104.webp",
@@ -59,7 +59,7 @@
     {
       "id": "p00101",
       "codigo": "CF-105",
-      "nome": "Cinto com Pedrarias e Aplique",
+      "nome": "Pedrarias e Aplique",
       "descricao": "• Pedraria\n• Cravejado\n• Couro Legítimo",
       "preco": 149,
       "nomeCor": "Café c/ Pedraria Verde",
@@ -73,7 +73,7 @@
     {
       "id": "p00007",
       "codigo": "CF-106",
-      "nome": "Cinto Cravejado",
+      "nome": "Cravejado",
       "descricao": "• Cravejado e Strass\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 99,
       "nomeCor": "Preto",
@@ -101,7 +101,7 @@
     {
       "id": "p00006",
       "codigo": "CF-108",
-      "nome": "Cinto Floral",
+      "nome": "Floral c/ Strass",
       "descricao": "• Strass\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Preto",
@@ -115,7 +115,7 @@
     {
       "id": "p00103",
       "codigo": "CF-109",
-      "nome": "Cinto Girassol Premium",
+      "nome": "Girassol Premium",
       "descricao": "• Entalhe Personalizado Premium\n• Cravejado\n• Couro Legítimo",
       "preco": 99,
       "nomeCor": "Op c/ Creme Pinhão",
@@ -143,7 +143,7 @@
     {
       "id": "p00008",
       "codigo": "CF-111",
-      "nome": "Cinto Girassol",
+      "nome": "Girassol",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
@@ -172,7 +172,7 @@
     {
       "id": "p00012",
       "codigo": "CF-113",
-      "nome": "Cinto Floral Bordado",
+      "nome": "Floral Bordado",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Pinhão e Flor Rosa",
@@ -186,7 +186,7 @@
     {
       "id": "p00010",
       "codigo": "CF-114",
-      "nome": "Cinto Floral Bordado",
+      "nome": "Floral Bordado",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Pinhão c/ Borda Preta e Flor Rosa",
@@ -200,7 +200,7 @@
     {
       "id": "p00011",
       "codigo": "CF-115",
-      "nome": "Cinto Floral Bordado",
+      "nome": "Floral Bordado",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Natural Pinhão c/ Borda Preta",
@@ -382,7 +382,7 @@
     {
       "id": "p00021",
       "codigo": "CF-128",
-      "nome": "Cinto Cravejado",
+      "nome": "Cravejado",
       "descricao": "• Cravejado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Preto",
@@ -396,7 +396,7 @@
     {
       "id": "p00027",
       "codigo": "CF-129",
-      "nome": "Cinto Cravejado",
+      "nome": "Cravejado",
       "descricao": "• Cravejado\n• Couro Legítimo",
       "preco": 99,
       "nomeCor": "Preto",
@@ -424,7 +424,7 @@
     {
       "id": "p00023",
       "codigo": "CF-131",
-      "nome": "Cinto Cravejado Slim",
+      "nome": "Cinto Slim Cravejado",
       "descricao": "• Fivela Personalizada\n• Detalhes em cobre\n• Couro Legítimo",
       "preco": 65,
       "nomeCor": "Natural Pinhão",
@@ -466,7 +466,7 @@
     {
       "id": "p00034",
       "codigo": "CM-001",
-      "nome": "Cinto Floral Texas Premium",
+      "nome": "Floral Texas Premium",
       "descricao": "• Bordado Artesanal\n• Entalhe Personalizado\n• Miçanga\n• Margarida de Cruz\n• Couro Legítimo",
       "preco": 259,
       "nomeCor": "Natural Antique Pinhão",
@@ -480,7 +480,7 @@
     {
       "id": "p00035",
       "codigo": "CM-002",
-      "nome": "Ás Royale",
+      "nome": "Cartas Royale",
       "descricao": "• Pintura Artesanal\n• Miçanga\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 299,
       "nomeCor": "Natural Antique Pinhão",
@@ -564,7 +564,7 @@
     {
       "id": "p00041",
       "codigo": "CM-008",
-      "nome": "Cinto Arizona",
+      "nome": "Arizona",
       "descricao": "• Costura Dupla\n• Couro Legítimo",
       "preco": 55,
       "nomeCor": "Caramelo",
@@ -648,7 +648,7 @@
     {
       "id": "p00100",
       "codigo": "CM-014",
-      "nome": "Jasmim Bordado",
+      "nome": "Floral Bordado",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
@@ -676,7 +676,7 @@
     {
       "id": "p00046",
       "codigo": "CM-016",
-      "nome": "Cinto Bordado Folha Seca",
+      "nome": "Castanhas Canadense",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Caramelo",
@@ -690,7 +690,7 @@
     {
       "id": "p00047",
       "codigo": "CM-017",
-      "nome": "Cinto Royal Diamond",
+      "nome": "Royal Diamond",
       "descricao": "• Entalhe Personalizado e Premium\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Marrom Destaque Antique Café c/ Borda Preta",
@@ -704,7 +704,7 @@
     {
       "id": "p00048",
       "codigo": "CM-018",
-      "nome": "Cinto Royal Diamond",
+      "nome": "Royal Diamond",
       "descricao": "• Entalhe Personalizado e Premium\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Marrom Claro",
@@ -718,7 +718,7 @@
     {
       "id": "p00049",
       "codigo": "CM-019",
-      "nome": "Cinto Royal Diamond",
+      "nome": "Royal Diamond",
       "descricao": "• Entalhe Personalizado e Premium\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Preto Brilhante",
@@ -760,7 +760,7 @@
     {
       "id": "p00052",
       "codigo": "CM-022",
-      "nome": "Buffalo West",
+      "nome": "Zebu Longhorn",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão Mix Verde Neon c/ Borda Preta",
@@ -788,7 +788,7 @@
     {
       "id": "p00060",
       "codigo": "CM-024",
-      "nome": "Cinto Balaiado Country",
+      "nome": "Balaiado Country",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado Premium\n• Couro Legítimo",
       "preco": 65,
       "nomeCor": "Natural Antique Pinhão",
@@ -802,7 +802,7 @@
     {
       "id": "p00054",
       "codigo": "CM-025",
-      "nome": "Cinto El Paso",
+      "nome": "El Paso",
       "descricao": "• Cravejado\n• Margarida\n• Entalhe Premium\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão",
@@ -858,7 +858,7 @@
     {
       "id": "p00058",
       "codigo": "CM-029",
-      "nome": "Cinto Pena e Ramos",
+      "nome": "Pena e Ramos",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Preto Brilhante",
@@ -872,7 +872,7 @@
     {
       "id": "p00059",
       "codigo": "CM-030",
-      "nome": "Cinto Pena e Ramos Floral",
+      "nome": "Pena e Ramos Floral",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão Mix Vermelho, Azul e Branco c/ Borda Preta",
@@ -914,7 +914,7 @@
     {
       "id": "p00063",
       "codigo": "CM-033",
-      "nome": "Cinto Balaiado Sheriff",
+      "nome": "Balaiado Sheriff",
       "descricao": "• Margarida Estrela\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Marrom",
@@ -928,7 +928,7 @@
     {
       "id": "p00064",
       "codigo": "CM-034",
-      "nome": "Cinto de Ramos e Ás",
+      "nome": "Ramos e Cartas",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
@@ -942,7 +942,7 @@
     {
       "id": "p00065",
       "codigo": "CM-035",
-      "nome": "Cinto Bordado com Raio",
+      "nome": "Cinto Bordado e Raio",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão c/ Borda Azul",
@@ -1012,7 +1012,7 @@
     {
       "id": "p00070",
       "codigo": "CM-040",
-      "nome": "Cinto Bordado Cravejado",
+      "nome": "Floral Cravejado",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 99,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
@@ -1068,7 +1068,7 @@
     {
       "id": "p00074",
       "codigo": "CM-044",
-      "nome": "Cinto Bordado c/ Ás",
+      "nome": "Cinto Bordado c/ Cartas",
       "descricao": "• Pintura Artesanal \n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão",
@@ -1082,7 +1082,7 @@
     {
       "id": "p00084",
       "codigo": "CM-045",
-      "nome": "Cinto Floral c/ Ramos",
+      "nome": "Floral c/ Ramos",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
@@ -1138,7 +1138,7 @@
     {
       "id": "p00078",
       "codigo": "CM-049",
-      "nome": "Cinto Balaiado Cravejado",
+      "nome": "Balaiado Cravejado",
       "descricao": "• Cravejado\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Natural Antique Pinhão",
@@ -1180,7 +1180,7 @@
     {
       "id": "p00081",
       "codigo": "CM-052",
-      "nome": "Cinto Floral",
+      "nome": "Floral",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 55,
       "nomeCor": "Preto Brilhante",
@@ -1250,7 +1250,7 @@
     {
       "id": "p00086",
       "codigo": "CM-057",
-      "nome": "Cinto Balaiado",
+      "nome": "Balaiado",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
@@ -1264,7 +1264,7 @@
     {
       "id": "p00087",
       "codigo": "CM-058",
-      "nome": "Cinto Balaiado c/ Borda",
+      "nome": "Balaiado c/ Borda",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Preto c/ Borda Natural",
@@ -1278,7 +1278,7 @@
     {
       "id": "p00128",
       "codigo": "CM-059",
-      "nome": "Cinto Balaiado Bordado",
+      "nome": "Balaiado Bordado",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 59,
       "nomeCor": "Preto",
@@ -1320,7 +1320,7 @@
     {
       "id": "p00090",
       "codigo": "CM-062",
-      "nome": "Cinto Longhorn",
+      "nome": "Longhorn",
       "descricao": "• Entalhe Premium Personalizado\n• Couro Legítimo",
       "preco": 69,
       "nomeCor": "Natural Antique Pinhão c/ Caramelo",
@@ -1334,7 +1334,7 @@
     {
       "id": "p00091",
       "codigo": "CM-063",
-      "nome": "Couro & Pelo",
+      "nome": "Cinto c/ Pelo e Ponteira",
       "descricao": "• Pelo\n• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Natural Antique Pinhão c/ Borda Preta",
@@ -1432,7 +1432,7 @@
     {
       "id": "p00095",
       "codigo": "CM-067",
-      "nome": "Cinto Avestruz Bordado",
+      "nome": "Avestruz c/ Ponteira",
       "descricao": "• Entalhe Premium Personalizado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Natural Antique Pinhão",
@@ -1446,7 +1446,7 @@
     {
       "id": "p00096",
       "codigo": "CM-068",
-      "nome": "Cinto Tombstone",
+      "nome": "Tombstone",
       "descricao": "• Pintura Artesanal\n• Costura Desenhada\n• Entalhe Premium Personalizado\n• Couro Legítimo",
       "preco": 99,
       "nomeCor": "Preto e Marrom Escuro",
@@ -1502,7 +1502,7 @@
     {
       "id": "p00106",
       "codigo": "CM-072",
-      "nome": "Couro & Pelo",
+      "nome": "Cinto c/ Pelo e Ponteira",
       "descricao": "• Entalhe Personalizado\n• Pelos\n• Cravejado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Natural Antique Pinhão",
@@ -1642,7 +1642,7 @@
     {
       "id": "p00125",
       "codigo": "CM-082",
-      "nome": "Cinto Floral Bordado",
+      "nome": "Floral Bordado",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Marrom",
@@ -1656,7 +1656,7 @@
     {
       "id": "p00126",
       "codigo": "CM-083",
-      "nome": "Cinto Floral Bordado",
+      "nome": "Floral Bordado",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Bordô",
@@ -1670,7 +1670,7 @@
     {
       "id": "p00127",
       "codigo": "CM-084",
-      "nome": "Cinto Floral Bordado",
+      "nome": "Floral Bordado",
       "descricao": "• Entalhe Personalizado\n• Couro Legítimo",
       "preco": 79,
       "nomeCor": "Caramelo Worn",
