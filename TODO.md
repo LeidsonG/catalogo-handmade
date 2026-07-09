@@ -12,10 +12,10 @@ _(vazio por enquanto)_
 
 ## PDF / Catálogo
 
-- [] Cor Worn nos masculino 082 e 083.
+_(vazio por enquanto)_
 
 ---
 
 ## Outros
 
-- [] Tirar os riscos das fotos dos produtos masculino 091, 090, 089 e 088.
+_(vazio por enquanto)_
