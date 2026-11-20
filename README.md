@@ -109,6 +109,61 @@ qualidade visível, use o **PDF24**:
    - [x] Remover informações estruturais
 5. Clique em **Compactar** e baixe o resultado
 
+## Sincronização entre máquinas
+
+Os cadastros (`data/produtos.json`, `categorias.json`, `intro.json`) e a pasta
+`uploads/` inteira **não ficam na `main`**: ficam na branch **`dados`** do
+GitHub e são sincronizados pelo botão **🔄 Sincronizar** do admin (e
+automaticamente ao abrir o admin). O app fala direto com a API do GitHub — não
+precisa de Git instalado.
+
+- **Configuração:** em cada máquina, "Configurar sincronização" → colar um
+  token *fine-grained* com acesso só a este repositório e permissão
+  **Contents: Read and write**. O token fica em `data/sincronizacao.json`
+  (local, gitignorado). Os commits saem com a conta dona do token.
+- **Merge:** de 3 vias contra o estado da última sincronização
+  (`data/.sync/`). Mudanças em itens ou campos diferentes se juntam sozinhas;
+  o mesmo campo alterado nas duas máquinas abre a tela "Escolha qual versão
+  manter". Produtos novos cadastrados nas duas máquinas com o mesmo
+  id/código são mantidos, e o local é renumerado (a foto é renomeada junto).
+- **Não sincronizados:** `data/auth.json` (senha de cada máquina), o token e
+  os backups `.bak`.
+- **Primeira vez:** a branch `dados` é criada na primeira sincronização da
+  máquina que já tem os cadastros. Só depois instale nas outras.
+
+Código em [lib/sync.js](lib/sync.js) (motor), [lib/merge.js](lib/merge.js)
+(merge) e [lib/github.js](lib/github.js) (cliente da API). Testes em `test/`
+(`npm test`).
+
+## App para Windows (.exe)
+
+```bash
+npm run build:exe            # empacota a branch main
+node scripts/build-exe.js --ref staging
+```
+
+Gera `build/CatalogoHandmade-<versão>-win64.zip` (roda no Linux/WSL; baixa o
+Node para Windows e o Chrome for Testing na primeira vez e guarda em
+`build/cache/`). Dentro do zip:
+
+```
+CatalogoHandmade/
+├── CatalogoHandmade.exe   Node + launcher/launcher.js embutido (abre o servidor e o navegador)
+├── app/                   código da main (atualizado pelo botão Sincronizar)
+├── node_modules/          dependências (só mudam com um zip novo)
+├── runtime/chrome/        Chrome usado pelo Puppeteer
+├── dados/                 cadastros, fotos e PDFs (criada no 1º uso)
+└── COMO USAR.txt          o GUIA.md
+```
+
+**Atualizações:** ao sincronizar, o app empacotado compara a `main` do GitHub
+com o `.manifesto.json` e baixa só os arquivos de código que mudaram, depois
+reinicia sozinho. Se `dependencies` do `package.json` mudar, a atualização não
+é aplicada e o app avisa que precisa de um zip novo. Por isso **tudo o que vai
+para a `main` chega na máquina da cliente** — valide antes na `staging`.
+
+Guia para quem usa o app: [GUIA.md](GUIA.md).
+
 ## Personalização visual
 
 Todo o visual do PDF está em [templates/pdf.css](templates/pdf.css). Os blocos
@@ -145,7 +200,11 @@ catalogo-handmade/
 ├── package.json
 ├── lib/
 │   ├── auth.js                Autenticação bcrypt + token interno
-│   ├── dados.js               Read/write JSONs + mutex + backup
+│   ├── dados.js               Read/write JSONs + mutex + backup (pasta DADOS)
+│   ├── sync.js                Sincronização com a branch `dados` do GitHub
+│   ├── merge.js               Merge de 3 vias de produtos/categorias/intro
+│   ├── github.js              Cliente mínimo da API do GitHub
+│   ├── atualizacao.js         Atualização do código no app .exe
 │   ├── ids.js                 IDs e códigos sequenciais + validação de duplicata
 │   ├── render.js              HTML do PDF (intro + páginas de produto)
 │   └── validacao.js           Whitelists de campos editáveis
@@ -154,26 +213,32 @@ catalogo-handmade/
 │   ├── produtos.js            CRUD de produtos (com validação de código único)
 │   ├── categorias.js          CRUD de categorias + próximo-código
 │   ├── intro.js               GET/PUT da introdução
-│   ├── uploads.js             Upload de foto e cor (multer)
+│   ├── uploads.js             Upload de foto + importação em lote
+│   ├── sync.js                /api/sync, /api/sistema
 │   └── pdf.js                 Render HTML + geração PDF (Puppeteer)
-├── admin/                     Interface web (index.html, admin.js, admin.css)
+├── admin/                     Interface web (index.html, admin.js, sync.js, importar.js, admin.css)
+├── launcher/launcher.js       Launcher embutido no .exe
+├── test/                      Testes (npm test)
 ├── templates/                 HTML/CSS do PDF (pdf.css, intro.html, layout-2.html)
 │   └── _backup/               Layout-1 desativado (html+css+README de reativação)
-├── data/
+├── data/                      (gitignorado — sincronizado pela branch `dados`)
 │   ├── produtos.json          Banco de produtos
 │   ├── categorias.json        Banco de categorias
 │   ├── intro.json             Texto da página de introdução
-│   └── auth.json              Credenciais do admin (criado no 1º start, gitignorado)
+│   ├── auth.json              Credenciais do admin (criado no 1º start, não sincroniza)
+│   ├── sincronizacao.json     Token do GitHub desta máquina (não sincroniza)
+│   └── .sync/                 Estado da última sincronização
 ├── assets/
 │   ├── logo.svg               Logo da marca (você adiciona)
 │   └── fonts/                 Fontes baixadas localmente (npm run baixar-fontes)
-├── uploads/
-│   ├── produtos/              Fotos dos cintos (PNG sem fundo)
-│   └── cores/                 Recortes de textura para o círculo de cor
+├── uploads/                   (gitignorado — sincronizado pela branch `dados`)
+│   ├── produtos/              Fotos dos cintos (PNG/WebP sem fundo)
+│   └── background/            Fundo da página de introdução por categoria
 ├── scripts/
 │   ├── remove-bg.py           Remoção de fundo em lote (rembg)
 │   ├── migrar-ids.js          Migração one-shot de IDs/arquivos
 │   ├── baixar-fontes.js       Baixa Work Sans + Rye localmente
+│   ├── build-exe.js           Gera o zip com o .exe para Windows
 │   └── requirements.txt
 ├── fotos-originais/           Fotos com fundo (entrada do remove-bg.py)
 └── output/                    PDFs gerados
@@ -184,6 +249,7 @@ catalogo-handmade/
 | Variável | Default  | Descrição |
 |---|---|---|
 | `PORT`   | `3000`   | Porta do servidor |
+| `CATALOGO_DADOS` | raiz do projeto | Pasta com `data/`, `uploads/` e `output/` (o .exe usa `dados/`) |
 
 ## Autenticação
 
@@ -213,6 +279,8 @@ recria com os defaults.
 | `npm run dev`           | Igual, com `--watch` (reinicia ao salvar arquivos) |
 | `npm run baixar-fontes` | Baixa Work Sans + Rye do Google Fonts para `assets/fonts/` (geração de PDF passa a funcionar offline) |
 | `npm run migrar-ids`    | One-shot: migra IDs antigos (hash hex) para o formato sequencial novo, renomeia arquivos |
+| `npm test`              | Testes da sincronização, do merge e da atualização |
+| `npm run build:exe`     | Gera o zip com o app para Windows |
 
 ## API REST
 
@@ -233,6 +301,10 @@ O admin web é apenas um cliente da API HTTP. Você pode integrar outra ferramen
 | POST   | `/api/categorias/reordenar`              | Reordena categorias |
 | GET    | `/api/categorias/:id/proximo-codigo`     | Próximo código sugerido para a categoria |
 | POST   | `/api/upload/:tipo`                      | Upload de foto (`?codigo=XXX`) — tipo `foto` ou `cor` |
+| POST   | `/api/upload/importar?codigo=XXX`        | Importa a foto de um produto existente (lote) |
+| GET    | `/api/sistema`                           | Versão, status da sincronização |
+| POST   | `/api/sync`                              | Sincroniza (`resolucoes` opcional) → `ok` / `conflitos` / `config-necessaria` |
+| POST/DELETE | `/api/sync/config`                  | Salva (testando) / remove o token do GitHub |
 | GET    | `/api/intro` / PUT                        | Texto da página de introdução |
 | GET    | `/api/auth/me`                           | Retorna o usuário autenticado |
 | POST   | `/api/auth/trocar-senha`                 | Troca senha (`senhaAtual`, `senhaNova`) |
