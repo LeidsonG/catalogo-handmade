@@ -390,7 +390,7 @@ function itemHtml(p, arrastavel) {
       ${arrastavel ? '<span class="item-drag" title="Arraste para reordenar">⋮⋮</span>' : ''}
       ${inativo ? '<span class="item-badge">Inativo</span>' : ''}
       <div class="item-foto">
-        ${p.foto ? `<img src="${p.foto}" alt="">` : '<span style="color:#aaa;font-size:11px">sem foto</span>'}
+        ${p.foto ? `<img src="${p.foto}?v=${versaoFotos}" alt="">` : '<span style="color:#aaa;font-size:11px">sem foto</span>'}
       </div>
       <div class="item-codigo">${esc(p.codigo)}</div>
       <div class="item-nome">${esc(p.nome)}</div>
@@ -670,9 +670,22 @@ formProduto.addEventListener('submit', async (e) => {
     body: JSON.stringify(dados),
   });
   if (resposta.ok) {
-    mostrarToast(id ? 'Produto atualizado' : 'Produto adicionado', 'sucesso');
+    // Sem reload: a lista é re-renderizada no lugar e a rolagem fica onde está.
+    // Num cadastro novo mantém a categoria e já sugere o próximo código, para
+    // cadastrar vários em sequência; numa edição volta para onde estava o card.
+    mostrarToast(id ? 'Produto atualizado' : 'Produto cadastrado', 'sucesso');
+    versaoFotos = Date.now();
     limparForm();
-    recarregarPagina();
+    await carregar();
+    if (id) {
+      if (scrollAntesDeEditar !== null) window.scrollTo({ top: scrollAntesDeEditar, behavior: 'smooth' });
+    } else {
+      selectCategoriaProduto.value = categoriaId;
+      atualizarPrefixoCodigo(categoriaId);
+      atualizarEstadoForm();
+      sugerirCodigo();
+    }
+    scrollAntesDeEditar = null;
   } else {
     const erroBody = await resposta.json().catch(() => ({}));
     // 409: código duplicado. Oferece a sugestão (próximo código da categoria).
@@ -729,7 +742,19 @@ async function sugerirCodigo() {
   } catch {}
 }
 
-btnLimpar.addEventListener('click', limparForm);
+btnLimpar.addEventListener('click', () => {
+  limparForm();
+  scrollAntesDeEditar = null;
+});
+
+// Posição da rolagem quando o usuário clicou em "Editar" num card, para voltar
+// até ele depois de salvar.
+let scrollAntesDeEditar = null;
+
+// Carimbo anexado às URLs das fotos na lista: muda a cada salvamento para o
+// navegador não mostrar a foto antiga do cache quando o arquivo é substituído
+// com o mesmo nome (ex.: CM-001.png). Era isso que o reload completo garantia.
+let versaoFotos = Date.now();
 
 function limparForm() {
   formProduto.reset();
@@ -753,6 +778,7 @@ function limparForm() {
 function editar(id) {
   const p = produtos.find((x) => x.id === id);
   if (!p) return;
+  if (scrollAntesDeEditar === null) scrollAntesDeEditar = window.scrollY;
   formProduto.elements.id.value = p.id;
   formProduto.elements.categoriaId.value = p.categoriaId || '';
   atualizarPrefixoCodigo(p.categoriaId || '');
