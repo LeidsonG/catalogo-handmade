@@ -173,9 +173,13 @@ function popularSelectsCategoria() {
     .map((c) => `<option value="${c.id}">${esc(c.nome)}</option>`)
     .join('');
 
+  // Preserva a categoria escolhida no formulário quando a lista é recarregada
+  // (ex.: depois de salvar ou de sincronizar sem recarregar a página).
+  const valorProdutoAtual = selectCategoriaProduto.value;
   selectCategoriaProduto.innerHTML = categorias.length
     ? `<option value="">— selecione —</option>${opcoesProduto}`
     : '<option value="">— crie uma categoria antes —</option>';
+  if (categorias.find((c) => c.id === valorProdutoAtual)) selectCategoriaProduto.value = valorProdutoAtual;
 
   const contagem = new Map();
   for (const p of produtos) {

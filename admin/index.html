@@ -12,6 +12,7 @@
   <header class="topo">
     <h1><img src="/assets/handmade.svg" class="topo-logo" alt="">Handmade<span class="topo-sub">— Sistema de catálogo</span></h1>
     <div class="topo-acoes">
+      <button id="btn-sincronizar" class="botao botao-sync" title="Envia seus cadastros e recebe os da outra máquina">🔄 Sincronizar</button>
       <select id="seletor-categoria-pdf" class="topo-select" title="Categoria do PDF"></select>
       <button id="btn-pdf-2" class="botao botao-primario">PDF Catálogo</button>
       <button id="btn-pdf-3" class="botao botao-secundario">PDF sem preço</button>
@@ -112,6 +113,13 @@
         </form>
       </section>
 
+      <section class="bloco">
+        <h2>Sincronização</h2>
+        <p class="sync-status" id="sync-status">Carregando…</p>
+        <button id="btn-config-sync" class="botao botao-fantasma botao-bloco">Configurar sincronização</button>
+        <p class="versao-app" id="versao-app"></p>
+      </section>
+
       <section class="bloco bloco-senha">
         <h2>Segurança</h2>
         <button id="btn-trocar-senha" class="botao botao-fantasma botao-bloco">Trocar senha</button>
@@ -136,6 +144,66 @@
 
   <div id="toast" class="toast"></div>
 
+  <!-- Configuração do token do GitHub -->
+  <dialog id="dlg-config" class="dialogo">
+    <form method="dialog" class="dialogo-corpo" id="form-config-sync">
+      <h2>Configurar sincronização</h2>
+      <p>A sincronização usa uma <strong>chave de acesso (token)</strong> do GitHub. É feita uma vez só em cada computador.</p>
+      <ol class="passos">
+        <li>Abra <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">github.com/settings/personal-access-tokens/new</a> (logado na conta dona do repositório).</li>
+        <li><strong>Token name:</strong> Catálogo Handmade. <strong>Expiration:</strong> escolha a validade (quando vencer, é só gerar outro e colar aqui).</li>
+        <li><strong>Repository access:</strong> <em>Only select repositories</em> → <code id="cfg-repo"></code>.</li>
+        <li><strong>Permissions → Repository permissions → Contents:</strong> <em>Read and write</em>.</li>
+        <li>Clique em <strong>Generate token</strong>, copie e cole abaixo.</li>
+      </ol>
+      <label>Token <input id="cfg-token" type="password" autocomplete="off" placeholder="github_pat_…"></label>
+      <p class="dialogo-info" id="cfg-atual"></p>
+      <div class="dialogo-acoes">
+        <button type="button" class="botao botao-perigo" id="cfg-remover">Remover desta máquina</button>
+        <span class="espaco"></span>
+        <button value="cancelar" class="botao botao-fantasma">Fechar</button>
+        <button type="button" class="botao botao-primario" id="cfg-salvar">Testar e salvar</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Conflitos: escolher qual versão manter -->
+  <dialog id="dlg-conflitos" class="dialogo dialogo-largo">
+    <div class="dialogo-corpo">
+      <h2>Escolha qual versão manter</h2>
+      <p>Estes itens foram alterados <strong>nas duas máquinas</strong> desde a última sincronização. Para cada um, escolha a versão que fica. O resto foi juntado automaticamente.</p>
+      <div class="conflitos-atalhos">
+        <button type="button" class="botao botao-fantasma botao-mini" id="conf-todos-local">Manter todas desta máquina</button>
+        <button type="button" class="botao botao-fantasma botao-mini" id="conf-todos-remoto">Manter todas da outra máquina</button>
+      </div>
+      <div id="lista-conflitos" class="lista-conflitos"></div>
+      <div class="dialogo-acoes">
+        <button type="button" class="botao botao-fantasma" id="conf-cancelar">Agora não</button>
+        <span class="espaco"></span>
+        <button type="button" class="botao botao-primario" id="conf-continuar" disabled>Continuar sincronização</button>
+      </div>
+    </div>
+  </dialog>
+
+  <!-- Progresso (sincronização / importação) -->
+  <dialog id="dlg-progresso" class="dialogo dialogo-progresso">
+    <div class="dialogo-corpo">
+      <div class="spinner"></div>
+      <p id="progresso-texto">Sincronizando…</p>
+      <p class="dialogo-info">Não feche o programa.</p>
+    </div>
+  </dialog>
+
+  <!-- Mensagem genérica (resumos) -->
+  <dialog id="dlg-mensagem" class="dialogo">
+    <form method="dialog" class="dialogo-corpo">
+      <h2 id="msg-titulo"></h2>
+      <div id="msg-corpo" class="msg-corpo"></div>
+      <div class="dialogo-acoes"><span class="espaco"></span><button class="botao botao-primario">OK</button></div>
+    </form>
+  </dialog>
+
   <script src="admin.js"></script>
+  <script src="sync.js"></script>
 </body>
 </html>

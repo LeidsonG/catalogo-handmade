@@ -9,12 +9,18 @@
     "dev": "node --watch server.js",
     "baixar-fontes": "node scripts/baixar-fontes.js",
     "migrar-ids": "node scripts/migrar-ids.js",
-    "renumerar-codigos": "node scripts/renumerar-codigos.js"
+    "renumerar-codigos": "node scripts/renumerar-codigos.js",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
     "express": "^4.19.2",
     "multer": "^1.4.5-lts.1",
     "puppeteer": "^22.10.0"
+  },
+  "catalogo": {
+    "repositorio": "LeidsonG/catalogo-handmade",
+    "branchDados": "dados",
+    "branchCodigo": "main"
   }
 }

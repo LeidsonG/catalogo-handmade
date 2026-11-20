@@ -17,6 +17,7 @@ const introRouter = require('./routes/intro');
 const uploadsRouter = require('./routes/uploads');
 const authRouter = require('./routes/auth');
 const criarPdfRouter = require('./routes/pdf');
+const { router: syncRouter, bloquearDuranteSync } = require('./routes/sync');
 
 const UPLOADS = path.join(DADOS, 'uploads');
 const OUTPUT_DIR = path.join(DADOS, 'output');
@@ -34,6 +35,7 @@ app.use(express.json());
 // com defaults handmade / @Hand55). Senha pode ser trocada via
 // POST /api/auth/trocar-senha.
 app.use(auth.middleware());
+app.use(bloquearDuranteSync);
 
 app.use('/admin', express.static(path.join(ROOT, 'admin')));
 app.use('/uploads', express.static(UPLOADS));
@@ -48,6 +50,7 @@ app.use('/api/categorias', categoriasRouter);
 app.use('/api/intro', introRouter);
 app.use('/api/upload', uploadsRouter);
 app.use('/api/auth', authRouter);
+app.use('/api', syncRouter);
 app.use(criarPdfRouter(PORTA)); // expõe /render/:layout e /api/gerar-pdf
 
 const server = app.listen(PORTA, () => {
