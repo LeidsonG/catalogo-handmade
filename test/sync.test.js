@@ -213,3 +213,33 @@ test('dados reais do repositório vão e voltam idênticos', async () => {
   }
   assert.equal((await eu.sync(gh)).resumo.enviados, 0, 'segunda sync sem mudanças');
 });
+
+test('arquivos de dados sumidos são recuperados, não apagam tudo no GitHub', async () => {
+  const { gh, eu, ela } = await cenarioInicial();
+  for (const f of ['produtos', 'categorias', 'intro']) fs.rmSync(path.join(ela.dir, 'data', `${f}.json`));
+  const r = await ela.sync(gh);
+  assert.equal(r.status, 'ok');
+  assert.ok(r.resumo.mensagens.some((m) => m.includes('recuperados')));
+  assert.equal(ela.produtos().length, 2, 'recuperou do GitHub');
+  await eu.sync(gh);
+  assert.equal(eu.produtos().length, 2, 'a outra máquina não perdeu nada');
+});
+
+test('pasta de fotos sumida é baixada de novo, não apaga as fotos do GitHub', async () => {
+  const { gh, eu, ela } = await cenarioInicial();
+  fs.rmSync(path.join(ela.dir, 'uploads'), { recursive: true });
+  const r = await ela.sync(gh);
+  assert.equal(r.status, 'ok');
+  assert.equal(ela.ler('uploads/produtos/CM-001.webp'), 'FOTO-1');
+  await eu.sync(gh);
+  assert.equal(eu.ler('uploads/produtos/CM-001.webp'), 'FOTO-1');
+  assert.ok(gh.arquivoRemoto('uploads/produtos/CM-001.webp'));
+});
+
+test('excluir um produto continua funcionando com a proteção', async () => {
+  const { gh, eu, ela } = await cenarioInicial();
+  eu.setProdutos(eu.produtos().slice(0, 1));
+  await eu.sync(gh);
+  await ela.sync(gh);
+  assert.equal(ela.produtos().length, 1);
+});
