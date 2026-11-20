@@ -1,10 +1,10 @@
 {
   "categorias": [
     {
-      "id": "c003",
-      "nome": "Cintos Infantil",
-      "prefixoCodigo": "CI-",
-      "ordem": 0
+      "id": "c001",
+      "nome": "Cintos Masculino",
+      "ordem": 0,
+      "prefixoCodigo": "CM-"
     },
     {
       "id": "c002",
@@ -13,10 +13,10 @@
       "ordem": 1
     },
     {
-      "id": "c001",
-      "nome": "Cintos Masculino",
-      "ordem": 2,
-      "prefixoCodigo": "CM-"
+      "id": "c003",
+      "nome": "Cintos Infantil",
+      "prefixoCodigo": "CI-",
+      "ordem": 2
     },
     {
       "id": "c004",
