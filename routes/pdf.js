@@ -9,11 +9,11 @@ const express = require('express');
 const fs = require('fs');
 const path = require('path');
 const puppeteer = require('puppeteer');
-const { readData, readIntro, readCategorias, ROOT } = require('../lib/dados');
+const { readData, readIntro, readCategorias, DADOS } = require('../lib/dados');
 const { construirHtml } = require('../lib/render');
 const { RENDER_TOKEN } = require('../lib/auth');
 
-const OUTPUT_DIR = path.join(ROOT, 'output');
+const OUTPUT_DIR = path.join(DADOS, 'output');
 
 function criarRouter(porta) {
   const router = express.Router();

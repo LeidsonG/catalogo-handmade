@@ -5,7 +5,7 @@
 const express = require('express');
 const fs = require('fs');
 const path = require('path');
-const { readData, writeData, readCategorias, comLock, ROOT } = require('../lib/dados');
+const { readData, writeData, readCategorias, comLock, DADOS } = require('../lib/dados');
 const { gerarProximoId, encontrarConflitoCodigo, proximoCodigoCategoria } = require('../lib/ids');
 const { CAMPOS_PRODUTO, pick } = require('../lib/validacao');
 
@@ -95,7 +95,7 @@ router.delete('/:id', (req, res) => comLock(() => {
     // são hex (cor1/cor2), não arquivos, então não há nada a remover delas.
     const url = produto.foto;
     if (url && url.startsWith('/uploads/')) {
-      const caminho = path.join(ROOT, url.replace(/^\//, ''));
+      const caminho = path.join(DADOS, url.replace(/^\//, ''));
       try {
         if (fs.existsSync(caminho)) fs.unlinkSync(caminho);
       } catch (err) {

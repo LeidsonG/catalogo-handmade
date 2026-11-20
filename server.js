@@ -9,7 +9,7 @@ const express = require('express');
 const path = require('path');
 const fs = require('fs');
 
-const { ROOT } = require('./lib/dados');
+const { ROOT, DADOS } = require('./lib/dados');
 const auth = require('./lib/auth');
 const produtosRouter = require('./routes/produtos');
 const categoriasRouter = require('./routes/categorias');
@@ -18,11 +18,11 @@ const uploadsRouter = require('./routes/uploads');
 const authRouter = require('./routes/auth');
 const criarPdfRouter = require('./routes/pdf');
 
-const UPLOADS = path.join(ROOT, 'uploads');
-const OUTPUT_DIR = path.join(ROOT, 'output');
+const UPLOADS = path.join(DADOS, 'uploads');
+const OUTPUT_DIR = path.join(DADOS, 'output');
 const PORTA = Number(process.env.PORT) || 3000;
 
-for (const dir of [path.join(UPLOADS, 'produtos'), path.join(UPLOADS, 'cores'), OUTPUT_DIR]) {
+for (const dir of [path.join(UPLOADS, 'produtos'), path.join(UPLOADS, 'background'), OUTPUT_DIR]) {
   fs.mkdirSync(dir, { recursive: true });
 }
 

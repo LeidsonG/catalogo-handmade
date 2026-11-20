@@ -6,10 +6,10 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const crypto = require('crypto');
-const { ROOT } = require('../lib/dados');
+const { DADOS } = require('../lib/dados');
 const { sanitizarCodigo } = require('../lib/ids');
 
-const UPLOADS = path.join(ROOT, 'uploads');
+const UPLOADS = path.join(DADOS, 'uploads');
 
 const storage = multer.diskStorage({
   destination: (_req, _file, cb) => {
