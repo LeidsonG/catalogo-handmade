@@ -114,9 +114,11 @@
       </section>
 
       <section class="bloco">
-        <h2>Sincronização</h2>
+        <h2>Sincronização e fotos</h2>
         <p class="sync-status" id="sync-status">Carregando…</p>
         <button id="btn-config-sync" class="botao botao-fantasma botao-bloco">Configurar sincronização</button>
+        <button id="btn-importar-fotos" class="botao botao-secundario botao-bloco">📁 Importar fotos de uma pasta</button>
+        <input type="file" id="input-pasta-fotos" webkitdirectory multiple hidden>
         <p class="versao-app" id="versao-app"></p>
       </section>
 
@@ -205,5 +207,6 @@
 
   <script src="admin.js"></script>
   <script src="sync.js"></script>
+  <script src="importar.js"></script>
 </body>
 </html>
