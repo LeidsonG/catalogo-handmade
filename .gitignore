@@ -7,6 +7,9 @@ uploads/
 # PDFs gerados
 output/
 
+# Build do instalador (.exe)
+build/
+
 # Dados do catálogo (produtos, categorias, intro, senha, token e estado da
 # sincronização). Não vão mais na main: são sincronizados pelo botão
 # "Sincronizar" do app com a branch `dados` do GitHub.

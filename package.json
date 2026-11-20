@@ -1,6 +1,6 @@
 {
   "name": "catalogo-handmade",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "private": true,
   "description": "Sistema de catálogo PDF para cintos de couro artesanais — marca Handmade — Tati",
   "main": "server.js",
@@ -10,7 +10,8 @@
     "baixar-fontes": "node scripts/baixar-fontes.js",
     "migrar-ids": "node scripts/migrar-ids.js",
     "renumerar-codigos": "node scripts/renumerar-codigos.js",
-    "test": "node --test test/*.test.js"
+    "test": "node --test test/*.test.js",
+    "build:exe": "node scripts/build-exe.js"
   },
   "dependencies": {
     "bcryptjs": "^3.0.3",
