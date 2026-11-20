@@ -109,7 +109,9 @@ O programa faz duas coisas de uma vez:
 - **envia** tudo o que você cadastrou ou mudou (inclusive as fotos), e
 - **recebe** tudo o que o Leidson cadastrou ou mudou.
 
-Espere a mensagem **"Sincronizado ✔"** aparecer. Pronto!
+Espere aparecer a mensagem verde **"Sincronizado ✔"** (quando tinha algo
+para enviar ou receber) ou **"Catálogo atualizado"** (quando já estava tudo
+igual). Pronto!
 
 Dicas:
 - Precisa de internet. Sem internet, pode continuar cadastrando normalmente:

@@ -176,7 +176,7 @@ async function concluirSync({ resumo, atualizacao }, silencioso) {
   if (resumo.enviados) partes.push('enviado');
   if (recebeu) partes.push('recebido');
   if (partes.length || !silencioso) {
-    mostrarToast(partes.length ? `Sincronizado ✔ (${partes.join(' e ')})` : 'Tudo em dia ✔', 'sucesso');
+    mostrarToast(partes.length ? `Sincronizado ✔ (${partes.join(' e ')})` : 'Catálogo atualizado', 'sucesso');
   }
 }
 
