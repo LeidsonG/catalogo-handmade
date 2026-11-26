@@ -2130,20 +2130,6 @@
       "ordem": 151
     },
     {
-      "id": "p00154",
-      "codigo": "CM-100",
-      "nome": "",
-      "descricao": "",
-      "preco": 0,
-      "nomeCor": "",
-      "foto": "/uploads/produtos/CM-100.webp",
-      "cor1": "",
-      "cor2": "",
-      "categoriaId": "c001",
-      "ativo": true,
-      "ordem": 154
-    },
-    {
       "id": "p00155",
       "codigo": "CM-098",
       "nome": "",
