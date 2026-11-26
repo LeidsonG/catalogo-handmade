@@ -2550,20 +2550,6 @@
       "ordem": 175
     },
     {
-      "id": "p00185",
-      "codigo": "CM-094",
-      "nome": "",
-      "descricao": "",
-      "preco": 0,
-      "nomeCor": "",
-      "foto": "/uploads/produtos/CM-094.webp",
-      "cor1": "",
-      "cor2": "",
-      "categoriaId": "c001",
-      "ativo": true,
-      "ordem": 148
-    },
-    {
       "id": "p00186",
       "codigo": "CM-128",
       "nome": "",
