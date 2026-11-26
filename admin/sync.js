@@ -218,12 +218,51 @@ function valorLegivel(campo, v) {
   return esc(String(v));
 }
 
+// Campos mostrados em cada tipo de cadastro, nesta ordem. Campos em conflito
+// que não estão na lista (ex.: foto, ordem) aparecem no fim.
+const CAMPOS_CADASTRO = {
+  produto: ['codigo', 'nome', 'categoriaId', 'preco', 'descricao', 'nomeCor', 'cor1', 'cor2', 'ativo'],
+  categoria: ['nome', 'prefixoCodigo', 'ordem'],
+  intro: [],
+};
+
+const vazio = (v) => v === undefined || v === null || v === '';
+
 function tituloConflito(c) {
-  if (c.tipo === 'arquivo') return `Foto ${esc(c.caminho.split('/').pop())}`;
+  if (c.tipo === 'arquivo') {
+    const p = c.produtoLocal || c.produtoRemoto;
+    const arquivo = esc(c.caminho.split('/').pop());
+    return p ? `Foto do produto ${esc(p.codigo || '')} — ${esc(p.nome || '')} <small>(${arquivo})</small>` : `Foto ${arquivo}`;
+  }
   if (c.tipo === 'intro') return 'Introdução do catálogo';
   const item = c.local || c.remoto || {};
   if (c.tipo === 'categoria') return `Categoria "${esc(item.nome || c.id)}"`;
   return `Produto ${esc(item.codigo || '')} — ${esc(item.nome || '')}`;
+}
+
+// Como o cadastro fica se este lado for escolhido: o merge automático já juntou
+// os campos sem conflito; a escolha só decide os campos em conflito.
+function versaoFinal(c, obj) {
+  if (!c.mesclado) return obj;
+  const final = { ...c.mesclado };
+  for (const k of c.campos) {
+    if (obj[k] === undefined) delete final[k];
+    else final[k] = obj[k];
+  }
+  return final;
+}
+
+// Lista de campos de um cadastro. `destacar` = campos que diferem entre os
+// dois lados; campos vazios nos dois lados são omitidos.
+function cadastroHtml(tipo, obj, outro, destacar) {
+  const campos = [...(CAMPOS_CADASTRO[tipo] || [])];
+  for (const k of destacar) if (!campos.includes(k)) campos.push(k);
+  return campos
+    .filter((k) => destacar.includes(k) || !vazio(obj[k]) || (outro && !vazio(outro[k])))
+    .map((k) => `
+      <div class="conflito-campo${destacar.includes(k) ? ' diferente' : ''}">
+        <span>${esc(ROTULOS[k] || k)}</span><span class="conflito-valor">${valorLegivel(k, obj[k])}</span>
+      </div>`).join('');
 }
 
 function ladoHtml(c, lado) {
@@ -235,17 +274,22 @@ function ladoHtml(c, lado) {
     if (!existe) corpo = '<span class="conflito-excluido">Foto apagada</span>';
     else if (lado === 'local') corpo = `<img src="/${esc(c.caminho)}?v=${Date.now()}" alt="">`;
     else corpo = `<img src="/api/sync/previa/${c.remotoSha}${esc(c.caminho.slice(c.caminho.lastIndexOf('.')).toLowerCase())}" alt="">`;
+    // Cadastro do produto dono da foto, para ajudar a decidir.
+    const prod = lado === 'local' ? c.produtoLocal : c.produtoRemoto;
+    const outro = lado === 'local' ? c.produtoRemoto : c.produtoLocal;
+    if (prod) {
+      const diferentes = CAMPOS_CADASTRO.produto.filter((k) => outro && String(prod[k] ?? '') !== String(outro[k] ?? ''));
+      corpo += cadastroHtml('produto', prod, outro, diferentes);
+    } else if (c.produtoLocal || c.produtoRemoto) {
+      corpo += '<span class="conflito-excluido">Produto não existe nesta versão</span>';
+    }
   } else if (!obj) {
     corpo = `<span class="conflito-excluido">${c.tipo === 'produto' ? 'Produto excluído' : 'Excluída'}</span>`;
   } else {
-    // Mostra os campos em conflito (destacados) e, para produtos, os principais.
-    const campos = c.campos.length ? [...c.campos] : [];
-    const basicos = c.tipo === 'produto' ? ['codigo', 'nome', 'preco'] : c.tipo === 'categoria' ? ['nome'] : [];
-    for (const k of basicos) if (!campos.includes(k)) campos.push(k);
-    corpo = campos.map((k) => `
-      <div class="conflito-campo${c.campos.includes(k) ? ' diferente' : ''}">
-        <span>${esc(ROTULOS[k] || k)}</span><span>${valorLegivel(k, obj[k])}</span>
-      </div>`).join('');
+    const outroObj = lado === 'local' ? c.remoto : c.local;
+    const final = versaoFinal(c, obj);
+    const outroFinal = outroObj ? versaoFinal(c, outroObj) : null;
+    corpo = cadastroHtml(c.tipo, final, outroFinal, c.campos);
   }
   return `
     <label class="conflito-opcao" data-lado="${lado}">

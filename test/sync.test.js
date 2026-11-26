@@ -81,6 +81,9 @@ test('campos diferentes do mesmo produto se juntam; mesmo campo vira conflito co
   assert.equal(r.status, 'conflitos');
   assert.equal(r.conflitos.length, 1);
   assert.deepEqual(r.conflitos[0].campos, ['preco']);
+  // O cadastro mesclado (para a tela mostrar como fica) já tem o que não conflitou.
+  assert.equal(r.conflitos[0].mesclado.nome, 'Dela');
+  assert.equal(r.conflitos[0].mesclado.ordem, 50);
   // nada foi aplicado ainda
   assert.equal(ela.produtos().find((p) => p.id === 'p00001').preco, 120);
   const r2 = await ela.sync(gh, { 'produto:p00001': 'local' });
@@ -126,6 +129,9 @@ test('mesma foto alterada nas duas máquinas vira conflito de arquivo', async ()
   const r = await ela.sync(gh);
   assert.equal(r.status, 'conflitos');
   assert.equal(r.conflitos[0].chave, 'arquivo:uploads/produtos/CM-001.webp');
+  // O conflito traz o cadastro do produto dono da foto, dos dois lados.
+  assert.equal(r.conflitos[0].produtoLocal.codigo, 'CM-001');
+  assert.equal(r.conflitos[0].produtoRemoto.nome, 'Cinto 1');
   assert.equal((await ela.sync(gh, { 'arquivo:uploads/produtos/CM-001.webp': 'remoto' })).status, 'ok');
   assert.equal(ela.ler('uploads/produtos/CM-001.webp'), 'FOTO-NOVA-MINHA');
 });

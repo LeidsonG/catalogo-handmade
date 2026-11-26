@@ -959,6 +959,8 @@ html, body {
 .conflito-opcao.escolhida .conflito-opcao-cabecalho { color: var(--cor-sucesso); }
 .conflito-campo { display: grid; grid-template-columns: 110px 1fr; gap: 6px; }
 .conflito-campo span:first-child { color: var(--cor-suave); }
+.conflito-valor { white-space: pre-line; overflow-wrap: anywhere; }
+.conflito-titulo small { font-weight: 400; color: var(--cor-suave); }
 .conflito-campo.diferente span:last-child { background: #fff3cd; border-radius: 3px; padding: 0 3px; }
 .conflito-opcao img { max-width: 100%; max-height: 180px; object-fit: contain; background: #f4f4f4; border-radius: 4px; }
 .conflito-excluido { color: var(--cor-erro); font-style: italic; }
